@@ -1,0 +1,41 @@
+/* Navbar styles */
+.navbar {
+    display: flex;
+    flex-wrap: wrap;  
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    font-size: 17px;
+    box-sizing: border-box;  
+}
+ 
+.search {
+    flex: 1;
+    min-width: 200px;  
+}
+ 
+.cart, .user {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;  
+}
+
+ 
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px;  
+        font-size: 16px;  
+    }
+
+    .search {
+        flex: 1 1 100%;  
+        margin-bottom: 10px;  
+    }
+
+    .cart, .user {
+        margin-left: 0;  
+    }
+}
+

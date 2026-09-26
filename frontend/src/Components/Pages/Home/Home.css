@@ -1,0 +1,32 @@
+/* .divIMG{ */
+	/* display:flex; */
+	/* justify-content: space-between; */
+	/* flex-wrap: wrap; */
+/* } */
+
+/* Home.css */
+
+.divIMG {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 20px;  
+}
+
+.recomneded,
+.features {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.imgShoes{
+	border:1px solid black;
+	padding:12px 0;
+	margin-bottom:10%;
+}
+
+.inDiv h1{
+	font-size: 31px;
+    text-align: center;
+    padding: 24px 3px;
+    margin-top: 30px;
+}

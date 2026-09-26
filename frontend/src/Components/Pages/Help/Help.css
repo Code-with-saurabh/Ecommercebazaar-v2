@@ -1,0 +1,157 @@
+/* Container for the video and content */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Background video styles */
+.bg-video-HC {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: -1; /* Keeps the video in the background */
+}
+
+/* Basic styles for the help container */
+.help-container-HC {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centers the content vertically and horizontally */
+  padding: 20px;
+  max-width: 800px;
+  border: 2px solid #a68f93a3;
+  border-radius: 2px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
+  color: #010202;
+  background-color: rgba(255, 255, 255, 0.8); /* Light background with opacity for readability */
+  z-index: 1; /* Ensure content appears above the video */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Optional: adds shadow for better contrast */
+}
+
+/* Header styles */
+.help-header-HC {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.help-header-HC h1 {
+  font-size: 2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.help-header-HC p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* FAQ section styles */
+.faq-section-HC {
+  margin-bottom: 30px;
+}
+
+.faq-section-HC h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 500;
+}
+
+.faq-item-HC {
+  margin-bottom: 20px;
+}
+
+.faq-item-HC h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 500;
+}
+
+.faq-item-HC p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Contact button styles */
+.contact-btn-HC {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007BFF; /* Blue color */
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-btn-HC:hover {
+  background-color: #0056b3; /* Darker blue */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .help-header-HC h1 {
+    font-size: 1.8rem;
+  }
+
+  .help-header-HC p {
+    font-size: 0.9rem;
+  }
+
+  .faq-section-HC h2 {
+    font-size: 1.3rem;
+  }
+
+  .faq-item-HC h3 {
+    font-size: 1rem;
+  }
+
+  .faq-item-HC p {
+    font-size: 0.9rem;
+  }
+
+  .contact-btn-HC {
+    width: 90%;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .help-header-HC h1 {
+    font-size: 1.5rem;
+  }
+
+  .help-header-HC p {
+    font-size: 0.8rem;
+  }
+
+  .faq-section-HC h2 {
+    font-size: 1.1rem;
+  }
+
+  .faq-item-HC h3 {
+    font-size: 0.9rem;
+  }
+
+  .faq-item-HC p {
+    font-size: 0.8rem;
+  }
+
+  .contact-btn-HC {
+    width: 80%;
+    font-size: 0.8rem;
+  }
+}

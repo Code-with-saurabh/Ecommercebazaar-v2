@@ -1,0 +1,12 @@
+.GridStyle{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 20px;  
+}
+ 
+.forH h1{
+	font-size: 31px;
+    text-align: center;
+    padding: 24px 3px;
+    margin-top: 30px;
+}

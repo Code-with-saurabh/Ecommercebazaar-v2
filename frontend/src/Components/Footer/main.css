@@ -1,0 +1,88 @@
+/* main.css */
+
+
+.Footer-section h4 {
+    font-size: 18px;
+    margin-bottom: 7px;
+}
+
+.FooterDiv {
+	/* margin-top: 100%; */
+	 /* position: fixed; */
+    padding: 20px;
+    background-color: #2a2d30;
+    color: lightgray;
+}
+
+.Footer-section {
+    flex: 1 1 200px;
+    margin: 10px;
+}
+
+.Footer-section a {
+    text-decoration: none;
+    color: lightgray;
+    margin-bottom: 5px;
+}
+
+.Footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.Footer-section ul li {
+    margin-bottom: 7px;
+}
+
+.Contact-info a p{
+    margin-bottom: 7px;  
+}
+
+ 
+footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.Footer-section.social-media img {
+    width: 24px;  
+    height: auto;  
+    margin-right: 7px;
+    transition: transform 0.3s ease;  
+}
+
+.Footer-section.social-media img:hover {
+    transform: scale(1.2);  
+}
+
+ 
+.Footer-section.social-media a:hover {
+    color: #ffffff;  
+}
+
+ 
+.Footer-section.social-media img.github-icon {
+    width: 24px;
+}
+
+.Footer-section.social-media img.linkedin-icon {
+    width: 22px;
+}
+
+.Footer-section.social-media img.twitter-icon {
+    width: 24px;
+}
+
+.Footer-section.social-media img.instagram-icon {
+    width: 20px;
+}
+
+.copyright p{
+	text-align:center;
+}
+
+ 

@@ -1,0 +1,29 @@
+.nav-links ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links ul li {
+    margin-right: 20px;
+}
+
+.nav-links ul li a {
+	font-family:robotl;
+    color: white; /* Link text color */
+    text-decoration: none;
+    padding: 8px 12px; /* Adjust padding as needed */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #333; /* Background color */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.nav-links ul li a:hover,
+.nav-links ul li a:focus {
+    background-color: #555; /* Background color on hover and focus */
+}
+
+.nav-links ul li a.active {
+    font-weight: bold; /* Example: Highlight active link */
+}
