@@ -7,6 +7,12 @@ Full-stack e-commerce app (**Bazaar**) — recovered, reorganized and running.
 - `frontend/` — React app (Vite): components, pages, Redux store, assets (images / videos / fonts)
 - `backend/` — Express + MongoDB API (`/api/users/register`, `/api/users/login`)
 
+## Docs
+
+Detailed documentation lives in [`docs/`](docs/README.md): overview & architecture,
+setup/troubleshooting, feature guides, API reference, future roadmap and
+contributing/code-style rules.
+
 ## Run
 
 ```bash
