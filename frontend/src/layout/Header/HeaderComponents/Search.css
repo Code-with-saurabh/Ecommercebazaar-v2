@@ -1,0 +1,166 @@
+ 
+
+.search {
+    display: flex;
+    align-items: center;
+    width: 700px;  
+    margin: 0 auto;  
+}
+
+.products{
+	 width: 700px;  
+    margin: 0 auto;  
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 5px;
+    width: 100%;  
+}
+
+
+.search-icon {
+    width: 16px;  
+    margin-right: 5px; 
+	cursor:pointer;
+	position:relative;
+}
+
+input[type="text"] {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 14px; 
+}
+
+input[type="text"]:focus::placeholder {
+  color: #666;
+  font-size: 16px;
+   
+}
+
+
+.search-bar button {
+    background-color: #a7c2c0;  
+    color: white;  
+    border: none;
+    padding: 8px 16px;  
+    margin-left: -20px;  
+    border-radius: 4px;  
+    cursor: pointer;
+	font-size: 17px;
+    transition: background-color 0.3s ease;
+	position:relative;
+}
+
+.search-bar button:hover {
+    background-color: #8eaa9e;
+	 
+}
+
+.search-bar button:focus {
+    outline: none;  
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);  
+}
+ 
+.search-bar button:after {
+     border-radius:5px;
+	 position:absolute;
+	 content:"";
+	 width :0;
+	 height:100%;
+	 transform: translateY(2px);
+	 z-index:-1;
+	 transition: all 0.3s ease;
+	 right:0;
+	 color:red; 
+	
+}
+
+.search-bar button:active{
+	transform: translateY(2px);
+}
+
+.search-icon:active {
+  transform: translateY(2px);
+}
+ 
+/* ===== Search icon is now a real submit button (Enter + click both work) ===== */
+.search-bar {
+  position: relative; /* anchor for the suggestions dropdown */
+}
+
+.search-bar .search-icon-button {
+  background: none;
+  border: none;
+  padding: 5px;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.search-bar .search-icon-button:hover {
+  background-color: #e6ecec;
+}
+
+.search-bar .search-icon-button .search-icon {
+  margin-right: 0;
+}
+
+/* ===== Debounced live suggestions ===== */
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.search-suggestions li button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: #ffffff;
+  color: #333333;
+  border: none;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 0;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-suggestions li button:hover,
+.search-suggestions li button:focus {
+  background: #eef4f3;
+  box-shadow: none;
+}
+
+.search-suggestions__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-suggestions__brand {
+  flex-shrink: 0;
+  color: #888888;
+  font-size: 12px;
+}

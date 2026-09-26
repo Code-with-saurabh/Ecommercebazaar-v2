@@ -23,7 +23,6 @@ async function connectDB(url = env.mongoURL, options = env.mongoOptions) {
   await mongoose.connect(url, options);
   return mongoose.connection;
 }
-
 async function disconnectDB() {
   if (mongoose.connection.readyState !== 0) {
     await mongoose.disconnect();

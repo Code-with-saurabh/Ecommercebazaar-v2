@@ -25,7 +25,7 @@ Lighthouse Performance ≥ 90.
 ## 4.2 Code splitting & bundle budget
 
 ```jsx
-const Cart = React.lazy(() => import('./Components/Pages/Cart/Cart'));
+const Cart = React.lazy(() => import('./pages/Cart/Cart'));
 // wrap routes in <Suspense fallback={<Spinner />}>
 ```
 

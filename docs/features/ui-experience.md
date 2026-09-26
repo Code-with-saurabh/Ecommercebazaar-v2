@@ -35,7 +35,7 @@ Four MP4s in `assets/video/` are used as autoplaying, muted, looping backdrops:
 
 ## Home page
 
-1. **Hero** (`Pages/Home/Hero.jsx`) — banner area with imagery/gradient.
+1. **Hero** (`pages/Home/Hero.jsx`) — banner area with imagery/gradient.
 2. **Recommended** — 4 product cards.
 3. **Features** — 5 product cards.
 
@@ -43,27 +43,27 @@ Sections share the `.inDiv` / `.divIMG` layout classes.
 
 ## Header
 
-`Header/main.jsx` assembles:
+`layout/Header/main.jsx` assembles:
 
 | Piece | File | Behaviour |
 |---|---|---|
-| Logo | `HeaderComponents/logo.jsx` | Links to `/` |
-| Nav links | `HeaderComponents/NavLinks.jsx` | Main menu |
-| Navbar | `Header/NavBar/Navbar.jsx` | Category navigation |
-| Search | `HeaderComponents/Search.jsx` | Input + button → `/search?query=…` |
-| Cart | `HeaderComponents/Cart.jsx` | Icon + **badge count** from `state.CartValue.value` |
-| User | `HeaderComponents/User.jsx` | Login/Logout depending on `sessionStorage` |
+| Logo | `layout/Header/HeaderComponents/logo.jsx` | Links to `/` |
+| Nav links | `layout/Header/HeaderComponents/NavLinks.jsx` | Main menu |
+| Navbar | `layout/Header/NavBar/Navbar.jsx` | Category navigation |
+| Search | `layout/Header/HeaderComponents/Search.jsx` | Input + button → `/search?query=…` |
+| Cart | `layout/Header/HeaderComponents/Cart.jsx` | Icon + **badge count** from `state.CartValue.value` |
+| User | `layout/Header/HeaderComponents/User.jsx` | Login/Logout depending on `sessionStorage` |
 
 The cart badge is the visible link between "Add to Cart" clicks and the cart page.
 
 ## Footer
 
-`Footer/main.jsx` — site links plus four social anchors (GitHub, LinkedIn, X,
+`layout/Footer/main.jsx` — site links plus four social anchors (GitHub, LinkedIn, X,
 Instagram) opening in new tabs with `rel="noopener noreferrer"`.
 
 ## Scroll behaviour
 
-`Components/ScrollToTop.jsx` — on every route change, scrolls the window to the
+`components/ScrollToTop.jsx` — on every route change, scrolls the window to the
 top. Without it, moving from a long product list to another page kept the old
 scroll offset.
 
@@ -76,7 +76,7 @@ scroll offset.
 
 ## Error page
 
-`Pages/Error/ErrorPage.jsx` reads `?message=` and displays it — used both for
+`pages/Error/ErrorPage.jsx` reads `?message=` and displays it — used both for
 real errors and as a general notice screen (e.g. duplicate signup).
 
 ## Accessibility & polish status
@@ -101,5 +101,5 @@ Concrete improvements are listed in
 - `serviceWorker.jsx` + `serviceWorkerRegistration.jsx` — CRA PWA files; the
   app explicitly calls `serviceWorker.unregister()`.
 - `logo.svg` — CRA default logo, unused.
-- `Pages/Products/Products-Backup.jsx` — old copy, not imported.
+- `pages/Products/Products-Backup.jsx` — old copy, not imported.
 - Commented-out `<datalist>` in the search bar.

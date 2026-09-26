@@ -100,7 +100,7 @@ pushing. See [`../contributing/README.md`](../contributing/README.md).
 
 - JSX files must end in `.jsx` (Vite 8 requirement).
 - One component folder = `Component.jsx` + `Component.css` side by side.
-- Redux: one `createSlice` per concern under `src/Components/Redux/`, wired in
-  `src/Components/Store/Store.jsx`.
+- Redux: one `createSlice` per concern under `src/store/slices/`, wired in
+  `src/store/Store.jsx`.
 
 Full rules: [`../contributing/code-style.md`](../contributing/code-style.md).

@@ -39,7 +39,7 @@ only reappear if you add a new `.js` file containing JSX.
 **Symptom**
 
 ```
-[UNLOADABLE_DEPENDENCY] Could not load src/Components/Pages/Contact/Contact.jsx
+[UNLOADABLE_DEPENDENCY] Could not load src/pages/Contact/Contact.jsx
   ... stream did not contain valid UTF-8
 ```
 

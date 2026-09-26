@@ -20,6 +20,12 @@ const env = {
   // server
   port: Number(process.env.PORT) || 5000,
   apiPrefix: '/api',
+  // Trust X-Forwarded-For (needed behind Render/NGINX; keep false when the
+  // server is directly exposed, otherwise clients could spoof their IP and
+  // dodge the rate limiter). Defaults to true in production, false in dev.
+  trustProxy: process.env.TRUST_PROXY
+    ? !/^(false|0|no)$/i.test(process.env.TRUST_PROXY)
+    : isProd,
   corsOrigins: (process.env.CORS_ORIGIN || '*')
     .split(',')
     .map(origin => origin.trim())
@@ -28,9 +34,9 @@ const env = {
   // database
   mongoURL: process.env.mongoURL || 'mongodb://127.0.0.1:27017/ecommerce',
   mongoOptions: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
+    // Fail fast when Mongo is unreachable instead of hanging for 30s
+    serverSelectionTimeoutMS: Number(process.env.MONGO_SERVER_SELECTION_MS) || 5000,
+    // Create indexes declared in the schemas (unique email/username/phone)
     autoIndex: true,
   },
 
@@ -53,6 +59,7 @@ const env = {
     windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
     max: Number(process.env.RATE_LIMIT_MAX) || 300,
     authMax: Number(process.env.RATE_LIMIT_AUTH_MAX) || 20,
+    loginMax: Number(process.env.RATE_LIMIT_LOGIN_MAX) || 10,
   },
 };
 

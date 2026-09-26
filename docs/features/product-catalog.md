@@ -4,7 +4,7 @@
 
 The catalog is **hardcoded** in a Redux slice:
 
-- File: `src/Components/Redux/ForSearch.jsx`
+- File: `src/store/slices/ForSearch.jsx`
 - State: `state.AllProduct.productCategories`
 - Shape:
 
@@ -33,7 +33,7 @@ build time), not a string filename.
 
 ## Products page (`/products`)
 
-`Pages/Products/Products.jsx`:
+`pages/Products/Products.jsx`:
 
 ```jsx
 const productCategories = useSelector(state => state.AllProduct.productCategories);
@@ -54,7 +54,7 @@ Object.entries(productCategories).map(([category, products]) => (
 - **It takes no props** — the `category` prop passed by `/products/tshirt` and
   `/products/shoes` is ignored (see [known gaps](#known-gaps)).
 
-## The product card (`Pages/Home/Card.jsx`)
+## The product card (`pages/Home/Card.jsx`)
 
 Props (with defaults):
 
@@ -83,7 +83,7 @@ Behaviour:
 
 ## Home page cards
 
-`Pages/Home/Home.jsx` renders `<Hero/>` plus two hard-coded sections:
+`pages/Home/Home.jsx` renders `<Hero/>` plus two hard-coded sections:
 
 - **Recommended** — 4 cards (ids 101, 102, 103, 104)
 - **Features** — 5 cards (ids 105, 1010, 1001, 1001, 1001)
@@ -101,7 +101,7 @@ roadmap items: [`../roadmap/commerce-core.md`](../roadmap/commerce-core.md).
 
 ## Backup file
 
-`Pages/Products/Products-Backup.jsx` (~7 KB) is an older copy of the products
+`pages/Products/Products-Backup.jsx` (~7 KB) is an older copy of the products
 page that is not imported anywhere. It should eventually be deleted (roadmap).
 
 ## Known gaps

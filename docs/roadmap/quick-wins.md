@@ -10,7 +10,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | Cart lives only in Redux memory — refresh empties it. Biggest UX bug. |
-| **Where** | `frontend/src/Components/Store/Store.jsx`, new `frontend/src/persist.js` |
+| **Where** | `frontend/src/store/Store.jsx`, new `frontend/src/store/persist.js` |
 | **How** | Option A: add `redux-persist` with `localStorage` for the `Shirt` and `CartValue` slices. Option B (lighter): subscribe to the store and write to `localStorage`, hydrate on boot. |
 | **Verify** | Add items → refresh → cart still has them; badge count matches. |
 
@@ -19,7 +19,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | Quantities are `useState` inside `Cart.jsx` — they reset on navigation, so totals can't be shown elsewhere (header, checkout). |
-| **Where** | `frontend/src/Components/Redux/ForShirt.jsx`, `Pages/Cart/Cart.jsx` |
+| **Where** | `frontend/src/store/slices/ForShirt.jsx`, `pages/Cart/Cart.jsx` |
 | **How** | Store `qty` on each cart line (`{ ...item, qty: 1 }`) and add `changeQty(id, qty)` reducer; replace local state. |
 | **Verify** | Set qty 3 → go to Home → back to Cart → still 3 and total correct. |
 
@@ -28,7 +28,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | `http://localhost:5000` is hardcoded in two files — deployment will break instantly. |
-| **Where** | `Pages/Login/Login.jsx`, `Pages/SignUp/Signup.jsx`, new `frontend/.env.example` |
+| **Where** | `pages/Login/Login.jsx`, `pages/SignUp/Signup.jsx`, new `frontend/.env.example` |
 | **How** | `const API = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';` — add a small `src/api.js`. Commit `.env.example` with `VITE_API_URL=http://localhost:5000`, add `.env*` to `.gitignore`. |
 | **Verify** | App works unchanged locally; changing the var redirects calls. |
 
@@ -37,7 +37,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | `/products/tshirt` and `/products/shoes` pass `category="T-shirts"` but `Products.jsx` takes no props → full catalog renders. |
-| **Where** | `Pages/Products/Products.jsx` |
+| **Where** | `pages/Products/Products.jsx` |
 | **How** | Accept `category`, and when provided show only the matching slice of `productCategories` (map friendly names → keys). |
 | **Verify** | `/products/shoes` shows only the 20 shoes. |
 
@@ -55,7 +55,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | `history.push('/login')` runs *before* axios resolves, so failed registrations still land on login with no feedback. |
-| **Where** | `Pages/SignUp/Signup.jsx` |
+| **Where** | `pages/SignUp/Signup.jsx` |
 | **How** | Move `history.push('/login')` into `.then()`, show a success message, and route failures to `/error` only in `.catch()`. |
 | **Verify** | Register with a duplicate email → you stay on the form and see the error. |
 
@@ -64,7 +64,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | Validation is HTML5-only: no visible messages, Gmail-only pattern, `password maxLength=8`. |
-| **Where** | `Pages/SignUp/Signup.jsx`, `Pages/Login/Login.jsx` |
+| **Where** | `pages/SignUp/Signup.jsx`, `pages/Login/Login.jsx` |
 | **How** | Wire `formik` + `yup`: min 8 chars password, confirm-password field, generic email rule (not Gmail-only), inline field errors. |
 | **Verify** | Invalid input shows field-level messages; valid input submits. |
 
@@ -73,7 +73,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | Searching `shoes` often returns 0 results (category match **and** name must contain "shoes"). |
-| **Where** | `Pages/SearchPage/SearchPage.jsx`, `Header/HeaderComponents/Search.jsx` |
+| **Where** | `pages/SearchPage/SearchPage.jsx`, `layout/Header/HeaderComponents/Search.jsx` |
 | **How** | (a) If the query matches a category, return the whole category. (b) Also match `BrandName`. (c) Search across name + brand with a small scoring. (d) Remove `console.log`s. (e) Re-enable an autocomplete `<datalist>` generated from categories/brands. |
 | **Verify** | `shoes` → all shoes; `nike` → Nike; `zzz` → "No products found." |
 
@@ -82,7 +82,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | `Home.jsx` hardcodes cards with prices that differ from the catalog slice (e.g. id 103 shows `123` on Home, `423` in Products). |
-| **Where** | `Pages/Home/Home.jsx` |
+| **Where** | `pages/Home/Home.jsx` |
 | **How** | Render Home sections from `state.AllProduct.productCategories` (or a `recommended` id list), instead of literal props. |
 | **Verify** | Same product shows the same price on Home, Products, Search and Cart. |
 
@@ -91,13 +91,13 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | Adding an already-carted item silently does nothing (only `console.warn`), while the badge still increments → badge can exceed the item count. |
-| **Where** | `Redux/ForShirt.jsx`, `Pages/Home/Card.jsx`, `Header/HeaderComponents/Cart.jsx` |
+| **Where** | `store/slices/ForShirt.jsx`, `pages/Home/Card.jsx`, `layout/Header/HeaderComponents/Cart.jsx` |
 | **How** | Return a flag from the reducer (or compare before dispatching); show "Already in cart" toast; only increment `CartValue` when an item was actually added; dedupe ids across categories (`1001`, `1030` appear twice). |
 | **Verify** | Add same product twice → one line, badge stays 1, user sees a message. |
 
 ## 1.11 Cleanup dead code & stale config
 
-- Delete `Pages/Products/Products-Backup.jsx` (not imported).
+- Delete `pages/Products/Products-Backup.jsx` (not imported).
 - Remove CRA leftovers: `src/logo.svg`, commented blocks in `index.jsx`,
   commented `<datalist>` in `Search.jsx`.
 - Decide on the service worker: either delete `serviceWorker*.jsx` or add
@@ -112,7 +112,7 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | Errors are either silent or a full page redirect; no loading states anywhere. |
-| **Where** | `Pages/Login`, `Pages/SignUp`, `Card.jsx`, `Cart.jsx` |
+| **Where** | `pages/Login`, `pages/SignUp`, `Card.jsx`, `Cart.jsx` |
 | **How** | Small toast helper (or `react-hot-toast`), spinner/disabled button while a request is in flight, inline success message after signup. |
 | **Verify** | Login with wrong password → clear message; button shows loading state. |
 

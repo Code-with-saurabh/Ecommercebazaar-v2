@@ -4,108 +4,116 @@
 
 | Aspect | Implementation |
 |---|---|
-| Transport | `axios` POST to `http://localhost:5000/api/users/...` |
-| Storage | MongoDB `users` collection via Mongoose |
-| Passwords | `bcryptjs` hash, 10 salt rounds (never stored in plain text) |
-| Session | **None** — `sessionStorage.isLoggedIn = 'true'` boolean only |
-| Client validation | HTML5 attributes (`required`, `pattern`, `maxLength`) |
+| Transport | shared axios instance `src/api.js` → `POST /api/users/...` |
+| Storage | MongoDB `users` collection via Mongoose (mongoose 9) |
+| Passwords | `bcryptjs` hash, 10 salt rounds, **8–72 chars** (never stored in plain text) |
+| Session | **None** — `sessionStorage.isLoggedIn = 'true'` boolean only (`src/utils/session.js`) |
+| Client validation | HTML5 attributes (`required`, `pattern`, `minLength`) + inline server-error display |
+| Server hardening | NoSQL-key sanitiser, field type guards, generic 401, 409 on duplicates, per-IP + per-`ip:username` rate limits |
 
 ## Signup — `/signup`
 
-`Pages/SignUp/Signup.jsx`
+`pages/SignUp/Signup.jsx`
 
-### Form fields & validation (all client-side, HTML5)
+### Form fields & validation
 
-| Field | Rules |
-|---|---|
-| `username` | required, `maxLength=25` |
-| `email` | required, `type=email`, **must match `[a-zA-Z0-9._%+-]+@gmail\.com`** (Gmail only) |
-| `phone` | required, `type=tel`, `maxLength=10`, pattern `[789][0-9]{9}` (Indian 10-digit starting 7/8/9) |
-| `password` | required, **`maxLength=8`** |
+| Field | Client rules | Server rules |
+|---|---|---|
+| `username` | required, `maxLength=25` | 3–25, `/^[a-zA-Z0-9_.-]+$/`, unique |
+| `email` | required, `type=email` | valid shape, unique |
+| `phone` | `type=tel`, `maxLength=10`, pattern `[789][0-9]{9}` | `/^\+?[0-9]{7,15}$/`, unique |
+| `password` | **`minLength=8`, `maxLength=64`** + hint in the label | 8–72 chars |
 
 ### Submit flow
 
 ```
-Submit
-  -> client duplicate check against Redux state.Data.data
-       (username / email / phone match?) 
-       -> if duplicate: history.push('/error?message=Duplicate data found...')
-  -> dispatch(AddToDB(formData))          # remembers it in Redux for this session
-  -> axios POST /api/users/register
-       -> success: clear the form
-       -> error:   history.push('/error?message=<server message>')
-  -> history.push('/login')               # fires immediately, before the API responds
+Submit (button disabled while in flight)
+  -> client guard: password < 8 chars -> inline error, no request
+  -> await post('/users/register', { username, email, phone, password })
+       success -> dispatch(AddToDB(formData))   # session-local duplicate check
+                  clear the form
+                  history.push('/login')        # AFTER the API confirms
+       failure -> inline role="alert" message
+                  400 -> join details[].message (field errors)
+                  409 -> "An account with that username, email or phone already exists"
 ```
 
-> **Bug to know:** `history.push('/login')` is called synchronously after
-> dispatching the axios request, so the user is redirected **before** the server
-> answers. A failed registration can still land you on the login page. The fix
-> (move the redirect into `.then()`) is a roadmap quick win.
+> The old flow redirected to `/login` synchronously before the response
+> arrived, so failed registrations still landed on the login page. Fixed.
 
 ### Server side (`backend/routes/users.js` → `POST /register`)
 
 ```js
-{ username, email, phone, password }
-  -> User.findOne({ $or: [{username},{email},{phone}] })
-       exists -> 400 { message: 'Duplicate data' }
-  -> bcrypt.hash(password, 10)
-  -> new User({...}).save()
-  -> 201 { message: 'User registered successfully' }
+sanitize(req.body)                     // strips any $/. operator keys
+require string fields                  // 400 "must be a string"
+validate format (username/email/phone/password 8-72)
+                                       // 400 + details [{field,message}]
+User.findOne({ $or: [{username},{email},{phone}] }).select('+password')
+  exists -> 409 { details: { fields: [...] } }   // was 400 "Duplicate data"
+bcrypt.hash(password, 10) -> new User(...).save() -> 201
 ```
 
 Model (`backend/models/User.js`):
 
 ```js
-{ username: String (required, unique),
-  email:    String (required, unique),
-  phone:    String (required, unique),
-  password: String (required) }   // hashed
+{ username: String (required, unique, trim, lowercase, 3-25, match),
+  email:    String (required, unique, trim, lowercase),
+  phone:    String (required, unique, match),
+  password: String (required, select: false) }   // hashed, hidden by default
 ```
 
 ## Login — `/login`
 
-`Pages/Login/Login.jsx`
+`pages/Login/Login.jsx`
 
 ```
-Submit -> axios POST /api/users/login { username, password }
-  success -> sessionStorage.setItem('isLoggedIn', 'true')
-             window.dispatchEvent(new Event('storage'))   # synthetic event
-             history.push('/')
-  failure -> errorMessage = 'Invalid username or password. Please try again.'
+Submit (button disabled while in flight)
+  -> await post('/users/login', { username, password })
+       success -> setLoggedIn(true)     # utils/session.js, notifies listeners
+                  history.push('/')
+       failure -> inline role="alert" from ApiError.message
+                  401 -> "Invalid username or password" (generic, no enumeration)
+                  429 -> rate-limit message from the API
 ```
 
-Server side: `User.findOne({ username })` → `bcrypt.compare(password, user.password)`
-→ `200 { message: 'Login successful' }` or `400 { message: 'Invalid username or password' }`.
+Server side: `sanitize` → `User.findOne({ username }).select('+password')`
+→ unknown user still runs a **timing-equalising** `bcrypt.compare` against a
+dummy hash → `401 { message: 'Invalid username or password' }` (same message
+and similar timing for both failure modes). `bcrypt.compare` failure → `401`.
+
+Rate limits on login:
+
+- `authLimiter`: 20 requests / 15 min per IP (all `/api/users/*`),
+- `loginLimiter`: **10 attempts / 15 min per `ip:username`** (slows targeted
+  brute force without locking out the whole NAT).
 
 Note: the server returns **no token, no user object, no expiry**.
 
 ## Logout & header state
 
-`Header/HeaderComponents/User.jsx`:
+`layout/Header/HeaderComponents/User.jsx`:
 
-- On mount and on the `storage` event, reads
-  `sessionStorage.getItem('isLoggedIn') === 'true'`.
-- Shows a **Login** link when logged out, a **Logout** control when logged in.
-- Logout sets `isLoggedIn = 'false'` (and the header re-renders).
-
-Because the app dispatches a **synthetic** `storage` event manually, the header
-updates immediately after login — `storage` normally only fires across tabs.
+- Reads login state through `isLoggedIn()` from `src/utils/session.js`.
+- Subscribes to the module's custom `bazaar:auth` event, so Login, Signup and
+  the header stay in sync **in the same tab** (the old code synthesised a
+  `storage` event, which only fires in *other* tabs).
+- Shows a **Login** control when logged out, **Logout** when logged in.
+- Logout: `setLoggedIn(false)` → navigate `/login`.
 
 ## Security assessment (why this is not production-ready)
 
-| Issue | Risk |
+| Issue | Status |
 |---|---|
-| No JWT / session cookie | Anyone can set `sessionStorage.isLoggedIn=true` in devtools and appear logged in |
-| No server-side session | The API cannot authorise anything (there are no protected endpoints yet) |
-| Login state is per-tab and lost on refresh | User appears logged out after reload |
-| CORS fully open (`cors()`) | Any origin can call the API |
-| No rate limiting / lockout | Brute-force possible |
-| No password strength rule (only `maxLength=8`) | Very weak passwords allowed |
-| Gmail-only email pattern | Blocks legitimate non-Gmail users |
-| `password` maxLength 8 in the UI only | Server accepts anything |
-| No email verification / password reset | Account recovery impossible |
-| Error messages leak little but are generic | OK, keep it that way |
-| Client "duplicate" check uses memory only | Duplicates only caught server-side after reload |
+| No JWT / session cookie | open — anyone can set `sessionStorage.isLoggedIn=true` in devtools |
+| No server-side session | open — the API cannot authorise anything yet |
+| Login state is per-tab and lost on refresh | open |
+| ~~CORS fully open~~ | done — `CORS_ORIGIN` allow-list env |
+| ~~No rate limiting~~ | done — api/auth/login limiters (see API docs) |
+| ~~No password strength rule~~ | done — server enforces 8–72 chars |
+| Gmail-only email pattern | loosened to `type=email` (server accepts any valid address) |
+| No email verification / password reset | open — needs email service |
+| User enumeration | mitigated — generic 401 + timing equaliser |
+| Client "duplicate" check uses memory only | kept as a fast-path hint; server is the source of truth (409) |
 
 Fix plan: JWT (or httpOnly cookies) + auth middleware + protected routes —
 see [`../roadmap/quality-security.md`](../roadmap/quality-security.md).
@@ -114,12 +122,10 @@ see [`../roadmap/quality-security.md`](../roadmap/quality-security.md).
 
 | Gap | Fix |
 |---|---|
-| Redirect to `/login` happens before API response | Move into `.then()` / `.catch()` |
 | No visible "account created" confirmation | Add a success toast/message |
-| Password field `maxLength=8` | Raise it, add strength rules, show/hide toggle |
 | Formik + Yup are installed but unused | Use them for validation + error messages |
 | No "forgot password" | Needs email service (later phase) |
-| Login errors are always the same message | Keep (good practice), but log details server-side |
+| Login errors are always the same message | Keep (good practice), details go to server logs |
 
 ## Related docs
 

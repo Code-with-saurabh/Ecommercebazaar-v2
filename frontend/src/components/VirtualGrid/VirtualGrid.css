@@ -1,0 +1,10 @@
+/* VirtualGrid keeps the host's own layout rules; this file only adds the
+   measurement context and placeholder styling for the spacers. */
+.virtual-grid {
+  position: relative;
+}
+
+.virtual-grid > [data-vg-spacer] {
+  pointer-events: none;
+  contain: layout style;
+}

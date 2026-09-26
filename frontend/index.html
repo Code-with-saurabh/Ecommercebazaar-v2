@@ -3,11 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bazaar</title>
+    <title>Bazaar | Online Shopping for Shirts, T-Shirts, Pants & Shoes</title>
+    <meta
+      name="description"
+      content="Bazaar - shop shirts, t-shirts, pants and shoes. Premium quality, fast checkout and free returns."
+    />
+    <meta name="theme-color" content="#007bff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta property="og:title" content="Bazaar | Online Shopping" />
+    <meta property="og:description" content="Shop shirts, t-shirts, pants and shoes at Bazaar." />
+    <meta property="og:type" content="website" />
     <link rel="icon" href="/favicon3.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+
+    <!-- LCP: first paint the hero image instead of discovering it from JS -->
+    <link
+      rel="preload"
+      as="image"
+      href="./src/assets/img/Hero1.jpg"
+      fetchpriority="high"
+      crossorigin
+    />
+    <!-- Critical fonts (font-display: swap keeps text visible meanwhile) -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="./src/assets/FontFamilys/font/roboto/Roboto-Regular.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="./src/assets/FontFamilys/font/roboto/Roboto-Medium.woff2"
+      crossorigin
+    />
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/index.jsx"></script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -14,7 +14,7 @@ when in doubt, copy the pattern of a neighbouring file.
 | Config / one-off scripts | `.mjs` / `.cjs` | `vite.config.mjs` |
 | Styles | same base name as the component | `Cart.css` next to `Cart.jsx` |
 | Slices | `For*.jsx` (existing convention) | `ForCart.jsx`, `ForShirt.jsx` |
-| Pages | one folder per page | `Pages/Cart/Cart.jsx` + `Cart.css` |
+| Pages | one folder per page | `pages/Cart/Cart.jsx` + `Cart.css` |
 
 > **Why `.jsx`:** Vite 8's oxc parser has JSX disabled for `.js`. A `.js` file
 > containing JSX fails the build with
@@ -22,7 +22,7 @@ when in doubt, copy the pattern of a neighbouring file.
 > back to `.js`.
 
 Component names are **PascalCase**; filenames follow the existing mixed style
-(`main.jsx`, `logo.jsx` in Header/Footer are legacy — do not spread it to new
+(`main.jsx`, `logo.jsx` in layout/Header/Footer are legacy — do not spread it to new
 files; new components should be PascalCase: `ProductCard.jsx`).
 
 ---
@@ -65,13 +65,13 @@ export default Thing;
 
 **Do**
 
-- One `createSlice` per concern in `src/Components/Redux/`.
-- Wire it in `src/Components/Store/Store.jsx`.
+- One `createSlice` per concern in `src/store/slices/`.
+- Wire it in `src/store/Store.jsx`.
 - Select with `useSelector(state => state.<slice>.<field>)`.
 - Keep slices small and serialisable (plain data only — no class instances).
 
 ```js
-// src/Components/Redux/ForCart.jsx  — existing pattern
+// src/store/slices/ForCart.jsx  — existing pattern
 const CartSlice = createSlice({
   name: 'cart',
   initialState: { value: 0 },

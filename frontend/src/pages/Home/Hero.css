@@ -1,0 +1,74 @@
+ 
+
+.Hero {
+  position: relative; /* anchor for the absolutely positioned LCP image */
+  text-align: center;
+  padding: 100px 20px 30px;
+  background-color: #f0f0f0;
+  height: 28rem; /* fixed box: swapping the image never shifts the page */
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+/* The banner image fills the fixed-height section -> zero CLS */
+.Hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top 25% right 0%;
+  z-index: 0;
+}
+
+.Hero .hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.Hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  /* font-family:SellenaBrush; */
+}
+
+.Hero h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.Hero p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  /* border-radius: 25% 65% 60% 35% / 35% 40% 30% 25%; */
+  transition: background-color 0.3s ease;
+  position:relative;/*this*/
+  background:transparent;/*this*/
+ 
+  cursor:pointer;/*this*/
+  z-index:0;/*this*/
+  font-weight:bold;
+  background-image: linear-gradient(318deg, #24a7dc96 0%,#9255b154 75%);
+ box-shadow:10px 8px 20px 0px #adb2b459, inset -8px -8px 26px #9255b154;
+}
+
+.hero-button:hover {
+ background-color: #005ca9; 
+ background-image: linear-gradient(131deg, #1f81b185 0%, #7e3a6fbf 75%);
+  background-position: right center;  
+}
+
+.hero-button:active{
+	 transform: translateY(2px);
+}
+
+ 

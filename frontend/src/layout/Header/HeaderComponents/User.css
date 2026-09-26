@@ -1,0 +1,62 @@
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.user button {
+    background-color: #b0a7c2;  
+    color: white;  
+    border: none;
+    padding: 8px 16px; 
+    transition:all 0.3s ease; 
+ 
+	border-radius: 4px;  
+    cursor: pointer;
+    display: flex;
+	font-size:17px;
+    align-items: center;  
+	z-index:1;  
+	background-image: linear-gradient(315deg, #dc2430 0%,#7b4397 75%); 
+	background-size: 120% auto; 
+}
+
+
+ 
+.user button img {
+    width: 20px; /* Adjust image width */
+    height: 20px; /* fixed box -> no shift while png loads */
+    object-fit: contain;
+    margin-right: 7px; /* Adjust spacing between icon and text */
+}
+
+.user button:hover {
+    background-color: #938eb0; /* Hover background color */
+	width:100%;/*this*/
+	left:0;/*this*/
+	background-position: right center;
+}
+
+.user button:focus {
+    outline: none; 
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);  
+	
+}
+
+/*this*/
+.user button:after {
+     border-radius:5px;
+	 width :0;
+	 height:100%;
+	 top:0;
+	 z-index:-1;
+	 transition: all 0.3s ease;
+	 right:0;
+	
+}
+
+.user button:active{
+	 transform: translateY(5px);
+}
+
+ 
+ 

@@ -18,7 +18,7 @@ Every route renders inside the same shell:
 ```
 
 - **Header** and **Footer** are always visible.
-- **ScrollToTop** (`src/Components/ScrollToTop.jsx`) listens to route changes —
+- **ScrollToTop** (`src/components/ScrollToTop.jsx`) listens to route changes —
   without it, navigating from a long page kept the scroll position mid-page.
 - Layout CSS lives in `src/assets/styles/App.css` (`.Header`, `.mainPage`, `.FDIV`).
 
@@ -26,19 +26,19 @@ Every route renders inside the same shell:
 
 | Path | Component | File | Notes |
 |---|---|---|---|
-| `/` (exact) | `Home` | `Pages/Home/Home.jsx` | Hero + Recommended + Features |
-| `/about` | `About` | `Pages/About/About.jsx` | Static content |
-| `/products` | `Products` | `Pages/Products/Products.jsx` | Full catalog, grouped by category |
+| `/` (exact) | `Home` | `pages/Home/Home.jsx` | Hero + Recommended + Features |
+| `/about` | `About` | `pages/About/About.jsx` | Static content |
+| `/products` | `Products` | `pages/Products/Products.jsx` | Full catalog, grouped by category |
 | `/products/tshirt` | `<Products category="T-shirts" />` | same | **Prop ignored** — full catalog renders |
 | `/products/shoes` | `<Products category="Shoes" />` | same | **Prop ignored** — full catalog renders |
-| `/login` | `Login` | `Pages/Login/Login.jsx` | API login |
-| `/signup` | `SignUp` | `Pages/SignUp/Signup.jsx` | API register |
-| `/error` | `ErrorPage` | `Pages/Error/ErrorPage.jsx` | Shows `?message=` |
-| `/cart` | `Cart` | `Pages/Cart/Cart.jsx` | Cart list + summary |
-| `/help` | `Help` | `Pages/Help/Help.jsx` | Static |
-| `/contact` | `Contact` | `Pages/Contact/Contact.jsx` | Static contact info |
-| `/search` | `SearchPage` | `Pages/SearchPage/SearchPage.jsx` | Reads `?query=` |
-| `/ByNow` | `ByNow` | `Pages/ByNow/ByNow.jsx` | Checkout placeholder |
+| `/login` | `Login` | `pages/Login/Login.jsx` | API login |
+| `/signup` | `SignUp` | `pages/SignUp/Signup.jsx` | API register |
+| `/error` | `ErrorPage` | `pages/Error/ErrorPage.jsx` | Shows `?message=` |
+| `/cart` | `Cart` | `pages/Cart/Cart.jsx` | Cart list + summary |
+| `/help` | `Help` | `pages/Help/Help.jsx` | Static |
+| `/contact` | `Contact` | `pages/Contact/Contact.jsx` | Static contact info |
+| `/search` | `SearchPage` | `pages/SearchPage/SearchPage.jsx` | Reads `?query=` |
+| `/ByNow` | `ByNow` | `pages/ByNow/ByNow.jsx` | Checkout placeholder |
 
 Anything else: no catch-all route exists, so unknown paths render the empty
 shell (header + footer only). A `path="*"` fallback is a roadmap quick win.
@@ -48,7 +48,7 @@ shell (header + footer only). A `path="*"` fallback is a roadmap quick win.
 Each page is a folder containing a component and its CSS:
 
 ```
-Pages/Cart/
+pages/Cart/
   Cart.jsx     component logic + markup
   Cart.css     page-scoped styles
 ```
@@ -57,11 +57,11 @@ Shared UI pieces:
 
 | Component | Used for |
 |---|---|
-| `Pages/Home/Card.jsx` | The product card used on Home, Products and Search results |
-| `Pages/Home/Hero.jsx` | Home hero banner/video |
-| `Header/HeaderComponents/*` | Cart badge, Search bar, User/login block, NavLinks, logo |
-| `Header/NavBar/Navbar.jsx` | Category navigation |
-| `Footer/main.jsx` | Footer + social links |
+| `pages/Home/Card.jsx` | The product card used on Home, Products and Search results |
+| `pages/Home/Hero.jsx` | Home hero banner/video |
+| `layout/Header/HeaderComponents/*` | Cart badge, Search bar, User/login block, NavLinks, logo |
+| `layout/Header/NavBar/Navbar.jsx` | Category navigation |
+| `layout/Footer/main.jsx` | Footer + social links |
 | `ScrollToTop.jsx` | Route-change scroll reset |
 
 ## Navigation entry points

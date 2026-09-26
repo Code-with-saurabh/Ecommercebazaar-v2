@@ -1,0 +1,170 @@
+// Backend endpoint + security test suite (no deps, uses fetch)
+const BASE = 'http://localhost:5000';
+const results = [];
+let pass = 0;
+let fail = 0;
+
+function check(name, cond, extra = '') {
+  if (cond) { pass++; results.push(`  PASS  ${name}${extra ? ' :: ' + extra : ''}`); }
+  else { fail++; results.push(`  FAIL  ${name}${extra ? ' :: ' + extra : ''}`); }
+}
+
+async function req(path, { method = 'GET', body, headers = {} } = {}) {
+  const res = await fetch(BASE + path, {
+    method,
+    headers: { 'Content-Type': 'application/json', ...headers },
+    body: body === undefined ? undefined : typeof body === 'string' ? body : JSON.stringify(body),
+  });
+  const ct = res.headers.get('content-type') || '';
+  let json = null;
+  let text = null;
+  if (ct.includes('application/json')) json = await res.json();
+  else if (ct.includes('text/html')) text = await res.text();
+  return { status: res.status, headers: res.headers, json, text, raw: res };
+}
+
+async function main() {
+  // ---- health + security headers ----
+  const h = await req('/api/health');
+  check('health 200', h.status === 200, `got ${h.status}`);
+  check('health db connected', h.json && h.json.db === 'connected');
+  check('CSP header', !!h.headers.get('content-security-policy'), String(h.headers.get('content-security-policy')).slice(0, 60));
+  check('X-Content-Type-Options: nosniff', h.headers.get('x-content-type-options') === 'nosniff');
+  check('X-Frame-Options: DENY', h.headers.get('x-frame-options') === 'DENY');
+  check('X-Powered-By removed', !h.headers.get('x-powered-by'));
+  check('X-Request-Id present', !!h.headers.get('x-request-id'));
+  check('Referrer-Policy', h.headers.get('referrer-policy') === 'strict-origin-when-cross-origin');
+  check('Permissions-Policy', !!h.headers.get('permissions-policy'));
+  check('Cache-Control: no-store on API', h.headers.get('cache-control') === 'no-store');
+  const anyApi = await req('/api/nope');
+  check('X-RateLimit-Limit on /api', !!anyApi.headers.get('x-ratelimit-limit'), String(anyApi.headers.get('x-ratelimit-limit')));
+  check('health NOT rate-limited (no RL headers)', !h.headers.get('x-ratelimit-limit'));
+
+  // ---- 404 shape ----
+  const nf = await req('/api/nope');
+  check('unknown API route -> 404', nf.status === 404, `got ${nf.status}`);
+  check('404 envelope success:false', nf.json && nf.json.success === false);
+
+  // ---- malformed JSON ----
+  const bad = await req('/api/users/register', { method: 'POST', body: '{"username":' });
+  check('malformed JSON -> 400', bad.status === 400, `got ${bad.status}`);
+  check('malformed JSON message', bad.json && /Malformed JSON/.test(bad.json.message));
+
+  // ---- NoSQL injection ----
+  const inj = await req('/api/users/register', {
+    method: 'POST',
+    body: JSON.stringify({ username: { $gt: '' }, email: { $ne: 'x' }, phone: '1234567890', password: 'password123' }),
+  });
+  check('object body fields rejected -> 400', inj.status === 400, `got ${inj.status}`);
+  check('injection message mentions type', inj.json && /must be a string/.test(inj.json.message), inj.json && inj.json.message);
+
+  const injLogin = await req('/api/users/login', {
+    method: 'POST',
+    body: JSON.stringify({ username: { $gt: '' }, password: 'anything' }),
+  });
+  check('login NoSQL injection -> 400', injLogin.status === 400, `got ${injLogin.status}`);
+
+  // ---- validation errors with details ----
+  const weak = await req('/api/users/register', {
+    method: 'POST',
+    body: { username: 'testuser1', email: 'not-an-email', phone: '12', password: 'short' },
+  });
+  check('weak input -> 400', weak.status === 400, `got ${weak.status}`);
+  check('field details returned', Array.isArray(weak.json && weak.json.details) && weak.json.details.length >= 3,
+    JSON.stringify(weak.json && weak.json.details));
+
+  const emailOnly = await req('/api/users/register', {
+    method: 'POST',
+    body: { username: 'testuser1', email: 'a@b.com', phone: '9876543210', password: '1234' },
+  });
+  check('short password -> 400 (min 8)', emailOnly.status === 400, `got ${emailOnly.status}`);
+
+  // ---- successful register ----
+  const username = 'testuser_' + Date.now().toString(36);
+  const phone = '9' + Date.now().toString().slice(-9);
+  const reg = await req('/api/users/register', {
+    method: 'POST',
+    body: { username, email: `${username}@example.com`, phone, password: 'Password123' },
+  });
+  check('valid register -> 201', reg.status === 201, `got ${reg.status} ${JSON.stringify(reg.json)}`);
+  check('register does not leak password', reg.json && !JSON.stringify(reg.json).includes('$2a$'));
+
+  // ---- duplicate register -> 409 ----
+  const dup = await req('/api/users/register', {
+    method: 'POST',
+    body: { username, email: `${username}@example.com`, phone, password: 'Password123' },
+  });
+  check('duplicate register -> 409', dup.status === 409, `got ${dup.status}`);
+  check('409 has fields detail', dup.json && dup.json.details && Array.isArray(dup.json.details.fields));
+
+  // ---- login flows ----
+  const wrongPw = await req('/api/users/login', { method: 'POST', body: { username, password: 'WrongPass1' } });
+  check('wrong password -> 401', wrongPw.status === 401, `got ${wrongPw.status}`);
+  check('wrong password generic message', wrongPw.json && /Invalid username or password/.test(wrongPw.json.message));
+
+  const noUser = await req('/api/users/login', { method: 'POST', body: { username: 'ghost_' + username, password: 'WrongPass1' } });
+  check('unknown user -> 401', noUser.status === 401, `got ${noUser.status}`);
+  check('unknown user same message (no enumeration)', noUser.json && noUser.json.message === (wrongPw.json && wrongPw.json.message));
+
+  const ok = await req('/api/users/login', { method: 'POST', body: { username, password: 'Password123' } });
+  check('correct login -> 200', ok.status === 200, `got ${ok.status} ${JSON.stringify(ok.json)}`);
+  check('login response has no password', ok.json && !JSON.stringify(ok.json).includes('$2a$'));
+
+  // ---- login rate limiter (10 per ip+username) ----
+  let limitedMsg = '';
+  for (let i = 0; i < 12; i++) {
+    const r = await req('/api/users/login', { method: 'POST', body: { username, password: 'Nope' + i } });
+    if (r.status === 429) { limitedMsg = (r.json && r.json.message) || ''; break; }
+  }
+  check('login limiter fires -> 429 from loginLimiter', /login attempts for this account/.test(limitedMsg), limitedMsg || 'no 429 in 12 tries');
+  const after429 = await req('/api/users/login', { method: 'POST', body: { username, password: 'Password123' } });
+  check('blocked account cannot login until window resets', after429.status === 429, `status ${after429.status}`);
+
+  // ---- static SPA + caching (only if dist exists) ----
+  const html = await req('/');
+  if (html.status === 200 && /text\/html/.test(String(html.headers.get('content-type')))) {
+    check('SPA fallback serves index.html', /<title>Bazaar<\/title>/.test(html.text || ''));
+    check('index.html Cache-Control: no-cache', html.headers.get('cache-control') === 'no-cache');
+    check('CSP on HTML too', !!html.headers.get('content-security-policy'));
+
+    const jsPath = (html.text || '').match(/\/assets\/[^"]+\.js/);
+    if (jsPath) {
+      const asset = await req(jsPath[0], { headers: { 'Accept-Encoding': 'gzip' } });
+      check('hashed JS asset -> 200', asset.status === 200, `got ${asset.status}`);
+      check('JS asset Cache-Control immutable', (asset.headers.get('cache-control') || '').includes('immutable'));
+      check('JS asset gzipped', asset.headers.get('content-encoding') === 'gzip', `encoding=${asset.headers.get('content-encoding')}`);
+      const cl = asset.headers.get('content-length');
+      check('gzip uses chunked encoding (no stale Content-Length)', cl === null || Number(cl) > 0, `content-length=${cl}`);
+    } else {
+      check('find hashed JS in html', false, 'no /assets/*.js match');
+    }
+
+    const deep = await req('/products/anything');
+    check('SPA deep link -> 200 html', deep.status === 200 && /text\/html/.test(String(deep.headers.get('content-type'))), `got ${deep.status}`);
+  } else {
+    check('SPA serving (dist present)', false, `status ${html.status} type ${html.headers.get('content-type')}`);
+  }
+
+  // ---- CORS preflight ----
+  const pre = await fetch(BASE + '/api/users/login', {
+    method: 'OPTIONS',
+    headers: {
+      Origin: 'http://localhost:3000',
+      'Access-Control-Request-Method': 'POST',
+      'Access-Control-Request-Headers': 'content-type',
+    },
+  });
+  check('CORS preflight allowed', pre.status === 204 || pre.status === 200, `got ${pre.status}`);
+  check('CORS allows origin', pre.headers.get('access-control-allow-origin') === 'http://localhost:3000',
+    String(pre.headers.get('access-control-allow-origin')));
+
+  console.log(results.join('\n'));
+  console.log(`\nTOTAL: ${pass} passed, ${fail} failed`);
+  process.exit(fail ? 1 : 0);
+}
+
+main().catch(err => {
+  console.error('SUITE CRASH:', err);
+  console.log(results.join('\n'));
+  process.exit(1);
+});

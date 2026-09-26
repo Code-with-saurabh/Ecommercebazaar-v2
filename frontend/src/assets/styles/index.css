@@ -18,48 +18,44 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #718079;
     }
-  
-  
-   
-/* Additional custom CSS rules */
+
+    /* Additional custom CSS rules */
 * {
   padding: 0;
   margin: 0;
-  font-family: Merriweather;
+  font-family: Merriweather, serif;
 }
 
-#root{
-	width:100vw;
-	height:100vh;
+#root {
+  /* 100vw includes the scrollbar and caused a phantom horizontal scrollbar;
+     width:100% follows the visible viewport instead. min-height keeps the
+     full-screen look without trapping overflowing content. */
+  width: 100%;
+  min-height: 100vh;
 }
-
-/* ::-webkit-scrollbar-thumb { */
-  /* background: darkgray; */
-  /* border-radius: 1px; */
-/* } */
 
 @font-face {
-  font-family: 'SellenaBrush';  
+  font-family: 'SellenaBrush';
   src: url('../FontFamilys/SellenaBrush-x3JyK.ttf') format('truetype');
+  /* Show fallback text immediately instead of invisible text (FOIT) */
+  font-display: swap;
 }
 
-/* @font-face { */
-  /* font-family: 'robot';   */
-  /* src: url('../FontFamilys/font/roboto/Roboto-Regular.ttf') format('truetype'); */
-/* } */
+/* woff2 first (half the bytes of the ttf), ttf as a fallback */
+@font-face {
+  font-family: 'robotl';
+  src: url('../FontFamilys/font/roboto/Roboto-Medium.woff2') format('woff2'),
+    url('../FontFamilys/font/roboto/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 @font-face {
-  font-family: 'robotl';  
-  src: url('../FontFamilys/font/roboto/Roboto-Medium.ttf') format('truetype');
+  font-family: 'robotm';
+  src: url('../FontFamilys/font/roboto/Roboto-Regular.woff2') format('woff2'),
+    url('../FontFamilys/font/roboto/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
-/* @font-face { */
-  /* font-family: 'robott';   */
-  /* src: url('../FontFamilys/font/roboto/Roboto-Thin.ttf') format('truetype'); */
-/* } */
-@font-face {
-  font-family: 'robotm';  
-  src: url('../FontFamilys/font/roboto/Roboto-Regular.ttf') format('truetype');
-}
-
-/* E:\React\Ecommearc\src\assets\FontFamilys\font\roboto\Roboto-Bold.woff2 */ 
- 

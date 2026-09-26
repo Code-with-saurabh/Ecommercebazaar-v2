@@ -62,7 +62,7 @@ reflects in the UI without a frontend rebuild.
 
 **Why:** there is no way to inspect a product; "Add to Cart" is the only action.
 
-- New route `/products/:id` + `Pages/ProductDetail/ProductDetail.jsx`.
+- New route `/products/:id` + `pages/ProductDetail/ProductDetail.jsx`.
 - Gallery, size/colour pickers, stock, rating, description, related products.
 - Update `Card.jsx` so the image/title links to the detail page.
 - SEO-friendly `<title>` per product.

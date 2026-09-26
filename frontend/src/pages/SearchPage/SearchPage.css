@@ -1,0 +1,46 @@
+.search-page{
+	margin-left:10%;
+}
+
+ 
+.product-grid{
+	display:flex;
+	flex-wrap:wrap;
+}
+
+
+/* .NFT-CC { */
+	/* margin: 0 auto; */
+    /* position: relative; */
+    /* top: 265px; */
+/* } */
+ 
+
+/* .NTF { */
+    /* margin: 0;   */
+    /* font-size: 24px;   */
+    /* color: #333;   */
+/* } */
+/* SearchPage.css */
+.NFT_CC {
+  text-align: center;
+  padding: 50px 0;
+}
+
+.NTF {
+  font-size: 24px;
+  color: #333;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #ff6347;  /* Example of a color change to make the text stand out */
+  text-transform: uppercase;
+}
+
+
+
+/* result count above the grid */
+.search-count {
+  margin: 12px 0 8px;
+  color: #555555;
+  font-size: 14px;
+}

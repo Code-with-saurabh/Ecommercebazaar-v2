@@ -42,7 +42,7 @@ export default defineConfig({
 
 The entry HTML is `frontend/index.html` (instead of CRA's `public/index.html`),
 with the script tag:
-`<script type="module" src="/src/index.jsx"></script>`.
+`<script type="module" src="/src/main.jsx"></script>`.
 
 > **Important rule:** under Vite 8, files containing JSX must have the `.jsx`
 > extension. JSX inside a `.js` file fails the build (the oxc parser has JSX

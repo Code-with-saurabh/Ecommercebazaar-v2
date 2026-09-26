@@ -1,0 +1,256 @@
+.IMGS-CC {
+  display: flex;
+  justify-content: left;
+  align-items: center; /* Align items vertically centered */
+  border: 1px solid #c8bcbc5e;
+  border-radius: 12px;
+  margin: 12px 10px;
+  padding: 10px; /* Added padding for inner spacing */
+}
+
+.IMGS-CC img {
+  width: 25%;
+  aspect-ratio: 1 / 1; /* fixed box -> zero shift while images load */
+  object-fit: cover;
+  height: auto;
+  border-radius: 22px;
+  padding: 7px;
+  box-shadow: 5px 10px 26px #00000030;
+  transition: transform 0.2s ease; /* Smooth transition on hover */
+}
+
+.IMGS-CC img:hover {
+  box-shadow: 5px 10px 26px #00000040;
+  transform: scale(1.05);
+}
+
+.desc-CC {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  margin-bottom: 20px; /* Adjust margin for spacing */
+}
+
+.IMGS-CC .desc-CC h4 {
+  font-size: 18px; /* Adjust font size for mobile */
+  margin-top: 5px; /* Adjust margin for spacing */
+  margin-bottom: 5px;
+}
+
+.IMGS-CC .desc-CC h5 {
+  /* /* font-size: 18px;   */
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #088178;
+}
+/* .IMGS-CC .btn-CC h5 { */
+  /* font-size: 18px;   */
+  /* margin-top: 15px; */
+  /* margin-bottom: 5px; */
+  /* color: #088178; */
+/* } */
+
+.btn-CC {
+  display: flex; /* Ensure buttons and input are flex items */
+  align-items: center;
+  position: relative;
+  /* margin-top: 10px;  Adjust margin for spacing */ 
+    margin-right: -200px;
+	margin-bottom: 30px;
+  right: 0; /* Reset position for smaller screens */
+}
+
+.btn-CC button,
+.btn-CC input {
+  margin-left: 10px; /* Adjust margin for spacing */
+  width: 30px; /* Adjust width for smaller screens */
+  height: 30px;
+  padding: 2px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.btn-CC input {
+  width: 50px; /* Adjust width for input field */
+  text-align: center;
+}
+
+.btn-CC button:hover,
+.btn-CC input:hover {
+  background-color: #e0e0e0;
+}
+
+@media (max-width: 600px) {
+  .IMGS-CC {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items at the start */
+  }
+
+  .IMGS-CC img {
+    max-width: 100%; /* Adjust image width to fit container */
+  }
+
+  .desc-CC {
+    margin-left: 0; /* Remove left margin for description */
+    margin-top: 10px; /* Add top margin for spacing */
+  }
+
+  .btn-CC {
+    flex-direction: row; /* Stack buttons and input horizontally */
+    margin-top: 10px;
+  }
+}
+
+.css-button-3d--red{
+  margin-top: 150px;
+  margin-left: 14px;
+  min-width: 130px;
+  height: 40px;
+  color: #fff;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  background: #ef233c;
+  box-shadow: 0 5px #d90429;
+}
+.css-button-3d--red:hover {
+  box-shadow: 0 3px #d90429;
+  top: 1px;
+}
+.css-button-3d--red:active {
+  box-shadow: 0 0 #d90429;
+  top: 5px;
+}
+.css-button-3d--blue{
+
+  margin-top: 150px;
+  min-width: 130px;
+  height: 40px;
+  color: #fff;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  background: #2397ef;
+  box-shadow: 0 5px #047fd9;
+}
+.css-button-3d--blue:hover {
+  box-shadow: 0 3px #047fd9;
+  top: 1px;
+}
+.css-button-3d--blue:active {
+  box-shadow: 0 0 #047fd9;
+  top: 5px;
+}
+
+.btn-CC button{
+	 /* margin-top: 150px; */
+  min-width: 30px;
+  /* height: 40px; */
+  /* color: #fff; */
+  /* padding: 5px 10px; */
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 5px;
+  /* border: none; */
+  /* background: #ef233c; */
+  box-shadow: -1px 1px #e7e7e7;
+}
+
+.btn-CC button:hover {
+  box-shadow: 0 3px #e7e7e7;
+  top: 1px;
+}
+.btn-CC button:active {
+  box-shadow: 0 0 #e7e7e7;
+  top: 5px;
+}
+
+.empty-cart-message-CCc {
+    position: relative;
+    height: 100vh; /* Adjust height as needed */
+    overflow: hidden;
+}
+
+.background-video-CCc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the video covers the entire container */
+    z-index: -1; /* Pushes the video behind the text content */
+}
+
+.content-CCc {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding-top: 50px;
+    color: #fcc;
+    -webkit-text-stroke: 0.2px #44223a;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+
+
+.content-CCc h1 {
+    font-size: 3rem; /* Example font size for heading */
+    margin-bottom: 20px; /* Bottom margin for separation */
+}
+
+.content-CCc p {
+    font-size: 1.5rem; /* Example font size for paragraph */
+}
+
+/* Cart summary (items + total) */
+.cart-summary-CC {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 25px auto;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.cart-summary-row-CC {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #222;
+}
+
+.cart-total-CC {
+    color: #1a7f37;
+    font-size: 1.3rem;
+}
+
+
+/* Buy-now control is a react-router Link (<a>), strip default link styling */
+a.css-button-3d--blue {
+  text-decoration: none;
+  text-align: center;
+  box-sizing: border-box;
+}

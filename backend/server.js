@@ -44,6 +44,10 @@ async function main() {
   process.on('unhandledRejection', reason => {
     console.error('[unhandledRejection]', reason);
   });
+  process.on('uncaughtException', err => {
+    console.error('[uncaughtException]', err);
+    process.exit(1);
+  });
 }
 
 main().catch(err => {

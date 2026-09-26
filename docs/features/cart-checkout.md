@@ -4,8 +4,8 @@
 
 | Slice | File | Shape | Purpose |
 |---|---|---|---|
-| `Shirt` | `Redux/ForShirt.jsx` | `{ products: [], duplicate: bool }` | The cart lines |
-| `CartValue` | `Redux/ForCart.jsx` | `{ value: number }` | Header badge count |
+| `Shirt` | `store/slices/ForShirt.jsx` | `{ products: [], duplicate: bool }` | The cart lines |
+| `CartValue` | `store/slices/ForCart.jsx` | `{ value: number }` | Header badge count |
 | — | `Cart.jsx` local state | `{ [productId]: number }` | Quantity per line |
 
 Cart line object:
@@ -33,7 +33,7 @@ dispatch(addCart());   // badge += 1
 
 ## The cart page (`/cart`)
 
-`Pages/Cart/Cart.jsx`
+`pages/Cart/Cart.jsx`
 
 **Empty state** — if `products.length === 0`, a full-screen looping video
 (`BGVideo.mp4`) with:
@@ -71,7 +71,7 @@ totalPrice = products.reduce((sum, p) => sum + getQty(p.id) * Number(p.price), 0
 
 ## Checkout / By Now (placeholder)
 
-Route `/ByNow` renders `Pages/ByNow/ByNow.jsx` — a looping background video with:
+Route `/ByNow` renders `pages/ByNow/ByNow.jsx` — a looping background video with:
 
 > **Sorry, We Are Working On It!!** — We appreciate your patience. Please check back later.
 
