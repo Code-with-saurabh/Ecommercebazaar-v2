@@ -218,3 +218,29 @@
 .content-CCc p {
     font-size: 1.5rem; /* Example font size for paragraph */
 }
+
+/* Cart summary (items + total) */
+.cart-summary-CC {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 25px auto;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.cart-summary-row-CC {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #222;
+}
+
+.cart-total-CC {
+    color: #1a7f37;
+    font-size: 1.3rem;
+}

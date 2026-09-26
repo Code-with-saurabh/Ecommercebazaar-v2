@@ -28,6 +28,15 @@ mongoose.connection.on('error', (err) => {
     console.error('Error connecting to MongoDB:', err);
 });
 
+// Health check
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+        uptime: process.uptime(),
+    });
+});
+
 // Import routes
 const usersRouter = require('./routes/users');
 

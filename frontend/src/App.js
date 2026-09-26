@@ -17,12 +17,14 @@ import Help from './Components/Pages/Help/Help';
 import Contact from './Components/Pages/Contact/Contact';
 import SearchPage  from './Components/Pages/SearchPage/SearchPage';
 import ByNow from './Components/Pages/ByNow/ByNow';
+import ScrollToTop from './Components/ScrollToTop';
 import './assets/styles/App.css';
  
 function App() {
    
   return (
     <>
+        <ScrollToTop />
         <div className="Header">
         <Header />
       </div>

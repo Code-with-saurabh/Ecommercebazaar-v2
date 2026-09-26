@@ -11,6 +11,12 @@ function Cart() {
   const [quantities, setQuantities] = useState({});
 	
 const dispatch = useDispatch();
+
+  // quantity set na ho to 1 maano (warna NaN dikhta tha)
+  const getQty = (id) => (quantities[id] === undefined || isNaN(quantities[id]) ? 1 : quantities[id]);
+
+  const totalItems = products.reduce((sum, product) => sum + getQty(product.id), 0);
+  const totalPrice = products.reduce((sum, product) => sum + getQty(product.id) * Number(product.price), 0);
   
   useState(() => {
     const initialQuantities = {};
@@ -67,7 +73,8 @@ const dispatch = useDispatch();
   return (
     <>
       {products.map(product => {
-        const finalPrice = quantities[product.id] * product.price;
+        const qty = getQty(product.id);
+        const finalPrice = qty * Number(product.price);
         return (
           <div key={product.id} className="IMGS-CC">
             <img src={product.image} alt={product.name} />
@@ -80,7 +87,7 @@ const dispatch = useDispatch();
               <input
                 className="I-CC"
                 type="number"
-                value={quantities[product.id]}
+                value={qty}
                 onChange={(e) => setQuantity(product.id, parseInt(e.target.value))}
                 placeholder="Quantity"
               />
@@ -97,6 +104,12 @@ const dispatch = useDispatch();
           </div>
         );
       })}
+      <div className="cart-summary-CC">
+        <div className="cart-summary-row-CC">
+          <span>Items: {totalItems}</span>
+          <span className="cart-total-CC">Total: ${totalPrice.toFixed(2)}</span>
+        </div>
+      </div>
     </>
   );
 }
