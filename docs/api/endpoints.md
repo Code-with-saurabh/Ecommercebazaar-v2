@@ -2,6 +2,31 @@
 
 Base URL: `http://localhost:5000` · Content type: `application/json`
 
+## Response envelope
+
+Every endpoint (health included) returns a consistent envelope:
+
+```json
+// success
+{ "success": true,  "message": "…", "data": { … }, "meta": { … } }
+
+// failure
+{ "success": false, "message": "…", "details": [ … ] }
+```
+
+`data` and `meta` are omitted when empty; `details` appears on validation errors
+(`[{ "field": "email", "message": "…" }]`). `stack` may appear on 5xx in
+development only.
+
+Rate-limit headers are attached to all `/api` responses except `/api/health`:
+
+```
+X-RateLimit-Limit: 300        (20 for /api/users/*)
+X-RateLimit-Remaining: 299
+X-RateLimit-Reset: 2026-09-26T13:11:47.872Z
+Retry-After: 899              (only on 429)
+```
+
 ---
 
 ## 1. `GET /api/health`
@@ -58,9 +83,12 @@ Creates a new user. **No auth required.**
 
 | Status | Body | When |
 |---|---|---|
-| `201` | `{"message":"User registered successfully"}` | Created |
-| `400` | `{"message":"Duplicate data"}` | username **or** email **or** phone already exists |
-| `500` | `{"message":"Internal server error"}` | Validation/DB failure (e.g. missing required field) |
+| `201` | `{"success":true,"message":"User registered successfully","data":{…}}` | Created (`data` = `{id, username, email, phone}` — never the password) |
+| `400` | `{"success":false,"message":"Duplicate data"}` | username **or** email **or** phone already exists |
+| `400` | `{"success":false,"message":"username, email, phone and password are required"}` | Missing field |
+| `400` | `{"success":false,"message":"Validation failed","details":[…]}` | Schema validation error |
+| `429` | `{"success":false,"message":"Too many auth attempts…","details":{"retryAfter":899}}` | Auth rate limit hit |
+| `500` | `{"success":false,"message":"Internal server error"}` | Unexpected failure |
 
 ### Server logic
 
@@ -94,9 +122,11 @@ Verifies credentials. **No auth required** (and no token is issued).
 
 | Status | Body | When |
 |---|---|---|
-| `200` | `{"message":"Login successful"}` | Username exists and bcrypt matches |
-| `400` | `{"message":"Invalid username or password"}` | Unknown username **or** wrong password (same message on purpose) |
-| `500` | `{"message":"Internal server error"}` | DB/exception failure |
+| `200` | `{"success":true,"message":"Login successful","data":{…}}` | Username exists and bcrypt matches (`data` = `{id, username}`) |
+| `400` | `{"success":false,"message":"Invalid username or password"}` | Unknown username **or** wrong password (same message on purpose) |
+| `400` | `{"success":false,"message":"username and password are required"}` | Missing field |
+| `429` | `{"success":false,"message":"Too many auth attempts, please try again later","details":{"retryAfter":899}}` | Auth rate limit hit |
+| `500` | `{"success":false,"message":"Internal server error"}` | DB/exception failure |
 
 ### Server logic
 
@@ -146,11 +176,28 @@ any deployment (roadmap quick win).
 |---|---|
 | `200` | Login OK, health OK |
 | `201` | User created |
-| `400` | Duplicate data / invalid credentials / client error |
+| `400` | Duplicate data / invalid credentials / missing fields / bad JSON |
+| `401` / `403` | Reserved for JWT auth (Phase 2 — `middleware/auth.js`) |
+| `404` | Unknown route: `{"success":false,"message":"Route GET /x not found"}` |
+| `429` | Rate limit exceeded (see `middleware/rateLimit.js`) |
 | `500` | Server or DB error |
 
-There are currently **no** `401`, `403` or `404` API responses, because no
-endpoint requires authentication yet.
+There are currently **no** `401`/`403` API responses, because no endpoint
+requires authentication yet — they arrive with JWT support.
+
+## Server structure
+
+```
+server.js          entry: connect DB -> listen -> graceful shutdown
+app.js             express app: cors, json, morgan, routes, 404, error handler
+config/env.js      loads .env, exposes typed config, validates in production
+config/db.js       mongoose connect/disconnect + connection events
+middleware/        rateLimit.js (sliding window), error.js (404 + handler)
+utils/             ApiError, APIResponse (envelope), asyncHandler
+routes/users.js    register + login
+```
+
+Start with `npm start` (or `npm run dev` for `node --watch`).
 
 ---
 

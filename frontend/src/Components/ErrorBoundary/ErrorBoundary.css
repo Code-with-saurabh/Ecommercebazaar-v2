@@ -1,0 +1,58 @@
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 60vh;
+  padding: 48px 24px;
+  text-align: center;
+  font-family: inherit;
+}
+
+.error-boundary h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.error-boundary p {
+  margin: 0;
+  max-width: 520px;
+  color: #4b5563;
+}
+
+.error-boundary__detail {
+  max-width: 640px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+}
+
+.error-boundary__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.error-boundary__actions button {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 6px;
+  background: #2f6fed;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.error-boundary__actions button:last-child {
+  background: #6b7280;
+}
+
+.error-boundary__actions button:hover {
+  filter: brightness(1.08);
+}

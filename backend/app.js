@@ -1,52 +1,51 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
-// Initialize the app
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-
-// MongoDB connection URI
-// Atlas cluster is dead, so local MongoDB is the default. Override with: set mongoURL=...
-const mongoDB = process.env.mongoURL || 'mongodb://127.0.0.1:27017/ecommerce';
-// MongoDB connection setup
-mongoose.connect(mongoDB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true, // Suppress deprecation warning
-});
-
-mongoose.connection.on('connected', () => {
-    console.log('Connected to MongoDB');
-});
-
-mongoose.connection.on('error', (err) => {
-    console.error('Error connecting to MongoDB:', err);
-});
-
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({
-        status: 'ok',
-        db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-        uptime: process.uptime(),
-    });
-});
-
-// Import routes
+const { env, validateEnv } = require('./config/env');
+const { isHealthy } = require('./config/db');
+const { notFound, errorHandler } = require('./middleware/error');
+const { apiLimiter, authLimiter } = require('./middleware/rateLimit');
 const usersRouter = require('./routes/users');
 
-// Use routes
-app.use('/api/users', usersRouter);
+validateEnv();
 
-// Start the server
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+const app = express();
+
+// Behind a proxy (Render/NGINX) so req.ip / X-Forwarded-For are trusted
+app.set('trust proxy', 1);
+
+// CORS - allow-list comes from CORS_ORIGIN (comma separated); '*' = any origin
+const allowAll = env.corsOrigins.includes('*');
+app.use(
+  cors({
+    origin: allowAll ? true : env.corsOrigins,
+    credentials: !allowAll,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  })
+);
+
+app.use(express.json({ limit: env.jsonLimit }));
+
+if (!env.isTest) {
+  app.use(morgan(env.isProd ? 'combined' : 'dev'));
+}
+
+// Health check (kept before the rate limiter so monitors never get 429)
+app.get(`${env.apiPrefix}/health`, (req, res) => {
+  res.json({
+    status: 'ok',
+    db: isHealthy() ? 'connected' : 'disconnected',
+    uptime: process.uptime(),
+  });
 });
+
+// Rate limits: general API traffic + stricter bucket for auth endpoints
+app.use(env.apiPrefix, apiLimiter);
+app.use(`${env.apiPrefix}/users`, authLimiter, usersRouter);
+
+// 404 -> ApiError -> shared error handler
+app.use(notFound);
+app.use(errorHandler);
 
 module.exports = app;
