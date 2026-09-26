@@ -1,9 +1,9 @@
 import React from 'react'
-import Card from './Card.js';
+import Card from './Card.jsx';
 
  
 
-import Hero from './Hero.js';
+import Hero from './Hero.jsx';
 
 import Prodouct1 from '../../../assets/img/products/f1.jpg';
 import Prodouct2 from '../../../assets/img/products/f2.jpg';

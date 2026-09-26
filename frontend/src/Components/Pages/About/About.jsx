@@ -7,7 +7,7 @@ import img4 from '../../../assets/img/IMGs/BG/Midnight Coders.jpg';
 
 import './About.css'; // Assuming you have a separate CSS file
 
-import ForAbout from './ForAbout.js';
+import ForAbout from './ForAbout.jsx';
 
 const About = () => {
 	

@@ -4,6 +4,8 @@ node_modules/
 # production
 build/
 frontend/build/
+dist/
+frontend/dist/
 
 # logs
 *.log

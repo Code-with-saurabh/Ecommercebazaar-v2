@@ -1,7 +1,7 @@
 // src/Components/Pages/Products/Products.js
 
 import React from 'react';
-import Card from  '../Home/Card.js';
+import Card from  '../Home/Card.jsx';
  
 import {useSelector} from 'react-redux';
 

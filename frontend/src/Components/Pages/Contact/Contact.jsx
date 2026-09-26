@@ -32,7 +32,7 @@ function Contact() {
     <div className="contact-container">
       <header className="contact-header">
         <h1>Contact Us</h1>
-        <p>We’re here to help and answer any questions you might have. We look forward to hearing from you.</p>
+        <p>Weâ€™re here to help and answer any questions you might have. We look forward to hearing from you.</p>
       </header>
       
       <section className="contact-form-section">

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {Link} from 'react-router-dom';
 import { useSelector ,useDispatch} from 'react-redux';
-import  {removeitems} from '../../Redux/ForShirt.js';
-import  {removeCart} from '../../Redux/ForCart.js';
+import  {removeitems} from '../../Redux/ForShirt.jsx';
+import  {removeCart} from '../../Redux/ForCart.jsx';
 import './Cart.css';
 import BGVideo from '../../../assets/video/BGVideo.mp4';
 function Cart() {

@@ -3,7 +3,7 @@ import './Signup.css';
 // import BGV1 from '../../../assets/video/background.mp4';
 import BGV2 from '../../../assets/video/background2.mp4';
 import { useHistory,Link  } from "react-router-dom";
-import {AddToDB} from '../../Redux/AllFormData.js';
+import {AddToDB} from '../../Redux/AllFormData.jsx';
 import {useSelector,useDispatch} from 'react-redux';
 import axios from 'axios';
 function Signup() {

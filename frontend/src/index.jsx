@@ -6,7 +6,7 @@ import './assets/styles/index.css';
 import App from './App';
  
 import {Provider} from 'react-redux';
-import {Store} from './Components/Store/Store.js';
+import {Store} from './Components/Store/Store.jsx';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -40,7 +40,7 @@ serviceWorker.unregister();
 
 */
  
- // import Router from './ExampleComponent.js';
+ // import Router from './ExampleComponent.jsx';
   // <Router/>
 
  

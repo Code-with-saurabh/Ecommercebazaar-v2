@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ProfilePic from '../../../assets/img/profile.jpg';
 import Stars from '../../../assets/img/star.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { additems } from '../../Redux/ForShirt.js';
-import { addCart } from '../../Redux/ForCart.js';
+import { additems } from '../../Redux/ForShirt.jsx';
+import { addCart } from '../../Redux/ForCart.jsx';
 
 import './Card.css';
 

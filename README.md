@@ -4,7 +4,7 @@ Full-stack e-commerce app (**Bazaar**) — recovered, reorganized and running.
 
 ## Structure
 
-- `frontend/` — React app (Create React App): components, pages, Redux store, assets (images / videos / fonts)
+- `frontend/` — React app (Vite): components, pages, Redux store, assets (images / videos / fonts)
 - `backend/` — Express + MongoDB API (`/api/users/register`, `/api/users/login`)
 
 ## Run

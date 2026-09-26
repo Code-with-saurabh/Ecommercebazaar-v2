@@ -1,4 +1,4 @@
-// This file handles the registration of a service worker for your app
+﻿// This file handles the registration of a service worker for your app
 
 // Check if service workers are supported in the current environment
 const isLocalhost = Boolean(
@@ -8,15 +8,15 @@ const isLocalhost = Boolean(
 );
 
 export function register() {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     // The service worker file is located at /service-worker.js
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
+    const publicUrl = new URL(import.meta.env.BASE_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
       return;
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      const swUrl = `${import.meta.env.BASE_URL}service-worker.js`;
 
       if (isLocalhost) {
         // Check if service worker exists in localhost
