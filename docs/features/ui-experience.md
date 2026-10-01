@@ -47,7 +47,7 @@ Sections share the `.inDiv` / `.divIMG` layout classes.
 
 | Piece | File | Behaviour |
 |---|---|---|
-| Logo | `layout/Header/HeaderComponents/logo.jsx` | Links to `/` |
+| Logo | `layout/Header/HeaderComponents/Logo.jsx` | Links to `/` |
 | Nav links | `layout/Header/HeaderComponents/NavLinks.jsx` | Main menu |
 | Navbar | `layout/Header/NavBar/Navbar.jsx` | Category navigation |
 | Search | `layout/Header/HeaderComponents/Search.jsx` | Input + button → `/search?query=…` |
@@ -95,11 +95,3 @@ real errors and as a general notice screen (e.g. duplicate signup).
 
 Concrete improvements are listed in
 [`../roadmap/scale-deploy.md`](../roadmap/scale-deploy.md) (UX/SEO/a11y section).
-
-## Dead / leftover UI code
-
-- `serviceWorker.jsx` + `serviceWorkerRegistration.jsx` — CRA PWA files; the
-  app explicitly calls `serviceWorker.unregister()`.
-- `logo.svg` — CRA default logo, unused.
-- `pages/Products/Products-Backup.jsx` — old copy, not imported.
-- Commented-out `<datalist>` in the search bar.

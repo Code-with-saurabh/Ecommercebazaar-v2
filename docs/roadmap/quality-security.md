@@ -108,7 +108,7 @@ Later: deploy workflow (Phase 4) + branch protection requiring green CI.
 | PropTypes / TypeScript | Either enforce PropTypes everywhere or migrate to TypeScript incrementally |
 | Error boundaries | Add `<ErrorBoundary>` around routes so one crash doesn't blank the app |
 | Loading/error states | Every async action needs loading + failure UI |
-| Remove dead code | `Products-Backup.jsx`, CRA service worker files, commented blocks, unused `counter` slice |
+| Remove dead code | Remaining commented-out blocks in pages/slices/CSS (backup file, CRA leftovers and unused `counter` slice are already gone) |
 | API layer | Single `src/api.js` with axios instance, interceptors, base URL from env |
 | Backend watch | `nodemon` for dev |
 | Logging | `morgan` (already a dependency) + structured error logs |

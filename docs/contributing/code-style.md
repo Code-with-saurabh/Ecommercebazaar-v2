@@ -22,8 +22,8 @@ when in doubt, copy the pattern of a neighbouring file.
 > back to `.js`.
 
 Component names are **PascalCase**; filenames follow the existing mixed style
-(`main.jsx`, `logo.jsx` in layout/Header/Footer are legacy — do not spread it to new
-files; new components should be PascalCase: `ProductCard.jsx`).
+(`main.jsx` in layout/Header/Footer is legacy — do not spread it to new
+files; new components should be PascalCase: `ProductCard.jsx`, `Logo.jsx`).
 
 ---
 

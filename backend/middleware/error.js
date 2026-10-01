@@ -1,5 +1,5 @@
 ﻿const ApiError = require('../utils/ApiError');
-const APIResponse = require('../utils/APIResponse');
+const ApiResponse = require('../utils/ApiResponse');
 const { env } = require('../config/env');
 
 /** 404 - attach when no route matched. */
@@ -58,7 +58,7 @@ function errorHandler(err, req, res, _next) {
   const stack = env.isProd || statusCode < 500 ? undefined : error.stack;
   const details = error.details || null;
 
-  APIResponse.error(res, statusCode, message, details, stack);
+  ApiResponse.error(res, statusCode, message, details, stack);
 }
 
 module.exports = { notFound, errorHandler };

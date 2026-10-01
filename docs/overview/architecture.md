@@ -19,34 +19,42 @@ EC/
 |       +-- api.js                shared axios instance (envelope unwrapping)
 |       +-- config.js             apiUrl / timeouts / storage keys
 |       +-- layout/
-|       |   +-- Header/           main.jsx, NavBar/, HeaderComponents/ (Cart, Search, User, NavLinks, logo)
+|       |   +-- Header/           main.jsx, NavBar/, HeaderComponents/ (Cart, Search, User, NavLinks, Logo)
 |       |   +-- Footer/           footer with social links
 |       +-- pages/                one folder per page (jsx + css each)
-|       |   +-- Home/             Home, Hero (LCP img), Card
+|       |   +-- Home/             Home, Hero (LCP img)
 |       |   +-- Products/         Products (VirtualGrid + route category)
 |       |   +-- Cart/, Login/, SignUp/, SearchPage/, ByNow/
 |       |   +-- About/, Help/, Contact/, Error/ (404 + /error)
 |       +-- components/
 |       |   +-- LazyVideo/        background video: visible + idle before loading
 |       |   +-- VirtualGrid/      windowed grid/flex list (spacers, DOM-measured rows)
+|       |   +-- ProductCard/      product card (Home, Products, Search results)
+|       |   +-- List/             generic list (renderItem/keyExtractor, empty + loading)
 |       |   +-- Toast/, Spinner/, ScrollToTop
+|       |   +-- ErrorBoundary/
 |       +-- hooks/                useDebounce, useRafThrottle, usePrefersReducedMotion
 |       +-- utils/                session.js (login flag), search.js, ApiError.js
 |       +-- store/                Store.jsx, slices/ (Redux Toolkit), persist.js
 |       +-- pwa/                  registerSW.js (prod only, hourly update())
 |       +-- assets/               img/, video/, styles/, FontFamilys/
 +-- backend/                      Express API (port 5000)
-|   +-- app.js                    middleware pipeline (see below), static dist, SPA fallback
-|   +-- server.js                 entry: connect DB -> listen -> uncaughtException guard
+|   +-- app.js                    middleware pipeline (see below) - wiring only
+|   +-- server.js                 entry: validateEnv -> connect DB -> listen -> guard
 |   +-- config/env.js             .env loader, TRUST_PROXY, rate-limit knobs, mongoose options
+|   +-- config/cors.js            CORS allow-list middleware (CORS_ORIGIN)
 |   +-- middleware/
-|   |   +-- security.js           CSP, HSTS, nosniff, frame/referrer/permissions, X-Request-Id
+|   |   +-- security.js           CSP, HSTS, nosniff, frame/referrer/permissions
+|   |   +-- requestId.js          X-Request-Id correlation id
 |   |   +-- sanitize.js           strips $/. keys from body/query (NoSQL injection guard)
 |   |   +-- cache.js              Cache-Control: no-store for API responses
 |   |   +-- rateLimit.js          apiLimiter / authLimiter / loginLimiter
+|   |   +-- spa.js                static frontend/dist + SPA fallback + cache headers
 |   |   +-- error.js              404 + error handler (envelope)
+|   +-- routes/health.js          GET /api/health (before the rate limiter)
 |   +-- routes/users.js           POST /register (409 dup), POST /login (401, timing-safe)
 |   +-- models/User.js            mongoose schema (select:false password)
+|   +-- utils/                    ApiError, ApiResponse (envelope), asyncHandler, validation
 +-- docs/                         this documentation
 +-- old-site/                     original built site (gitignored)
 ```
@@ -100,9 +108,8 @@ Router version is **react-router-dom v5** (`Switch`, `useHistory`), not v6
 
 | Slice key | File | State shape | Used by |
 |---|---|---|---|
-| `counter` | `store/slices/Counter.jsx` | counter value | (demo slice) |
 | `CartValue` | `store/slices/ForCart.jsx` | `{ value, ids }` — badge **derived** from the unique ids in `Shirt.products` | header `Cart.jsx` (badge) |
-| `Shirt` | `store/slices/ForShirt.jsx` | `{ products: [], duplicate: bool }` — cart items | `Cart.jsx`, `Card.jsx` |
+| `Shirt` | `store/slices/ForShirt.jsx` | `{ products: [], duplicate: bool }` — cart items | `Cart.jsx`, `ProductCard.jsx` |
 | `Data` | `store/slices/AllFormData.jsx` | `{ data: [] }` — signups this session | `Signup.jsx` (duplicate check) |
 | `AllProduct` | `store/slices/ForSearch.jsx` | `{ productCategories: { tshirts, shirts, pants, shoes } }` | `Products.jsx`, `SearchPage.jsx`, header `Search.jsx` |
 

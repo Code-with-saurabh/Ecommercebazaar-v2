@@ -3,17 +3,14 @@ const bcrypt = require('bcryptjs');
 
 const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
-const APIResponse = require('../utils/APIResponse');
+const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
+const { validateRegistration } = require('../utils/validation');
 const { loginLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
 const SALT_ROUNDS = 10;
-
-const USERNAME_RE = /^[a-zA-Z0-9_.-]{3,25}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_RE = /^\+?[0-9]{7,15}$/;
 
 // Compared against when the user does not exist so response time does not
 // reveal whether an account is registered (user-enumeration timing oracle).
@@ -39,14 +36,7 @@ router.post(
     const phone = asString(body.phone, 'phone');
     const password = asString(body.password, 'password');
 
-    const errors = [];
-    if (!USERNAME_RE.test(username)) {
-      errors.push({ field: 'username', message: '3-25 chars: letters, numbers, _ . - only' });
-    }
-    if (!EMAIL_RE.test(email)) errors.push({ field: 'email', message: 'must be a valid email address' });
-    if (!PHONE_RE.test(phone)) errors.push({ field: 'phone', message: '7-15 digits, optional leading +' });
-    if (password.length < 8) errors.push({ field: 'password', message: 'password must be at least 8 characters' });
-    if (password.length > 72) errors.push({ field: 'password', message: 'password must be at most 72 characters' });
+    const errors = validateRegistration({ username, email, phone, password });
     if (errors.length) throw ApiError.badRequest('Validation failed', errors);
 
     const existingUser = await User.findOne({
@@ -77,7 +67,7 @@ router.post(
       throw err;
     }
 
-    return APIResponse.created(res, 'User registered successfully', {
+    return ApiResponse.created(res, 'User registered successfully', {
       id: user._id,
       username: user.username,
       email: user.email,
@@ -109,7 +99,7 @@ router.post(
       throw ApiError.unauthorized('Invalid username or password');
     }
 
-    return APIResponse.ok(res, 'Login successful', {
+    return ApiResponse.ok(res, 'Login successful', {
       id: user._id,
       username: user.username,
       email: user.email,

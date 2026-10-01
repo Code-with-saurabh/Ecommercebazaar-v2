@@ -57,7 +57,7 @@ Shared UI pieces:
 
 | Component | Used for |
 |---|---|
-| `pages/Home/Card.jsx` | The product card used on Home, Products and Search results |
+| `components/ProductCard/ProductCard.jsx` | The product card used on Home, Products and Search results |
 | `pages/Home/Hero.jsx` | Home hero banner/video |
 | `layout/Header/HeaderComponents/*` | Cart badge, Search bar, User/login block, NavLinks, logo |
 | `layout/Header/NavBar/Navbar.jsx` | Category navigation |

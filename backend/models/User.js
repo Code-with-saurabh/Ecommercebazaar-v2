@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-
-const USERNAME_RE = /^[a-zA-Z0-9_.-]{3,25}$/;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const { USERNAME_RE, EMAIL_RE } = require('../utils/validation');
 
 const userSchema = new mongoose.Schema(
   {

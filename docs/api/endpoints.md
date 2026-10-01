@@ -231,17 +231,21 @@ arrive with JWT support.
 ## Server structure
 
 ```
-server.js          entry: connect DB -> listen -> uncaughtException guard
-app.js             express app (see pipeline below)
+server.js          entry: validateEnv -> connect DB -> listen -> uncaughtException guard
+app.js             express app wiring (see pipeline below)
 config/env.js      loads .env, typed config, TRUST_PROXY, production validation
+config/cors.js     CORS allow-list middleware (CORS_ORIGIN)
 config/db.js       mongoose connect/disconnect + connection events
 middleware/
   security.js      CSP + HSTS + nosniff + frame/referrer/permissions headers
+  requestId.js     X-Request-Id correlation id
   sanitize.js      strips $/. keys from body/query (NoSQL injection guard)
   cache.js         Cache-Control: no-store for API responses
   rateLimit.js     apiLimiter / authLimiter / loginLimiter (sweeping windows)
+  spa.js           static frontend/dist + immutable /assets + SPA fallback
   error.js         404 + error handler (envelope)
-utils/             ApiError, APIResponse (envelope), asyncHandler
+utils/             ApiError, ApiResponse (envelope), asyncHandler, validation
+routes/health.js   GET /health (mounted before the rate limiter)
 routes/users.js    register + login (field validation, 409, timing equaliser)
 models/User.js     schema (trim/lowercase/match, password select:false)
 ```

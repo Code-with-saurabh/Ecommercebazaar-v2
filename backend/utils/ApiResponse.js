@@ -4,7 +4,7 @@
  * success:  { success: true,  message, data?, meta? }
  * failure:  { success: false, message, details?, stack? }
  */
-class APIResponse {
+class ApiResponse {
   static success(res, statusCode, message, data = null, meta = undefined) {
     const body = { success: true, message };
     if (data !== null && data !== undefined) body.data = data;
@@ -13,11 +13,11 @@ class APIResponse {
   }
 
   static ok(res, message = 'OK', data = null, meta = undefined) {
-    return APIResponse.success(res, 200, message, data, meta);
+    return ApiResponse.success(res, 200, message, data, meta);
   }
 
   static created(res, message = 'Created', data = null, meta = undefined) {
-    return APIResponse.success(res, 201, message, data, meta);
+    return ApiResponse.success(res, 201, message, data, meta);
   }
 
   static noContent(res) {
@@ -25,7 +25,7 @@ class APIResponse {
   }
 
   static paginated(res, { items, total, page, limit, message = 'OK' }) {
-    return APIResponse.success(res, 200, message, items, {
+    return ApiResponse.success(res, 200, message, items, {
       total,
       page,
       limit,
@@ -42,5 +42,5 @@ class APIResponse {
   }
 }
 
-module.exports = APIResponse;
+module.exports = ApiResponse;
 

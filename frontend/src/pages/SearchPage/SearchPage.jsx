@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Card from '../Home/Card';
+import Card from '../../components/ProductCard/ProductCard';
 import VirtualGrid from '../../components/VirtualGrid/VirtualGrid';
 import { searchProducts } from '../../utils/search';
 import './SearchPage.css';

@@ -2,7 +2,7 @@ import React from 'react';
 import './Navbar.css'; // Assuming you have a separate CSS file for styling
 
 import NavLinks from '../HeaderComponents/NavLinks.jsx';
-import Logo from '../HeaderComponents/logo.jsx';
+import Logo from '../HeaderComponents/Logo.jsx';
 import Search from '../HeaderComponents/Search.jsx';
 import Cart from '../HeaderComponents/Cart.jsx';
 import User from '../HeaderComponents/User.jsx';

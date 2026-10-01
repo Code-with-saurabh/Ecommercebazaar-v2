@@ -123,7 +123,7 @@ async function main() {
   // ---- static SPA + caching (only if dist exists) ----
   const html = await req('/');
   if (html.status === 200 && /text\/html/.test(String(html.headers.get('content-type')))) {
-    check('SPA fallback serves index.html', /<title>Bazaar<\/title>/.test(html.text || ''));
+    check('SPA fallback serves index.html', /<title>Bazaar\b/.test(html.text || ''));
     check('index.html Cache-Control: no-cache', html.headers.get('cache-control') === 'no-cache');
     check('CSP on HTML too', !!html.headers.get('content-security-policy'));
 

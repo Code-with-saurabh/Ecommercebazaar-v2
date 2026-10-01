@@ -91,21 +91,28 @@ makes the existing app *correct* rather than bigger. **Do these first.**
 | | |
 |---|---|
 | **Why** | Adding an already-carted item silently does nothing (only `console.warn`), while the badge still increments → badge can exceed the item count. |
-| **Where** | `store/slices/ForShirt.jsx`, `pages/Home/Card.jsx`, `layout/Header/HeaderComponents/Cart.jsx` |
+| **Where** | `store/slices/ForShirt.jsx`, `components/ProductCard/ProductCard.jsx`, `layout/Header/HeaderComponents/Cart.jsx` |
 | **How** | Return a flag from the reducer (or compare before dispatching); show "Already in cart" toast; only increment `CartValue` when an item was actually added; dedupe ids across categories (`1001`, `1030` appear twice). |
 | **Verify** | Add same product twice → one line, badge stays 1, user sees a message. |
 
 ## 1.11 Cleanup dead code & stale config
 
-- Delete `pages/Products/Products-Backup.jsx` (not imported).
-- Remove CRA leftovers: `src/logo.svg`, commented blocks in `index.jsx`,
-  commented `<datalist>` in `Search.jsx`.
-- Decide on the service worker: either delete `serviceWorker*.jsx` or add
-  `vite-plugin-pwa` (see Phase 4). Today `serviceWorker.unregister()` is called.
-- Remove backend packages from frontend `dependencies`
-  (`express`, `mongoose`, `cors`, `body-parser`) and the stale
-  `eslintConfig: react-app`.
-- Remove unused `counter` slice or wire it to something.
+Done:
+
+- Deleted `pages/Products/Products-Backup.jsx` (never imported).
+- Removed CRA leftovers: `src/logo.svg`, stale `browserslist` in
+  `frontend/package.json`.
+- Removed the unused `counter` slice and its registration in `Store.jsx`.
+- Unified `src/Components/` + `src/components/` into one `src/components/`
+  (the split broke imports on case-sensitive filesystems).
+- Moved the shared product card to `components/ProductCard/` (it was parked
+  under `pages/Home/` but used by Products and Search too).
+
+Still open:
+
+- Decide on the service worker: keep `public/sw.js` (custom) or adopt
+  `vite-plugin-pwa` (see Phase 4).
+- Remove remaining commented-out blocks in pages/slices/CSS.
 
 ## 1.12 Error/notice UX
 

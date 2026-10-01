@@ -1,5 +1,7 @@
-const { env } = require('./config/env');
+const { env, validateEnv } = require('./config/env');
 const { connectDB, disconnectDB } = require('./config/db');
+
+validateEnv();
 
 async function main() {
   const app = require('./app');

@@ -54,7 +54,7 @@ Object.entries(productCategories).map(([category, products]) => (
 - **It takes no props** — the `category` prop passed by `/products/tshirt` and
   `/products/shoes` is ignored (see [known gaps](#known-gaps)).
 
-## The product card (`pages/Home/Card.jsx`)
+## The product card (`components/ProductCard/ProductCard.jsx`)
 
 Props (with defaults):
 
@@ -99,11 +99,6 @@ There is **no** `/products/:id` route. Clicking a card does nothing except
 "Add to Cart". Product detail, images gallery, size/colour selection are
 roadmap items: [`../roadmap/commerce-core.md`](../roadmap/commerce-core.md).
 
-## Backup file
-
-`pages/Products/Products-Backup.jsx` (~7 KB) is an older copy of the products
-page that is not imported anywhere. It should eventually be deleted (roadmap).
-
 ## Known gaps
 
 | Gap | Impact | Roadmap |
@@ -114,4 +109,3 @@ page that is not imported anywhere. It should eventually be deleted (roadmap).
 | Home card prices differ from catalog prices | Inconsistent pricing shown | quick-wins (single source of truth) |
 | Duplicate ids across categories (e.g. `1001`, `1030`) | Bad React keys, future API conflicts | quick-wins |
 | No stock, size, colour, discount, rating data | Blocks realistic e-commerce | commerce-core |
-| `Products-Backup.jsx` dead code | Confusing | quick-wins |

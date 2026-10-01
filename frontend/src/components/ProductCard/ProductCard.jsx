@@ -4,9 +4,9 @@ import ProfilePic from '../../assets/img/profile.jpg';
 import Stars from '../../assets/img/star.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { additems } from '../../store/slices/ForShirt.jsx';
-import { useToast } from '../../components/Toast/Toast.jsx';
+import { useToast } from '../Toast/Toast.jsx';
 
-import './Card.css';
+import './ProductCard.css';
 
 const Card = ({
   id = 0,
