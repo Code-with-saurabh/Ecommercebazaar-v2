@@ -8,11 +8,55 @@
       name="description"
       content="Bazaar - shop shirts, t-shirts, pants and shoes. Premium quality, fast checkout and free returns."
     />
+    <meta name="keywords" content="online shopping, shirts, t-shirts, pants, shoes, bazaar, ecommerce" />
+    <meta name="author" content="Saurabh" />
+    <meta name="robots" content="index, follow" />
+    <!-- ✏️ EDIT: replace your-domain.example with your real domain (match VITE_SITE_URL) -->
+    <link rel="canonical" href="https://your-domain.example/" />
     <meta name="theme-color" content="#007bff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn previews) -->
+    <meta property="og:site_name" content="Bazaar" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
     <meta property="og:title" content="Bazaar | Online Shopping" />
     <meta property="og:description" content="Shop shirts, t-shirts, pants and shoes at Bazaar." />
-    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-domain.example/" />
+    <meta property="og:image" content="https://your-domain.example/logo512.png" />
+    <meta property="og:image:alt" content="Bazaar logo" />
+
+    <!-- X/Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bazaar | Online Shopping" />
+    <meta name="twitter:description" content="Shop shirts, t-shirts, pants and shoes at Bazaar." />
+    <meta name="twitter:image" content="https://your-domain.example/logo512.png" />
+
+    <!-- Structured data: helps Google show sitelinks + search box -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Bazaar",
+        "url": "https://your-domain.example/",
+        "logo": "https://your-domain.example/logo512.png",
+        "sameAs": ["https://github.com/Code-with-saurabh"]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Bazaar",
+        "url": "https://your-domain.example/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://your-domain.example/search?query={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
     <link rel="icon" href="/favicon3.ico" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/logo192.png" />

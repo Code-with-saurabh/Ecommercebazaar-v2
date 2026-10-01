@@ -1,0 +1,9 @@
+# ============================================================
+# ✏️ EDIT: replace https://your-domain.example with your real
+# domain (and set VITE_SITE_URL in frontend/.env to match)
+# ============================================================
+User-agent: *
+Allow: /
+
+# Sitemap: where Google finds every page
+Sitemap: https://your-domain.example/sitemap.xml

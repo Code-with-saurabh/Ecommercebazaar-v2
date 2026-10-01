@@ -6,6 +6,7 @@ import Header from './layout/Header/main';
 import Footer from './layout/Footer/main';
 import ScrollToTop from './components/ScrollToTop';
 import { SpinnerBlock } from './components/Spinner/Spinner';
+import { Seo } from './seo';
 import './assets/styles/App.css';
 
 // Route-level code splitting: each page is its own chunk, so the initial
@@ -25,6 +26,7 @@ const ByNow = lazy(() => import('./pages/ByNow/ByNow'));
 function App() {
   return (
     <>
+      <Seo />
       <ScrollToTop />
       <div className="Header">
         <Header />
