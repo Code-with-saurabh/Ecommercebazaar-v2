@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Spinner from '../Spinner/Spinner';
+import { ListSkeleton } from '../Skeleton/Skeleton';
 import './List.css';
 
 /**
@@ -22,12 +22,9 @@ function List({
   className = '',
 }) {
   if (loading) {
-    return (
-      <p className={`list__status ${className}`.trim()} role="status">
-        <Spinner size={20} label={emptyMessage} />
-        Loading…
-      </p>
-    );
+    // Shimmer rows shaped like `.list__item` instead of a lone spinner:
+    // the list keeps its final layout while data arrives.
+    return <ListSkeleton rows={4} />;
   }
 
   if (!items.length) {

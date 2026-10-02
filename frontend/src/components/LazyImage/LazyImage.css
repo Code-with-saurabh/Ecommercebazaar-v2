@@ -1,0 +1,70 @@
+/* LazyImage — reserved box + shimmer placeholder + fade-in.
+   The box is always the size of the final image (aspect-ratio), so nothing
+   on the page moves when the real bytes arrive. */
+
+.lazy-image {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+/* square media (product cards, cart thumbs) */
+.lazy-image--square {
+  aspect-ratio: 1 / 1;
+}
+
+.lazy-image__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.lazy-image.is-loaded .lazy-image__img {
+  opacity: 1;
+}
+
+/* placeholder sits exactly on top of the (already laid out) image box */
+.lazy-image__placeholder {
+  position: absolute;
+  inset: 0;
+  background-color: #e9ecef;
+  background-image: linear-gradient(90deg, #e9ecef 0%, #f6f7f9 40%, #e9ecef 80%);
+  background-size: 200% 100%;
+  animation: lazy-image-shimmer 1.4s ease-in-out infinite;
+}
+
+.lazy-image.is-loaded .lazy-image__placeholder {
+  display: none;
+}
+
+/* download failed -> quiet grey block instead of a broken-image icon */
+.lazy-image__fallback {
+  position: absolute;
+  inset: 0;
+  background: #e9ecef;
+  border: 1px dashed #ced4da;
+}
+
+@keyframes lazy-image-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lazy-image__placeholder {
+    animation: none;
+    background-image: none;
+  }
+
+  .lazy-image__img {
+    transition: none;
+  }
+}

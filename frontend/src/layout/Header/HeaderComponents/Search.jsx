@@ -48,7 +48,6 @@ const Search = () => {
           onChange={event => setInput(event.target.value)}
           placeholder="Search products..."
           aria-label="Search products"
-          list="products"
           autoComplete="off"
         />
         <button type="submit">Search</button>

@@ -5,6 +5,7 @@ import Stars from '../../assets/img/star.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { additems } from '../../store/slices/ForShirt.jsx';
 import { useToast } from '../Toast/Toast.jsx';
+import LazyImage from '../LazyImage/LazyImage.jsx';
 
 import './ProductCard.css';
 
@@ -43,14 +44,13 @@ const Card = ({
   return (
     <div className="card">
       <div className="Pro">
-        <img
+        <LazyImage
           src={Imgs}
           alt={ProductName}
           className="PDF"
+          wrapperClassName="lazy-image--square"
           width="1100"
           height="1100"
-          loading="lazy"
-          decoding="async"
         />
         <div className="desc">
           <span>{short_name(BrandName, 8)}</span>

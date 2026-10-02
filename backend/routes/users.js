@@ -5,7 +5,7 @@ const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
-const { validateRegistration } = require('../utils/validation');
+const { validateBody, schemas } = require('../middleware/validate');
 const { loginLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
@@ -16,28 +16,14 @@ const SALT_ROUNDS = 10;
 // reveal whether an account is registered (user-enumeration timing oracle).
 const DUMMY_HASH = bcrypt.hashSync('bazaar-timing-equalizer', SALT_ROUNDS);
 
-/** Field must be a plain string - objects would be MongoDB operators. */
-function asString(value, field) {
-  if (typeof value !== 'string') {
-    throw ApiError.badRequest(`${field} must be a string`, [
-      { field, message: `${field} must be a string` },
-    ]);
-  }
-  return value.trim();
-}
-
 // POST /api/users/register
 router.post(
   '/register',
+  validateBody(schemas.register),
   asyncHandler(async (req, res) => {
-    const body = req.body || {};
-    const username = asString(body.username, 'username');
-    const email = asString(body.email, 'email').toLowerCase();
-    const phone = asString(body.phone, 'phone');
-    const password = asString(body.password, 'password');
-
-    const errors = validateRegistration({ username, email, phone, password });
-    if (errors.length) throw ApiError.badRequest('Validation failed', errors);
+    // zod already trimmed/lower-cased every field and dropped unknown keys,
+    // and rejected objects (NoSQL operators) with 400 + field details.
+    const { username, email, phone, password } = req.body;
 
     const existingUser = await User.findOne({
       $or: [{ username }, { email }, { phone }],
@@ -80,14 +66,9 @@ router.post(
 router.post(
   '/login',
   loginLimiter,
+  validateBody(schemas.login),
   asyncHandler(async (req, res) => {
-    const body = req.body || {};
-    const username = asString(body.username, 'username');
-    const password = asString(body.password, 'password');
-
-    if (!username || !password) {
-      throw ApiError.badRequest('username and password are required');
-    }
+    const { username, password } = req.body;
 
     const user = await User.findOne({ username }).select('+password');
 
@@ -95,8 +76,20 @@ router.post(
     const hash = user ? user.password : DUMMY_HASH;
     const isMatch = await bcrypt.compare(password, hash);
 
-    if (!user || !isMatch) {
+    // Same generic message for unknown user, wrong password and blocked
+    // account — the client must not learn which of the three happened.
+    if (!user || !isMatch || user.isActive === false) {
       throw ApiError.unauthorized('Invalid username or password');
+    }
+
+    // Audit trail for the account page (never blocks a successful login)
+    try {
+      await User.updateOne(
+        { _id: user._id },
+        { $set: { lastLoginAt: new Date() }, $inc: { loginCount: 1 } }
+      );
+    } catch (err) {
+      console.warn('[login] could not record lastLoginAt:', err.message);
     }
 
     return ApiResponse.ok(res, 'Login successful', {

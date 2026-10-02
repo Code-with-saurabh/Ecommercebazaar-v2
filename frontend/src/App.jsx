@@ -5,7 +5,13 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './layout/Header/main';
 import Footer from './layout/Footer/main';
 import ScrollToTop from './components/ScrollToTop';
-import { SpinnerBlock } from './components/Spinner/Spinner';
+import {
+  HomeSkeleton,
+  ProductGridSkeleton,
+  FormSkeleton,
+  CartSkeleton,
+  PageSkeleton,
+} from './components/Skeleton/Skeleton';
 import { Seo } from './seo';
 import './assets/styles/App.css';
 
@@ -23,6 +29,30 @@ const Contact = lazy(() => import('./pages/Contact/Contact'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const ByNow = lazy(() => import('./pages/ByNow/ByNow'));
 
+/**
+ * LazyRoute — a route whose page chunk is loaded on demand, showing a
+ * skeleton shaped like that page while the chunk downloads.
+ *
+ * (A single app-wide <Suspense> fallback was one spinner for everything;
+ * per-route fallbacks show the grid/form/cart the user is waiting for.)
+ *
+ *   <LazyRoute path="/products" component={Products} fallback={<ProductGridSkeleton />} />
+ *   <LazyRoute path="/products/tshirt" component={Products}
+ *              componentProps={{ category: 'T-shirts' }} />
+ */
+function LazyRoute({ component: Component, componentProps, fallback, ...routeProps }) {
+  return (
+    <Route
+      {...routeProps}
+      render={props => (
+        <Suspense fallback={fallback || <PageSkeleton />}>
+          <Component {...props} {...componentProps} />
+        </Suspense>
+      )}
+    />
+  );
+}
+
 function App() {
   return (
     <>
@@ -32,29 +62,33 @@ function App() {
         <Header />
       </div>
       <div className="mainPage">
-        <Suspense fallback={<SpinnerBlock label="Loading page…" />}>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
-            <Route exact path="/products" component={Products} />
-            <Route path="/products/tshirt">
-              <Products category="T-shirts" />
-            </Route>
-            <Route path="/products/shoes">
-              <Products category="Shoes" />
-            </Route>
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/error" component={ErrorPage} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/help" component={Help} />
-            <Route path="/contact" component={Contact} />
-            <Route path="/search" component={SearchPage} />
-            <Route path="/ByNow" component={ByNow} />
-            {/* Unknown URLs used to render a blank page - now an explicit 404 */}
-            <Route component={ErrorPage} />
-          </Switch>
-        </Suspense>
+        <Switch>
+          <LazyRoute exact path="/" component={Home} fallback={<HomeSkeleton />} />
+          <LazyRoute path="/about" component={About} />
+          <LazyRoute exact path="/products" component={Products} fallback={<ProductGridSkeleton />} />
+          <LazyRoute
+            path="/products/tshirt"
+            component={Products}
+            componentProps={{ category: 'T-shirts' }}
+            fallback={<ProductGridSkeleton />}
+          />
+          <LazyRoute
+            path="/products/shoes"
+            component={Products}
+            componentProps={{ category: 'Shoes' }}
+            fallback={<ProductGridSkeleton />}
+          />
+          <LazyRoute path="/login" component={Login} fallback={<FormSkeleton fields={2} />} />
+          <LazyRoute path="/signup" component={SignUp} fallback={<FormSkeleton fields={4} />} />
+          <LazyRoute path="/error" component={ErrorPage} />
+          <LazyRoute path="/cart" component={Cart} fallback={<CartSkeleton />} />
+          <LazyRoute path="/help" component={Help} />
+          <LazyRoute path="/contact" component={Contact} />
+          <LazyRoute path="/search" component={SearchPage} fallback={<ProductGridSkeleton count={6} />} />
+          <LazyRoute path="/ByNow" component={ByNow} />
+          {/* Unknown URLs used to render a blank page - now an explicit 404 */}
+          <LazyRoute component={ErrorPage} />
+        </Switch>
       </div>
       <div className="FDIV">
         <Footer />

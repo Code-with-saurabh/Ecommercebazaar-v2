@@ -1,67 +1,74 @@
 import React, { useState } from 'react';
-import './Signup.css';
-import BGV2 from '../../assets/video/background2.mp4';
 import { useHistory, Link } from 'react-router-dom';
-import { AddToDB } from '../../store/slices/AllFormData.jsx';
-import { useDispatch } from 'react-redux';
+import BGV2 from '../../assets/video/background2.mp4';
 import { post } from '../../api';
+import { validateRegister, trimmedCredentials } from '../../utils/validation';
+import { useToast } from '../../components/Toast/Toast.jsx';
+import FormField from '../../components/FormField/FormField';
 import LazyVideo from '../../components/LazyVideo/LazyVideo';
+import '../../assets/styles/Auth.css';
 
 function Signup() {
-  const dispatch = useDispatch();
   const history = useHistory();
+  const toast = useToast();
 
-  const [fromData, setfromData] = useState({
+  const [formData, setFormData] = useState({
     username: '',
     email: '',
     phone: '',
     password: '',
   });
+  const [fieldErrors, setFieldErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  function handalAlldata(e) {
+  function handleChange(e) {
     const { id, value } = e.target;
-    setfromData(prev => ({
-      ...prev,
-      [id]: value,
-    }));
+    setFormData(prev => ({ ...prev, [id]: value }));
+    // clear the field's error as soon as the user starts fixing it
+    setFieldErrors(prev => (prev[id] ? { ...prev, [id]: '' } : prev));
+    if (errorMessage) setErrorMessage('');
   }
 
-  async function Submit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (submitting) return;
-    setErrorMessage('');
+    if (submitting) return; // guard against double submit
 
-    // Basic client-side guard (the API validates again server-side)
-    if (fromData.password.length < 8) {
-      setErrorMessage('Password must be at least 8 characters.');
+    // trim first - the browser validates the raw value, zod validates the
+    // trimmed one, so " ab " used to pass here and fail on the server
+    const values = trimmedCredentials(formData);
+    values.email = values.email.toLowerCase(); // zod lower-cases it anyway
+
+    const errors = validateRegister(values);
+    if (Object.keys(errors).length) {
+      setFieldErrors(errors);
+      setErrorMessage('');
+      const first = document.getElementById(Object.keys(errors)[0]);
+      if (first) first.focus();
       return;
     }
 
+    setErrorMessage('');
+    setFieldErrors({});
     setSubmitting(true);
     try {
-      const created = await post('/users/register', {
-        username: fromData.username.trim(),
-        email: fromData.email.trim(),
-        phone: fromData.phone.trim(),
-        password: fromData.password,
-      });
-
-      // Keep the session-local duplicate check working
-      dispatch(AddToDB(fromData));
-
-      setfromData({ username: '', email: '', phone: '', password: '' });
+      await post('/users/register', values);
+      setFormData({ username: '', email: '', phone: '', password: '' });
+      toast.success('Account created. Please log in.');
       // Navigate only AFTER the API confirmed success (the old code redirected
       // immediately, so failures landed on /login anyway)
       history.push('/login');
-      return created;
     } catch (error) {
-      const details = error.details;
-      const fieldErrors = Array.isArray(details)
-        ? details.map(item => item.message).join(', ')
-        : '';
-      setErrorMessage(fieldErrors || error.message || 'Registration failed. Please try again.');
+      const mapped = error.fieldErrors; // 400 -> { field: message }
+      if (mapped) {
+        setFieldErrors(mapped);
+        setErrorMessage(Object.values(mapped).join(' '));
+      } else if (error.status === 429) {
+        setErrorMessage('Too many attempts. Please try again later.');
+      } else {
+        // 409 comes through as "Account already exists for: email" etc.
+        setErrorMessage(error.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -71,81 +78,77 @@ function Signup() {
     <div className="form-container">
       <LazyVideo src={BGV2} className="background-video" />
       <div className="form-content">
-        <form className="login-form" onSubmit={Submit}>
-          <div className="input-wrapper">
-            <input
-              type="text"
-              id="username"
-              className="floating-input"
-              placeholder=" "
-              maxLength={25}
-              value={fromData.username}
-              onChange={handalAlldata}
-              autoComplete="username"
-              required
-            />
-            <label htmlFor="username">Username</label>
-          </div>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <FormField
+            id="username"
+            label="Username"
+            value={formData.username}
+            onChange={handleChange}
+            error={fieldErrors.username}
+            autoComplete="username"
+            minLength={3}
+            maxLength={25}
+            pattern="[a-zA-Z0-9_.\-]{3,25}"
+            title="3-25 chars: letters, numbers, _ . - only"
+            autoFocus
+            required
+          />
 
-          <div className="input-wrapper">
-            <input
-              type="email"
-              id="email"
-              className="floating-input"
-              placeholder=" "
-              value={fromData.email}
-              onChange={handalAlldata}
-              autoComplete="email"
-              required
-              title="Enter a valid email address"
-            />
-            <label htmlFor="email">Email</label>
-          </div>
+          <FormField
+            id="email"
+            label="Email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            error={fieldErrors.email}
+            autoComplete="email"
+            maxLength={254}
+            title="Enter a valid email address"
+            required
+          />
 
-          <div className="input-wrapper">
-            <input
-              type="tel"
-              id="phone"
-              className="floating-input"
-              placeholder=" "
-              maxLength={10}
-              value={fromData.phone}
-              onChange={handalAlldata}
-              autoComplete="tel"
-              required
-              pattern="[789][0-9]{9}"
-              title="Phone number must start with 7, 8, or 9 and be 10 digits long"
-            />
-            <label htmlFor="phone">Phone No.</label>
-          </div>
+          <FormField
+            id="phone"
+            label="Phone No."
+            type="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            error={fieldErrors.phone}
+            autoComplete="tel"
+            maxLength={16}
+            pattern="\+?[0-9]{7,15}"
+            title="7-15 digits, optional leading +"
+            required
+          />
 
-          <div className="input-wrapper">
-            <input
-              type="password"
-              id="password"
-              className="floating-input"
-              placeholder=" "
-              minLength={8}
-              maxLength={64}
-              value={fromData.password}
-              onChange={handalAlldata}
-              autoComplete="new-password"
-              required
-              title="At least 8 characters"
-            />
-            <label htmlFor="password">Password (min 8 chars)</label>
-          </div>
+          <FormField
+            id="password"
+            label="Password (min 8 chars)"
+            type="password"
+            reveal
+            value={formData.password}
+            onChange={handleChange}
+            error={fieldErrors.password}
+            autoComplete="new-password"
+            minLength={8}
+            maxLength={72}
+            title="At least 8 characters"
+            required
+          />
 
           <button type="submit" className="submit-btn" disabled={submitting}>
             {submitting ? 'Creating account…' : 'Submit'}
           </button>
+
           <div className="account-prompt">
-            <p>Already have an account? <Link to="/login">Login</Link>.</p>
+            <p>
+              Already have an account? <Link to="/login">Login</Link>.
+            </p>
           </div>
         </form>
 
         {errorMessage && (
-          <div className="error-message" role="alert">
+          <div className="form-error" role="alert">
             <p>{errorMessage}</p>
           </div>
         )}

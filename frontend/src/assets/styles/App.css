@@ -26,3 +26,18 @@
 	 
 }
 
+/* Shared "nothing to show" block (used by pages/Products and pages/SearchPage;
+   lived only in SearchPage.css, so the Products page rendered it unstyled). */
+.NFT_CC {
+  text-align: center;
+  padding: 50px 0;
+}
+
+.NTF {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff6347;
+  text-transform: uppercase;
+}
+

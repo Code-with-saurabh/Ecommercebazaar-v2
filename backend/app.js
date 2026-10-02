@@ -11,6 +11,11 @@ const { securityHeaders } = require('./middleware/security');
 const { sanitize } = require('./middleware/sanitize');
 const { apiCache } = require('./middleware/cache');
 const { mountSpa } = require('./middleware/spa');
+
+// Compile every schema up-front: populate()/refs and the cascade hooks
+// (User -> Address/Cart/Review, Review -> Product rating) resolve by name.
+require('./models');
+
 const healthRouter = require('./routes/health');
 const usersRouter = require('./routes/users');
 

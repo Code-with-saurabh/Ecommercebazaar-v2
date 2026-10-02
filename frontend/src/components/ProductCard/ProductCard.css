@@ -40,6 +40,13 @@
   background: #f3f4f6;
 }
 
+/* LazyImage wrapper (see components/LazyImage): carries the rounded corners
+   + bottom spacing, which used to live on the bare <img>. */
+.Pro .lazy-image {
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
 .start {
   display: flex;
   justify-content: left; /* Centers stars horizontally */

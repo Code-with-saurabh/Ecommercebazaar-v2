@@ -1,8 +1,11 @@
 const config = {
   appName: 'Bazaar',
 
-  // API
-  apiBaseUrl: (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, ''),
+  // API - dev server talks to the local backend; in a production build the
+  // backend serves this bundle itself, so same-origin '/api' is the default.
+  // (The old default pointed every deployed visitor at *their* localhost:5000.)
+  // Set VITE_API_URL when the API lives somewhere else.
+  apiBaseUrl: (import.meta.env.VITE_API_URL ?? (import.meta.env.PROD ? '' : 'http://localhost:5000')).replace(/\/+$/, ''),
   apiPrefix: '/api',
   apiTimeout: 10000,
 
