@@ -194,6 +194,33 @@ async function main() {
   const meAfter = await req('/api/auth/me', { headers: { Authorization: `Bearer ${accessToken}` } });
   check('access token dead after logout (tokenVersion bumped)', meAfter.status === 401, `got ${meAfter.status}`);
 
+  // ---- public products API (needs the catalog: npm run seed:products) ----
+  const pl = await req('/api/products?limit=5&sort=price_asc');
+  check('products list 200', pl.status === 200, `got ${pl.status}`);
+  const items = (pl.json && pl.json.data) || [];
+  check('products list has items', items.length > 0, `${items.length} (run: npm run seed:products)`);
+  check('products meta has total', !!(pl.json && pl.json.meta && typeof pl.json.meta.total === 'number'));
+  const first = items[0] || null;
+  check('product has numeric price + thumbnail', !!first && typeof first.price === 'number' && !!(first.thumbnail !== undefined), first ? `price=${first.price}` : 'no item');
+  check('list honours sort=price_asc', items.every((p, i) => i === 0 || items[i - 1].price <= p.price));
+  const brands = await req('/api/products/brands');
+  check('brands 200 + array', brands.status === 200 && Array.isArray(brands.json && brands.json.data));
+  const cats = await req('/api/products/categories');
+  check('categories 200 + counts', cats.status === 200 && cats.json && typeof cats.json.data.tshirts === 'number');
+  if (first) {
+    const det = await req(`/api/products/${first.slug}`);
+    check('product detail by slug 200', det.status === 200, `got ${det.status}`);
+    check('detail is the same product', !!(det.json && det.json.data && det.json.data._id === first._id));
+    const byId = await req(`/api/products/${first._id}`);
+    check('product detail by id 200', byId.status === 200, `got ${byId.status}`);
+  }
+  const noProduct = await req('/api/products/definitely-not-a-product-xyz');
+  check('unknown product -> 404', noProduct.status === 404, `got ${noProduct.status}`);
+  const badPage = await req('/api/products?page=0');
+  check('invalid page -> 400', badPage.status === 400, `got ${badPage.status}`);
+  const badSort = await req('/api/products?sort=evil');
+  check('invalid sort -> 400', badSort.status === 400, `got ${badSort.status}`);
+
   // ---- static SPA + caching (only if dist exists) ----
   const html = await req('/');
   if (html.status === 200 && /text\/html/.test(String(html.headers.get('content-type')))) {

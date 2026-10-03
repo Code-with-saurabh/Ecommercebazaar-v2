@@ -21,6 +21,7 @@ const healthRouter = require('./routes/health');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
+const productsRouter = require('./routes/products');
 
 const app = express();
 
@@ -65,6 +66,8 @@ app.use(`${env.apiPrefix}/users`, authLimiter, usersRouter);
 app.use(`${env.apiPrefix}/auth`, authLimiter, authRouter);
 // role=admin lives inside the router (middleware/auth.js), budget is apiLimiter
 app.use(`${env.apiPrefix}/admin`, adminRouter);
+// public catalog: GET-only, inherits apiCache + apiLimiter from the /api mount
+app.use(`${env.apiPrefix}/products`, productsRouter);
 
 // --- built SPA (production: `npm run build` in frontend/) -------------------
 mountSpa(app);
