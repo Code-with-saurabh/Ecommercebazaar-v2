@@ -58,7 +58,7 @@ function Home(){
 			Imgs={Prodouct4}/>
 		</div>
 	</div>
-	<div className="featuures inDiv">
+	<div className="features inDiv">
 		<h1>Features</h1>
 		<div className="divIMG">
 		<Card 

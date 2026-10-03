@@ -58,7 +58,9 @@ function App() {
     <>
       <Seo />
       <ScrollToTop />
-      <div className="Header">
+      {/* `sticky` (not `Header` alone) is what header/main.css styles -
+          position:sticky + white bar so the nav survives long grids */}
+      <div className="Header sticky">
         <Header />
       </div>
       <div className="mainPage">

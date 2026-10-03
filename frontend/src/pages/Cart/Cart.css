@@ -183,6 +183,19 @@
   top: 5px;
 }
 
+/* Action row (By Now + Remove): the class existed in the markup but had no
+   rules, so the two controls only lined up by accident of inline layout. */
+.remove {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.remove .css-button-3d--red {
+  margin-left: 0; /* the 14px came from the flex gap above */
+}
+
 .empty-cart-message-CCc {
     position: relative;
     height: 100vh; /* Adjust height as needed */

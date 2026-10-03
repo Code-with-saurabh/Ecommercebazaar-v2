@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './logo.css'; // Import CSS file for styling
+import './Logo.css'; // file name is Logo.css - lowercase breaks case-sensitive builds
 
 const Logo = () => {
     return (
