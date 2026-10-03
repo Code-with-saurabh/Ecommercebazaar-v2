@@ -44,12 +44,9 @@ const Card = ({ product }) => {
   const ratingCount = rating && typeof rating.count === 'number' ? rating.count : 0;
 
   const handleAddToCart = () => {
-    if (alreadyInCart) {
-      toast.info('This item is already in your cart');
-      return;
-    }
-    dispatch(additems({ id, Bname: brand, name, price, image: thumbnail }));
-    toast.success('Added to cart');
+    // slice bumps qty when the line exists - "In Cart" = +1 more
+    dispatch(additems({ id, Bname: brand, name, price, image: thumbnail, qty: 1 }));
+    toast.success(alreadyInCart ? 'Quantity updated in cart' : 'Added to cart');
   };
 
   function short_name(str, maxlength) {

@@ -2,11 +2,13 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/User');
+const Cart = require('../models/Cart');
 const asyncHandler = require('../utils/asyncHandler');
 const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
 const { validateBody, schemas } = require('../middleware/validate');
 const { loginLimiter } = require('../middleware/rateLimit');
+const { readGuestId, clearGuestCookie } = require('../utils/guestCookie');
 const {
   signAccessToken,
   signRefreshToken,
@@ -20,6 +22,25 @@ const SALT_ROUNDS = 10;
 // Compared against when the user does not exist so response time does not
 // reveal whether an account is registered (user-enumeration timing oracle).
 const DUMMY_HASH = bcrypt.hashSync('bazaar-timing-equalizer', SALT_ROUNDS);
+
+/**
+ * Anonymous cart -> account cart (Phase A3): runs after a successful login
+ * or registration. Best effort - a cart hiccup must never fail the auth
+ * flow. On success the guest cookie is cleared so later cart calls go
+ * straight to the account cart.
+ */
+async function mergeGuestCart(req, res, userId) {
+  try {
+    const guestId = readGuestId(req);
+    if (!guestId) return;
+    const guestCart = await Cart.findOne({ guestId, status: 'active' });
+    if (!guestCart) return;
+    await Cart.mergeIntoUser(guestCart, userId);
+    clearGuestCookie(res);
+  } catch (err) {
+    console.warn('[users] guest cart merge failed:', err.message);
+  }
+}
 
 // POST /api/users/register
 router.post(
@@ -62,6 +83,7 @@ router.post(
     // second round trip. `role` is taken from the document (never the body -
     // zod strips unknown keys, so register can not self-promote).
     setRefreshCookie(res, signRefreshToken(user));
+    await mergeGuestCart(req, res, user._id);
 
     return ApiResponse.created(res, 'User registered successfully', {
       id: user._id,
@@ -107,6 +129,7 @@ router.post(
     // access token in the body (frontend stores it), refresh token in an
     // httpOnly cookie (frontend JS can never touch it)
     setRefreshCookie(res, signRefreshToken(user));
+    await mergeGuestCart(req, res, user._id);
 
     return ApiResponse.ok(res, 'Login successful', {
       id: user._id,

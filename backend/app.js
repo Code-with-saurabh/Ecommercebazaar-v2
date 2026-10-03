@@ -22,6 +22,7 @@ const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
 const productsRouter = require('./routes/products');
+const cartRouter = require('./routes/cart');
 
 const app = express();
 
@@ -68,6 +69,8 @@ app.use(`${env.apiPrefix}/auth`, authLimiter, authRouter);
 app.use(`${env.apiPrefix}/admin`, adminRouter);
 // public catalog: GET-only, inherits apiCache + apiLimiter from the /api mount
 app.use(`${env.apiPrefix}/products`, productsRouter);
+// server cart: Bearer or guest cookie, inherits apiCache + apiLimiter
+app.use(`${env.apiPrefix}/cart`, cartRouter);
 
 // --- built SPA (production: `npm run build` in frontend/) -------------------
 mountSpa(app);

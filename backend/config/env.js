@@ -60,6 +60,12 @@ const env = {
     keySecret: process.env.RAZORPAY_KEY_SECRET || '',
   },
 
+  // anonymous carts: id lives in an httpOnly cookie, TTL'd in Mongo
+  cart: {
+    cookie: process.env.CART_COOKIE || 'guest_cart',
+    ttlDays: Number(process.env.CART_TTL_DAYS) || 30,
+  },
+
   // body limits / rate limits
   jsonLimit: process.env.JSON_LIMIT || '100kb',
   rateLimit: {

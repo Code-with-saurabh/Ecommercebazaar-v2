@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeitems } from '../../store/slices/ForShirt.jsx';
+import { removeitems, updateQty } from '../../store/slices/ForShirt.jsx';
 import './Cart.css';
 import backgroundVideo from '../../assets/video/background.mp4';
 import LazyVideo from '../../components/LazyVideo/LazyVideo';
@@ -11,42 +10,35 @@ const MAX_QTY = 99;
 
 function Cart() {
   const products = useSelector(state => state.Shirt.products);
-  const [quantities, setQuantities] = useState({});
   const dispatch = useDispatch();
 
-  // quantity set na ho to 1 maano (warna NaN dikhta tha)
-  const getQty = id => {
-    const value = quantities[id];
-    if (value === undefined || Number.isNaN(value)) return MIN_QTY;
+  // quantity lives in the slice now (server sync + header badge read it)
+  const getQty = product => {
+    const value = Number(product.qty);
+    if (!Number.isFinite(value)) return MIN_QTY;
     return Math.min(MAX_QTY, Math.max(MIN_QTY, value));
   };
 
-  const totalItems = products.reduce((sum, product) => sum + getQty(product.id), 0);
+  const totalItems = products.reduce((sum, product) => sum + getQty(product), 0);
   const totalPrice = products.reduce(
-    (sum, product) => sum + getQty(product.id) * Number(product.price),
+    (sum, product) => sum + getQty(product) * Number(product.price),
     0
   );
 
   function setQuantity(productId, quantity) {
     if (Number.isNaN(quantity)) return; // input cleared -> ignore, keep old
-    setQuantities(prevQuantities => ({
-      ...prevQuantities,
-      [productId]: Math.min(MAX_QTY, Math.max(MIN_QTY, quantity)),
-    }));
+    dispatch(updateQty({ id: productId, qty: quantity }));
   }
 
-  const incrementQuantity = productId => {
-    // getQty guards against undefined/NaN (quantities[productId] + 1 was NaN
-    // the first time +/- was pressed for a product added in another session)
-    setQuantity(productId, getQty(productId) + 1);
+  const incrementQuantity = product => {
+    setQuantity(product.id, getQty(product) + 1);
   };
 
-  const decrementQuantity = productId => {
-    setQuantity(productId, getQty(productId) - 1);
+  const decrementQuantity = product => {
+    setQuantity(product.id, getQty(product) - 1);
   };
 
   function remove(id) {
-    // ForCart derives its badge from this id list - no manual addCart/removeCart
     dispatch(removeitems(id));
   }
 
@@ -67,7 +59,7 @@ function Cart() {
   return (
     <>
       {products.map(product => {
-        const qty = getQty(product.id);
+        const qty = getQty(product);
         const finalPrice = qty * Number(product.price);
         return (
           <div key={product.id} className="IMGS-CC">
@@ -88,7 +80,7 @@ function Cart() {
                 type="button"
                 className="P-CC"
                 aria-label={`Increase quantity of ${product.name}`}
-                onClick={() => incrementQuantity(product.id)}
+                onClick={() => incrementQuantity(product)}
               >
                 +
               </button>
@@ -105,7 +97,7 @@ function Cart() {
                 type="button"
                 className="M-CC"
                 aria-label={`Decrease quantity of ${product.name}`}
-                onClick={() => decrementQuantity(product.id)}
+                onClick={() => decrementQuantity(product)}
               >
                 -
               </button>

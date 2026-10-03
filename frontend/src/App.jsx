@@ -13,6 +13,7 @@ import {
   PageSkeleton,
 } from './components/Skeleton/Skeleton';
 import { Seo } from './seo';
+import useCartSync from './hooks/useCartSync';
 import './assets/styles/App.css';
 
 // Route-level code splitting: each page is its own chunk, so the initial
@@ -56,6 +57,9 @@ function LazyRoute({ component: Component, componentProps, fallback, ...routePro
 }
 
 function App() {
+  // local cart <-> server cart (guest cookie / account), see hooks/useCartSync
+  useCartSync();
+
   return (
     <>
       <Seo />

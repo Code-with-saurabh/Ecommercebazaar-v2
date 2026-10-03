@@ -1,71 +1,74 @@
-// import { createSlice } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
+const MIN_QTY = 1;
+const MAX_QTY = 99;
 
+/**
+ * Local cart (redux + localStorage). Product-level lines - no size/color
+ * yet (detail page variants are cosmetic). `qty` lives here so the header
+ * badge, totals and the server sync (hooks/useCartSync.js) all read the
+ * single source of truth.
+ */
 const initialState = {
-  products: [],
-  duplicate:false,
-  
+  products: [], // { id, Bname, name, price, image, qty }
 };
 
-const ForProducts = createSlice(
-	{
-  name: "Products",
+function clampQty(qty) {
+  const value = Math.round(Number(qty));
+  if (!Number.isFinite(value) || value < MIN_QTY) return MIN_QTY;
+  return Math.min(MAX_QTY, value);
+}
+
+const ForProducts = createSlice({
+  name: 'Products',
   initialState,
   reducers: {
+    // add -> new line; already there -> bump its quantity (capped at 99)
     additems: (state, action) => {
-		
-      const { id, Bname,name, price, image } = action.payload;
-	  
-	const existingProduct = state.products.find(product => product.id === id);
-	  
-	  if(!existingProduct){
-		  state.products.push({ id, Bname,name, price, image });
-	  }else{
-		   state.duplicate =true;
-		   console.warn("Duplicate product!",state.duplicate);
-	  }
-	
-	},
-	
-	removeitems:(state,action)=>{
-		state.products = state.products.filter(obj  => obj.id !== action.payload)
-	}
-	
+      const { id, Bname, name, price, image, qty } = action.payload;
+      if (!id) return;
+      const existing = state.products.find(product => product.id === id);
+      if (existing) {
+        existing.qty = Math.min(MAX_QTY, existing.qty + clampQty(qty));
+        return;
+      }
+      state.products.push({ id, Bname, name, price, image, qty: clampQty(qty) });
+    },
+
+    removeitems: (state, action) => {
+      state.products = state.products.filter(product => product.id !== action.payload);
+    },
+
+    // one line's quantity; qty < 1 removes the line (matches server PATCH)
+    updateQty: (state, action) => {
+      const { id, qty } = action.payload;
+      const existing = state.products.find(product => product.id === id);
+      if (!existing) return;
+      const value = Math.round(Number(qty));
+      if (!Number.isFinite(value) || value < MIN_QTY) {
+        state.products = state.products.filter(product => product.id !== id);
+        return;
+      }
+      existing.qty = Math.min(MAX_QTY, value);
+    },
+
+    // server -> local (login merge / second device); merges, never wipes
+    hydrateItems: (state, action) => {
+      const incoming = Array.isArray(action.payload) ? action.payload : [];
+      if (incoming.length === 0) return;
+      for (const item of incoming) {
+        if (!item || !item.id) continue;
+        const existing = state.products.find(product => product.id === item.id);
+        if (existing) {
+          existing.qty = Math.min(MAX_QTY, existing.qty + clampQty(item.qty));
+        } else {
+          state.products.push({ ...item, qty: clampQty(item.qty) });
+        }
+      }
+    },
   },
 });
 
-export const { additems ,removeitems} = ForProducts.actions;
+export const { additems, removeitems, updateQty, hydrateItems } = ForProducts.actions;
 
 export default ForProducts.reducer;
-
-
-/*state.products.forEach((i)=>{
-			if(action.payload === i.id){
-				delete state.products[i.id];
-			}
-		});*/
-
-
-/*
-setCount : (state)=>{
-		state.count+=1;
-	},
-	mainprice : (state)=>{
-		state.main_price = state.products.map((value)=>{
-			return value.price;
-		});
-	},
-*/
-/*if(state.products.length !== 0){
-      state.products.push({ id, Bname,name, price, image });
-	}else{
-		state.products.map((product)=>{
-			if(product.id !== id ){
-				return(state.products.push({ id, Bname,name, price, image }));
-			}else{
-				alert("Duplicate");
-			}
-		});
-	}*/
-	  

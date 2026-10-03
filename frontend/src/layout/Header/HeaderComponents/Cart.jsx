@@ -4,7 +4,10 @@ import './Cart.css';
 
 import { useSelector } from 'react-redux';  
 const Cart = () => {
-    const itemValue = useSelector(state => state.CartValue.value);  
+    // total quantity across cart lines (single source of truth: Shirt slice)
+    const itemValue = useSelector(state =>
+        state.Shirt.products.reduce((sum, item) => sum + (item.qty || 1), 0)
+    );
     const cartEmpty = itemValue === 0;  
 
     return (

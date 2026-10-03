@@ -84,10 +84,7 @@ function Detail({ id }) {
 
   const handleAdd = () => {
     if (!product.inStock) return;
-    if (alreadyInCart) {
-      toast.info('This item is already in your cart');
-      return;
-    }
+    // slice bumps qty when the line already exists
     dispatch(
       additems({
         id: product._id,
@@ -95,9 +92,15 @@ function Detail({ id }) {
         name: product.name,
         price: product.price,
         image: product.thumbnail,
+        qty,
       })
     );
-    toast.success(`Added to cart${selectedSize ? ` (size ${selectedSize})` : ''}`);
+    const suffix = selectedSize ? ` (size ${selectedSize})` : '';
+    if (alreadyInCart) {
+      toast.success(`Quantity updated in cart${suffix}`);
+    } else {
+      toast.success(`Added to cart${suffix}`);
+    }
   };
 
   return (

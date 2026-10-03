@@ -221,6 +221,66 @@ async function main() {
   const badSort = await req('/api/products?sort=evil');
   check('invalid sort -> 400', badSort.status === 400, `got ${badSort.status}`);
 
+  // ---- server cart (guest cookie) ----
+  if (first) {
+    const c0 = await req('/api/cart');
+    check('cart GET anon -> 200', c0.status === 200, `got ${c0.status}`);
+    const guestCookie = ((c0.headers.get('set-cookie') || '').match(/guest_cart=([^;]+)/) || [])[1];
+    check('anon cart sets guest_cart cookie', !!guestCookie, String(c0.headers.get('set-cookie')).slice(0, 90));
+    const ck = { Cookie: `guest_cart=${guestCookie}` };
+
+    const put1 = await req('/api/cart/items', { method: 'PUT', body: { items: [{ productId: first._id, qty: 2 }] }, headers: ck });
+    check('cart PUT -> 200 + one line', put1.status === 200 && put1.json && put1.json.data.items.length === 1, `got ${put1.status} ${JSON.stringify(put1.json && put1.json.data && put1.json.data.items)}`);
+    check('cart PUT re-reads live price', !!(put1.json && put1.json.data.items[0].price === first.price), `cart=${put1.json && put1.json.data.items[0].price} list=${first.price}`);
+    check('cart summary qty=2', !!(put1.json && put1.json.data.summary && put1.json.data.summary.qty === 2), JSON.stringify(put1.json && put1.json.data.summary));
+
+    const c1 = await req('/api/cart', { headers: ck });
+    check('cart GET roundtrip -> same line', c1.status === 200 && c1.json.data.items.length === 1, `got ${c1.status}`);
+
+    const p5 = await req('/api/cart/items', { method: 'PATCH', body: { productId: first._id, qty: 5 }, headers: ck });
+    check('cart PATCH qty -> summary qty=5', p5.status === 200 && p5.json.data.summary.qty === 5, `got ${p5.status} qty=${p5.json && p5.json.data.summary.qty}`);
+
+    const p0 = await req('/api/cart/items', { method: 'PATCH', body: { productId: first._id, qty: 0 }, headers: ck });
+    check('cart PATCH qty 0 removes line', p0.status === 200 && p0.json.data.items.length === 0, `got ${p0.status} items=${p0.json && p0.json.data.items.length}`);
+
+    const badQty = await req('/api/cart/items', { method: 'POST', body: { productId: first._id, qty: 999 }, headers: ck });
+    check('cart add qty>99 -> 400', badQty.status === 400, `got ${badQty.status}`);
+    const badId = await req('/api/cart/items', { method: 'POST', body: { productId: 'not-an-id' }, headers: ck });
+    check('cart add bad productId -> 400', badId.status === 400, `got ${badId.status}`);
+    const unknown = await req('/api/cart/items', { method: 'POST', body: { productId: 'ffffffffffffffffffffffff' }, headers: ck });
+    check('cart add unknown product -> 404', unknown.status === 404, `got ${unknown.status}`);
+
+    const putStale = await req('/api/cart/items', { method: 'PUT', body: { items: [{ productId: 'ffffffffffffffffffffffff', qty: 1 }] }, headers: ck });
+    check('PUT drops stale productId quietly', putStale.status === 200 && putStale.json.data.items.length === 0, `got ${putStale.status}`);
+
+    await req('/api/cart/items', { method: 'PUT', body: { items: [{ productId: first._id, qty: 1 }] }, headers: ck });
+    const del = await req(`/api/cart/items/${first._id}`, { method: 'DELETE', headers: ck });
+    check('cart DELETE line -> 200 + empty', del.status === 200 && del.json.data.items.length === 0, `got ${del.status}`);
+    const clear = await req('/api/cart', { method: 'DELETE', headers: ck });
+    check('cart clear -> 200 + empty', clear.status === 200 && clear.json.data.items.length === 0, `got ${clear.status}`);
+
+    // ---- guest cart merges into the account at register + login ----
+    await req('/api/cart/items', { method: 'PUT', body: { items: [{ productId: first._id, qty: 3 }] }, headers: ck });
+    const mergeUser = 'cartuser_' + Date.now().toString(36);
+    const mergeReg = await req('/api/users/register', {
+      method: 'POST',
+      body: { username: mergeUser, email: `${mergeUser}@example.com`, phone: '8' + Date.now().toString().slice(-9), password: 'Password123' },
+      headers: ck,
+    });
+    check('register with guest cart -> 201', mergeReg.status === 201, `got ${mergeReg.status}`);
+    check('register clears guest_cart cookie', /guest_cart=;/.test(mergeReg.headers.get('set-cookie') || ''), String(mergeReg.headers.get('set-cookie')).slice(0, 140));
+
+    const mergeLogin = await req('/api/users/login', { method: 'POST', body: { username: mergeUser, password: 'Password123' } });
+    check('merge user login -> 200', mergeLogin.status === 200, `got ${mergeLogin.status}`);
+    const mergeToken = mergeLogin.json && mergeLogin.json.data && mergeLogin.json.data.accessToken;
+    const userCart = await req('/api/cart', { headers: { Authorization: `Bearer ${mergeToken}` } });
+    check('user cart has merged guest line', userCart.status === 200 && userCart.json.data.items.some(i => String(i.product) === first._id && i.qty === 3),
+      `items=${JSON.stringify(userCart.json && userCart.json.data.items)}`);
+    check('guest cart is isGuest=false for user', !!(userCart.json && userCart.json.data.isGuest === false));
+  } else {
+    check('server cart suite', true, 'SKIPPED (no products - run: npm run seed:products)');
+  }
+
   // ---- static SPA + caching (only if dist exists) ----
   const html = await req('/');
   if (html.status === 200 && /text\/html/.test(String(html.headers.get('content-type')))) {
