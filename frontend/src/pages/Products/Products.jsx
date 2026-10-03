@@ -1,13 +1,13 @@
 // src/pages/Products/Products.jsx
 
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../../components/ProductCard/ProductCard.jsx';
-import { useSelector } from 'react-redux';
 import VirtualGrid from '../../components/VirtualGrid/VirtualGrid';
+import { ProductGridSkeleton } from '../../components/Skeleton/Skeleton';
+import { useProducts } from '../../hooks/useProducts';
 import './Products.css';
 
-// Route prop -> productCategories key. /products/tshirt passes "T-shirts".
+// Route prop -> API category value.
 const CATEGORY_ALIASES = {
   't-shirts': 'tshirts',
   tshirt: 'tshirts',
@@ -20,53 +20,81 @@ const CATEGORY_ALIASES = {
   shoe: 'shoes',
 };
 
-function Products({ category }) {
-  const productCategories = useSelector(state => state.AllProduct.productCategories);
+const ALL_CATEGORIES = ['tshirts', 'shirts', 'pants', 'shoes'];
 
-  // When a route passes a category, only that section renders (these routes
-  // used to be dead: the prop was ignored and every category showed).
-  const sections = useMemo(() => {
-    if (!category) return Object.entries(productCategories);
-    const key = CATEGORY_ALIASES[category.toLowerCase()] || category.toLowerCase();
-    const products = productCategories[key];
-    return products ? [[key, products]] : [];
-  }, [category, productCategories]);
+function labelFor(key) {
+  return key.charAt(0).toUpperCase() + key.slice(1);
+}
+
+/**
+ * One fetch per section. The hook lives here (not in a loop in `Products`)
+ * so the number of requests stays legal with the rules of hooks: /products
+ * renders four of these, a category route renders one.
+ */
+function CategorySection({ categoryKey }) {
+  const { items, loading, error, refetch } = useProducts({
+    category: categoryKey,
+    limit: 50,
+    sort: 'newest',
+  });
 
   return (
-    <>
-      {sections.map(([categoryKey, products]) => (
-        <section key={categoryKey} className={`for-${categoryKey} forH`}>
-          <h1>{categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1)}</h1>
-          <hr />
-          <div className={`${categoryKey} Hadding`}>
-            <VirtualGrid
-              className="GridStyle"
-              layout="grid"
-              minColumnWidth={250}
-              gap={20}
-              items={products}
-              itemKey={product => product.id}
-              renderItem={product => (
-                <Card
-                  id={product.id}
-                  BrandName={product.BrandName}
-                  ProductName={product.ProductName}
-                  Price={product.Price}
-                  Imgs={product.Imgs}
-                />
-              )}
-              empty={<div className="NFT_CC"><h1 className="NTF">No products in this category.</h1></div>}
-            />
+    <section className={`for-${categoryKey} forH`}>
+      <h1>{labelFor(categoryKey)}</h1>
+      <hr />
+      <div className={`${categoryKey} Hadding`}>
+        {loading ? (
+          <ProductGridSkeleton count={6} />
+        ) : error ? (
+          <div className="NFT_CC">
+            <h1 className="NTF">Could not load products.</h1>
+            <button type="button" onClick={refetch}>
+              Retry
+            </button>
           </div>
-        </section>
-      ))}
-      {sections.length === 0 && (
-        <div className="NFT_CC">
-          <h1 className="NTF">No products in this category.</h1>
-        </div>
-      )}
-    </>
+        ) : (
+          <VirtualGrid
+            className="GridStyle"
+            layout="grid"
+            minColumnWidth={250}
+            gap={20}
+            items={items || []}
+            itemKey={product => product._id}
+            renderItem={product => <Card product={product} />}
+            empty={
+              <div className="NFT_CC">
+                <h1 className="NTF">No products in this category.</h1>
+              </div>
+            }
+          />
+        )}
+      </div>
+    </section>
   );
+}
+
+CategorySection.propTypes = {
+  categoryKey: PropTypes.string.isRequired,
+};
+
+function Products({ category }) {
+  // When a route passes a category, only that section renders; otherwise the
+  // full catalog splits into its four buckets (matches the legacy layout).
+  let keys = ALL_CATEGORIES;
+  if (category) {
+    const key = CATEGORY_ALIASES[category.toLowerCase()] || category.toLowerCase();
+    keys = ALL_CATEGORIES.includes(key) ? [key] : [];
+  }
+
+  if (keys.length === 0) {
+    return (
+      <div className="NFT_CC">
+        <h1 className="NTF">No products in this category.</h1>
+      </div>
+    );
+  }
+
+  return <>{keys.map(key => <CategorySection key={key} categoryKey={key} />)}</>;
 }
 
 Products.propTypes = {

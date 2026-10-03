@@ -1,25 +1,22 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import SearchIcon from '../../../assets/img/pngegg.png';
 import { useDebouncedValue } from '../../../hooks/useDebounce';
-import { searchProducts } from '../../../utils/search';
+import { useProducts } from '../../../hooks/useProducts';
 import './Search.css';
 
 const Search = () => {
   const [input, setInput] = useState('');
   const history = useHistory();
-  const productCategories = useSelector(state => state.AllProduct.productCategories);
 
-  // Suggestions are recomputed 250ms after typing stops, not on every
-  // keystroke (keeps typing responsive - INP)
+  // Suggestions come from the API, recomputed 250ms after typing stops
+  // (keeps typing responsive - INP), and only once there is something to match
   const debouncedQuery = useDebouncedValue(input.trim(), 250);
-
-  // Ranked: name matches, brand matches, category matches (shared helper)
-  const suggestions = useMemo(
-    () => searchProducts(debouncedQuery, productCategories, { limit: 6 }),
-    [debouncedQuery, productCategories]
+  const { items } = useProducts(
+    { q: debouncedQuery, limit: 6, inStock: 'true' },
+    { enabled: debouncedQuery.length >= 2 }
   );
+  const suggestions = items || [];
 
   const goToSearch = text => {
     const value = (text || '').trim();
@@ -27,13 +24,19 @@ const Search = () => {
   };
 
   const handleSubmit = event => {
-    event.preventDefault(); // Enter now submits (it used to do nothing)
+    event.preventDefault(); // Enter submits instead of doing nothing
     goToSearch(input);
   };
 
   const handleSuggestion = product => {
-    setInput(product.ProductName);
-    goToSearch(product.ProductName);
+    // straight to the product page when we know where it lives
+    if (product.slug) {
+      setInput(product.name || '');
+      history.push(`/products/${product.slug}`);
+      return;
+    }
+    setInput(product.name);
+    goToSearch(product.name);
   };
 
   return (
@@ -55,7 +58,7 @@ const Search = () => {
         {suggestions.length > 0 && (
           <ul className="search-suggestions" role="listbox" aria-label="Search suggestions">
             {suggestions.map(product => (
-              <li key={product.id} role="option">
+              <li key={product._id} role="option">
                 <button
                   type="button"
                   // Keep focus in the input so blur does not hide the list
@@ -63,8 +66,8 @@ const Search = () => {
                   onMouseDown={event => event.preventDefault()}
                   onClick={() => handleSuggestion(product)}
                 >
-                  <span className="search-suggestions__name">{product.ProductName}</span>
-                  <span className="search-suggestions__brand">{product.BrandName}</span>
+                  <span className="search-suggestions__name">{product.name}</span>
+                  <span className="search-suggestions__brand">{product.brand}</span>
                 </button>
               </li>
             ))}

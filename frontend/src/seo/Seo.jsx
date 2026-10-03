@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import { SITE, absUrl, absAsset } from './site';
 import { resolvePageMeta } from './pageMeta';
@@ -8,7 +7,6 @@ import {
   organizationJsonLd,
   websiteJsonLd,
   breadcrumbJsonLd,
-  catalogItemListJsonLd,
 } from './structuredData';
 
 function upsertMeta(attr, key, content) {
@@ -61,7 +59,6 @@ function applyHead(meta) {
 function Seo() {
   const { pathname } = useLocation();
   const meta = useMemo(() => resolvePageMeta(pathname), [pathname]);
-  const productCategories = useSelector(state => state.AllProduct?.productCategories);
 
   useEffect(() => {
     applyHead(meta);
@@ -70,10 +67,10 @@ function Seo() {
   const jsonLd = useMemo(() => {
     const nodes = [organizationJsonLd(), websiteJsonLd()];
     if (meta.path !== '/') nodes.push(breadcrumbJsonLd(meta.path, meta.title));
-    const catalog = catalogItemListJsonLd(pathname, productCategories);
-    if (catalog) nodes.push(catalog);
+    // catalog ItemList moved server-side (products live in Mongo now); the
+    // per-product JSON-LD is emitted by the detail page once data lands
     return nodes;
-  }, [meta, pathname, productCategories]);
+  }, [meta]);
 
   return (
     <>

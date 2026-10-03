@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import ProfilePic from '../../assets/img/profile.jpg';
 import Stars from '../../assets/img/star.png';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,28 +9,46 @@ import LazyImage from '../LazyImage/LazyImage.jsx';
 
 import './ProductCard.css';
 
-const Card = ({
-  id = 0,
-  BrandName = 'Guest',
-  ProductName = 'No Data...',
-  Price = '0',
-  Imgs = ProfilePic,
-}) => {
+/**
+ * One catalog card. Takes an API product straight from `useProducts`:
+ *
+ *   { _id, slug, name, brand, price, mrp, thumbnail, discountPercent, rating, inStock }
+ *
+ * The image and the title link to the detail page; Add to Cart writes the
+ * same slim shape the cart slice has always stored (id/brand/name/price/img).
+ */
+const Card = ({ product }) => {
+  const {
+    _id: id,
+    slug,
+    name = 'No Data...',
+    brand = 'Bazaar',
+    price = 0,
+    mrp,
+    thumbnail = ProfilePic,
+    discountPercent = 0,
+    rating,
+    inStock = true,
+  } = product || {};
+
   const dispatch = useDispatch();
   const toast = useToast();
 
   // Boolean selector: this card re-renders only when *its* membership flips,
   // not on every cart change (the old selector re-rendered every card).
   const alreadyInCart = useSelector(state =>
-    state.Shirt.products.some(product => product.id === id)
+    state.Shirt.products.some(item => item.id === id)
   );
+
+  const avgRating = rating && typeof rating.avg === 'number' ? rating.avg : 0;
+  const ratingCount = rating && typeof rating.count === 'number' ? rating.count : 0;
 
   const handleAddToCart = () => {
     if (alreadyInCart) {
       toast.info('This item is already in your cart');
       return;
     }
-    dispatch(additems({ id, Bname: BrandName, name: ProductName, price: Price, image: Imgs }));
+    dispatch(additems({ id, Bname: brand, name, price, image: thumbnail }));
     toast.success('Added to cart');
   };
 
@@ -41,31 +60,52 @@ const Card = ({
   }
 
   return (
-    <div className="card">
+    <div className={`card${inStock ? '' : ' card--oos'}`}>
       <div className="Pro">
-        <LazyImage
-          src={Imgs}
-          alt={ProductName}
-          className="PDF"
-          wrapperClassName="lazy-image--square"
-          width="1100"
-          height="1100"
-        />
+        <Link to={`/products/${slug}`} className="card-media" aria-label={name}>
+          <LazyImage
+            src={thumbnail}
+            alt={name}
+            className="PDF"
+            wrapperClassName="lazy-image--square"
+            width="1100"
+            height="1100"
+          />
+        </Link>
         <div className="desc">
-          <span>{short_name(BrandName, 8)}</span>
-          <h5>{short_name(ProductName, 70)}</h5>
+          <span>{short_name(brand, 8)}</span>
+          <h5>
+            <Link to={`/products/${slug}`} className="card-title">
+              {short_name(name, 70)}
+            </Link>
+          </h5>
 
-          <div className="start">
-            <img src={Stars} alt="" aria-hidden="true" width="20" height="20" loading="lazy" />
-            <img src={Stars} alt="" aria-hidden="true" width="20" height="20" loading="lazy" />
-            <img src={Stars} alt="" aria-hidden="true" width="20" height="20" loading="lazy" />
-            <img src={Stars} alt="" aria-hidden="true" width="20" height="20" loading="lazy" />
-            <img src={Stars} alt="" aria-hidden="true" width="20" height="20" loading="lazy" />
+          <div
+            className="start"
+            aria-label={`Rated ${avgRating.toFixed(1)} out of 5${ratingCount ? ` (${ratingCount} reviews)` : ''}`}
+            title={ratingCount ? `${avgRating.toFixed(1)} / 5 from ${ratingCount} review(s)` : 'No reviews yet'}
+          >
+            {[0, 1, 2, 3, 4].map(index => (
+              <img
+                key={index}
+                src={Stars}
+                alt=""
+                aria-hidden="true"
+                width="20"
+                height="20"
+                loading="lazy"
+                style={{ opacity: index < Math.round(avgRating) ? 1 : 0.25 }}
+              />
+            ))}
           </div>
-          <h4>{Price}$</h4>
+          <h4>
+            {Number(price).toFixed(2)}$
+            {mrp && mrp > price ? <s className="card-mrp">{Number(mrp).toFixed(0)}$</s> : null}
+            {discountPercent > 0 ? <em className="card-off">-{discountPercent}%</em> : null}
+          </h4>
         </div>
-        <button type="button" onClick={handleAddToCart}>
-          {alreadyInCart ? 'In Cart' : 'Add to Cart'}
+        <button type="button" onClick={handleAddToCart} disabled={!inStock}>
+          {!inStock ? 'Out of Stock' : alreadyInCart ? 'In Cart' : 'Add to Cart'}
         </button>
       </div>
     </div>
@@ -73,11 +113,21 @@ const Card = ({
 };
 
 Card.propTypes = {
-  id: PropTypes.number,
-  BrandName: PropTypes.string,
-  ProductName: PropTypes.string,
-  Price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  Imgs: PropTypes.string,
+  product: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    slug: PropTypes.string,
+    name: PropTypes.string,
+    brand: PropTypes.string,
+    price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    mrp: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    thumbnail: PropTypes.string,
+    discountPercent: PropTypes.number,
+    rating: PropTypes.shape({
+      avg: PropTypes.number,
+      count: PropTypes.number,
+    }),
+    inStock: PropTypes.bool,
+  }).isRequired,
 };
 
 export default Card;

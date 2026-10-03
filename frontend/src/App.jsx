@@ -29,6 +29,7 @@ const Contact = lazy(() => import('./pages/Contact/Contact'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const ByNow = lazy(() => import('./pages/ByNow/ByNow'));
 const Admin = lazy(() => import('./pages/Admin/Admin'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'));
 
 /**
  * LazyRoute — a route whose page chunk is loaded on demand, showing a
@@ -80,6 +81,13 @@ function App() {
             component={Products}
             componentProps={{ category: 'Shoes' }}
             fallback={<ProductGridSkeleton />}
+          />
+          {/* after the literal category routes so /products/tshirt keeps its meaning;
+              slug + mongo id both work - the API accepts either */}
+          <LazyRoute
+            path="/products/:id"
+            component={ProductDetail}
+            fallback={<PageSkeleton sections={3} />}
           />
           <LazyRoute path="/login" component={Login} fallback={<FormSkeleton fields={2} />} />
           <LazyRoute path="/signup" component={SignUp} fallback={<FormSkeleton fields={4} />} />

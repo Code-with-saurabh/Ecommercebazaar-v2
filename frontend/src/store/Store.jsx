@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import ForCart from './slices/ForCart.jsx';
 import Shirt_P from './slices/ForShirt.jsx';
-import Product from './slices/ForSearch.jsx';
 import { loadState, saveState, KEYS } from './persist.js';
 
 /**
@@ -24,7 +23,7 @@ export const Store = configureStore({
   reducer: {
     CartValue: ForCart,
     Shirt: Shirt_P,
-    AllProduct: Product,
+    // catalog lives in Mongo now (hooks/useProducts) - no static products slice
   },
   preloadedState: persistedCart ? { Shirt: persistedCart } : undefined,
 });
