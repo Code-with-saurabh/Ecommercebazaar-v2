@@ -1,4 +1,3 @@
-import React from 'react';
 import './Navbar.css'; // Assuming you have a separate CSS file for styling
 
 import NavLinks from '../HeaderComponents/NavLinks.jsx';

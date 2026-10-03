@@ -1,6 +1,6 @@
 // src/pages/Products/Products.jsx
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../../components/ProductCard/ProductCard.jsx';
 import { useSelector } from 'react-redux';

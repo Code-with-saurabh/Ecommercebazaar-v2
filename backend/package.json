@@ -9,7 +9,10 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "node tests/api.test.cjs",
-    "seed:admin": "node scripts/seed-admin.js"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "seed:admin": "node scripts/seed-admin.js",
+    "seed:products": "node scripts/seed.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,5 +24,10 @@
     "mongoose": "^9.10.2",
     "morgan": "^1.10.0",
     "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0"
   }
 }

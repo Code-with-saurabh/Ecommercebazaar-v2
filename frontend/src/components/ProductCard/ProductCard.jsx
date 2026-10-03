@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import ProfilePic from '../../assets/img/profile.jpg';
 import Stars from '../../assets/img/star.png';

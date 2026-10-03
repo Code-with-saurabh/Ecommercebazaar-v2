@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // If using react-router for navigation
 import { isAdmin, subscribeAuth } from '../../../utils/session';
 import './NavLinks.css';

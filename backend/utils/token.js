@@ -67,7 +67,7 @@ function setRefreshCookie(res, token) {
 
 function clearRefreshCookie(res) {
   // options minus maxAge: a clear must match name/path/domain/sameSite/secure
-  const { maxAge, ...rest } = refreshCookieOptions();
+  const { maxAge: _maxAge, ...rest } = refreshCookieOptions();
   res.clearCookie(env.jwt.refreshCookie, rest);
 }
 

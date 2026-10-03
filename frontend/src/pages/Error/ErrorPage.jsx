@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./ErrorPage.css"; // Import the custom CSS file
 

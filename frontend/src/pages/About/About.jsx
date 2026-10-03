@@ -1,4 +1,3 @@
-import React from 'react';
 
 import img1 from '../../assets/img/IMGs/BG/Minimalist Composition with Vase and Dried Plants.jpg';
 import img2 from '../../assets/img/IMGs/BG/Serene Minimalist Plant.jpg';

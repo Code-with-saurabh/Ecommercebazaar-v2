@@ -1,4 +1,3 @@
-import React from 'react';
 import './About.css'; // Assuming you have a separate CSS file
 
 const ForAbout = ({ Img ,Color, hadding, data1, data2, data3 }) => {

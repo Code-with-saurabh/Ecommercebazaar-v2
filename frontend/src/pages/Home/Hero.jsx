@@ -1,6 +1,6 @@
 // Hero.jsx - homepage banner (LCP element)
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import usePrefersReducedMotion from '../../hooks/usePrefersReducedMotion';
 import './Hero.css';

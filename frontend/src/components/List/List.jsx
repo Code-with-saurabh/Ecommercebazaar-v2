@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { ListSkeleton } from '../Skeleton/Skeleton';
 import './List.css';

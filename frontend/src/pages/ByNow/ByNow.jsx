@@ -1,4 +1,3 @@
-import React from 'react';
 import './ByNow.css';
 import backgroundVideo from '../../assets/video/BGvedio1.mp4';
  

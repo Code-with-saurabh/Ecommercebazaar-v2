@@ -1,4 +1,3 @@
-import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './Help.css'; // Ensure this CSS file has the updated styles
 import backgroundVideo from '../../assets/video/BGvedio1.mp4';

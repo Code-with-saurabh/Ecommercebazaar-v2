@@ -49,6 +49,7 @@ function errorHandler(err, req, res, _next) {
     error.isOperational || statusCode < 500 ? error.message : 'Internal server error';
 
   const logLevel = statusCode >= 500 ? 'error' : 'warn';
+  // eslint-disable-next-line no-console -- level is chosen at runtime
   console[logLevel](`[error] ${req.method} ${req.originalUrl} -> ${statusCode}: ${message}`);
   if (statusCode >= 500 && error.stack) {
     console.error(error.stack);

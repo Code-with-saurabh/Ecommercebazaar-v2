@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Header from './layout/Header/main';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import BGV2 from '../../assets/video/background2.mp4';
 import { post } from '../../api';
