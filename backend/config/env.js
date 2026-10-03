@@ -41,9 +41,16 @@ const env = {
   },
 
   // auth
+  // access  -> short-lived JWT, sent as `Authorization: Bearer`
+  // refresh -> longer-lived JWT, httpOnly cookie, rotated on every refresh
+  //            (signed with a SEPARATE secret when JWT_REFRESH_SECRET is set,
+  //            so a leaked access token cannot mint refresh tokens)
   jwt: {
     secret: process.env.JWT_SECRET || DEFAULT_JWT_SECRET,
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+    refreshSecret: process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET || DEFAULT_JWT_SECRET,
+    accessTtl: process.env.JWT_ACCESS_TTL || '15m',
+    refreshTtl: process.env.JWT_REFRESH_TTL || '7d',
+    refreshCookie: process.env.JWT_REFRESH_COOKIE || 'bazaar_rt',
     issuer: 'bazaar-api',
   },
 
@@ -58,7 +65,9 @@ const env = {
   rateLimit: {
     windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
     max: Number(process.env.RATE_LIMIT_MAX) || 300,
-    authMax: Number(process.env.RATE_LIMIT_AUTH_MAX) || 20,
+    // 30 covers register + login for one IP inside a window; the /api/auth
+    // router gets its own bucket, so session traffic never eats into it.
+    authMax: Number(process.env.RATE_LIMIT_AUTH_MAX) || 30,
     loginMax: Number(process.env.RATE_LIMIT_LOGIN_MAX) || 10,
   },
 };

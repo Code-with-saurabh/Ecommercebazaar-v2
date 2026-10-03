@@ -104,6 +104,15 @@ const userSchema = new mongoose.Schema(
       default: 0,
       min: [0, 'login count cannot be negative'],
     },
+
+    // Revocation counter for refresh tokens: every refresh JWT embeds the
+    // tokenVersion it was born with, and logout/password change increments
+    // this number, instantly invalidating all of them.
+    tokenVersion: {
+      type: Number,
+      default: 0,
+      min: [0, 'token version cannot be negative'],
+    },
   },
   {
     timestamps: true,
@@ -111,6 +120,7 @@ const userSchema = new mongoose.Schema(
       virtuals: true,
       transform(_doc, ret) {
         delete ret.password; // belt & braces on top of select:false
+        delete ret.tokenVersion; // internal revocation counter, not API surface
         delete ret.__v;
         return ret;
       },

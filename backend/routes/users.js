@@ -7,6 +7,11 @@ const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
 const { validateBody, schemas } = require('../middleware/validate');
 const { loginLimiter } = require('../middleware/rateLimit');
+const {
+  signAccessToken,
+  signRefreshToken,
+  setRefreshCookie,
+} = require('../utils/token');
 
 const router = express.Router();
 
@@ -53,11 +58,18 @@ router.post(
       throw err;
     }
 
+    // Issue the token pair right away so the client can log in without a
+    // second round trip. `role` is taken from the document (never the body -
+    // zod strips unknown keys, so register can not self-promote).
+    setRefreshCookie(res, signRefreshToken(user));
+
     return ApiResponse.created(res, 'User registered successfully', {
       id: user._id,
       username: user.username,
       email: user.email,
       phone: user.phone,
+      role: user.role,
+      accessToken: signAccessToken(user),
     });
   })
 );
@@ -92,10 +104,16 @@ router.post(
       console.warn('[login] could not record lastLoginAt:', err.message);
     }
 
+    // access token in the body (frontend stores it), refresh token in an
+    // httpOnly cookie (frontend JS can never touch it)
+    setRefreshCookie(res, signRefreshToken(user));
+
     return ApiResponse.ok(res, 'Login successful', {
       id: user._id,
       username: user.username,
       email: user.email,
+      role: user.role,
+      accessToken: signAccessToken(user),
     });
   })
 );

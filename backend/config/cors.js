@@ -9,7 +9,10 @@ function createCors(env) {
 
   return cors({
     origin: allowAll ? true : env.corsOrigins,
-    credentials: !allowAll,
+    // Credentials (the bazaar_rt refresh cookie) are always allowed: with
+    // '*' we reflect the request origin instead of echoing the star, and
+    // production forbids '*' entirely (see config/env.js validateEnv).
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id'],
     maxAge: 600,

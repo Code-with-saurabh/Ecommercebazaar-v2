@@ -120,6 +120,80 @@ async function main() {
   const after429 = await req('/api/users/login', { method: 'POST', body: { username, password: 'Password123' } });
   check('blocked account cannot login until window resets', after429.status === 429, `status ${after429.status}`);
 
+  // ---- JWT session: access token in body, refresh token in httpOnly cookie ----
+  const accessToken = ok.json && ok.json.data && ok.json.data.accessToken;
+  check('login returns accessToken (JWT)', typeof accessToken === 'string' && accessToken.split('.').length === 3,
+    String(accessToken).slice(0, 25));
+  check('login returns role', ok.json && ok.json.data && ok.json.data.role === 'user',
+    JSON.stringify(ok.json && ok.json.data && ok.json.data.role));
+
+  const meAnon = await req('/api/auth/me');
+  check('auth/me anon -> 401', meAnon.status === 401, `got ${meAnon.status}`);
+
+  const meOk = await req('/api/auth/me', { headers: { Authorization: `Bearer ${accessToken}` } });
+  check('auth/me with token -> 200', meOk.status === 200, `got ${meOk.status}`);
+  check('auth/me returns own username', meOk.json && meOk.json.data && meOk.json.data.username === username,
+    JSON.stringify(meOk.json && meOk.json.data));
+
+  const meBad = await req('/api/auth/me', { headers: { Authorization: 'Bearer aaa.bbb.ccc' } });
+  check('garbage token -> 401', meBad.status === 401, `got ${meBad.status}`);
+
+  const setCookie = ok.headers.get('set-cookie') || '';
+  const rt = (setCookie.match(/bazaar_rt=([^;]+)/) || [])[1];
+  check('login sets httpOnly refresh cookie', !!rt && /httponly/i.test(setCookie), setCookie.slice(0, 90));
+
+  const refreshed = await req('/api/auth/refresh', { method: 'POST', headers: { Cookie: `bazaar_rt=${rt}` } });
+  check('refresh -> 200 + new accessToken',
+    refreshed.status === 200 && !!(refreshed.json && refreshed.json.data && refreshed.json.data.accessToken),
+    `got ${refreshed.status}`);
+
+  const refreshAnon = await req('/api/auth/refresh', { method: 'POST' });
+  check('refresh without cookie -> 401', refreshAnon.status === 401, `got ${refreshAnon.status}`);
+
+  // ---- admin API (role gate) ----
+  const adminAnon = await req('/api/admin/users');
+  check('admin list anon -> 401', adminAnon.status === 401, `got ${adminAnon.status}`);
+
+  const adminAsUser = await req('/api/admin/users', { headers: { Authorization: `Bearer ${accessToken}` } });
+  check('admin list as normal user -> 403', adminAsUser.status === 403, `got ${adminAsUser.status}`);
+
+  const adminCreds = {
+    username: process.env.ADMIN_USERNAME || 'admin',
+    password: process.env.ADMIN_PASSWORD || 'Admin@12345',
+  };
+  const adminLogin = await req('/api/users/login', { method: 'POST', body: adminCreds });
+  if (adminLogin.status === 200) {
+    const adminToken = adminLogin.json.data.accessToken;
+    const list = await req('/api/admin/users', { headers: { Authorization: `Bearer ${adminToken}` } });
+    check('admin list users -> 200', list.status === 200 && Array.isArray(list.json && list.json.data),
+      `got ${list.status} ${JSON.stringify(list.json).slice(0, 120)}`);
+
+    const stats = await req('/api/admin/stats', { headers: { Authorization: `Bearer ${adminToken}` } });
+    check('admin stats -> 200', stats.status === 200 && typeof (stats.json.data || {}).users === 'object',
+      `got ${stats.status}`);
+
+    const selfRole = await req(`/api/admin/users/${adminLogin.json.data.id}/role`, {
+      method: 'PATCH',
+      body: { role: 'user' },
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    check('admin cannot change own role', selfRole.status === 403, `got ${selfRole.status}`);
+  } else {
+    check('admin list users -> 200', true, `SKIPPED (admin login ${adminLogin.status}) - run: npm run seed:admin`);
+    check('admin stats -> 200', true, 'SKIPPED - run: npm run seed:admin');
+    check('admin cannot change own role', true, 'SKIPPED - run: npm run seed:admin');
+  }
+
+  // ---- logout revokes the refresh cookie AND kills live access tokens ----
+  const logout = await req('/api/auth/logout', { method: 'POST', headers: { Cookie: `bazaar_rt=${rt}` } });
+  check('logout -> 200', logout.status === 200, `got ${logout.status}`);
+
+  const refreshAfter = await req('/api/auth/refresh', { method: 'POST', headers: { Cookie: `bazaar_rt=${rt}` } });
+  check('refresh after logout -> 401 (revoked)', refreshAfter.status === 401, `got ${refreshAfter.status}`);
+
+  const meAfter = await req('/api/auth/me', { headers: { Authorization: `Bearer ${accessToken}` } });
+  check('access token dead after logout (tokenVersion bumped)', meAfter.status === 401, `got ${meAfter.status}`);
+
   // ---- static SPA + caching (only if dist exists) ----
   const html = await req('/');
   if (html.status === 200 && /text\/html/.test(String(html.headers.get('content-type')))) {
