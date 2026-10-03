@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './User.css';
 import UserIcon from '../../../assets/img/User.png';
-import { isLoggedIn, setLoggedIn, subscribeAuth } from '../../../utils/session';
+import { isLoggedIn, clearSession, subscribeAuth } from '../../../utils/session';
+import { post } from '../../../api';
 import { useToast } from '../../../components/Toast/Toast.jsx';
 
 const User = () => {
@@ -11,16 +12,16 @@ const User = () => {
     const [loggedIn, setLoggedInState] = useState(isLoggedIn);
 
     useEffect(() => {
-        // sessionStorage is per-tab, so the auth event only ever fires here
+        // the auth event only ever fires here (same tab) - see utils/session
         const unsubscribe = subscribeAuth(() => setLoggedInState(isLoggedIn()));
         return unsubscribe;
     }, []);
 
     const handleLoginClick = () => {
         if (loggedIn) {
-            // Logging out means "end the session", not "show the login form"
-            setLoggedIn(false);
-            setLoggedInState(false);
+            // instant UI reset, then revoke the refresh cookie server-side
+            clearSession();
+            post('/auth/logout').catch(() => {}); // fire & forget: cookie may already be gone
             toast.info('Logged out');
             return;
         }

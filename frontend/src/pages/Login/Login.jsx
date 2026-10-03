@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import BGV2 from '../../assets/video/background2.mp4';
 import { post } from '../../api';
-import { setLoggedIn } from '../../utils/session';
+import { setSession } from '../../utils/session';
 import { validateLogin, trimmedCredentials } from '../../utils/validation';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import FormField from '../../components/FormField/FormField';
@@ -54,9 +54,14 @@ function Login() {
     setFieldErrors({});
     setSubmitting(true);
     try {
-      const user = await post('/users/login', values);
-      setLoggedIn(true);
-      toast.success(user && user.username ? `Welcome back, ${user.username}` : 'Welcome back');
+      const session = await post('/users/login', values); // accessToken + profile
+      setSession(session);
+      toast.success(session && session.username ? `Welcome back, ${session.username}` : 'Welcome back');
+      // admins land straight on their panel; everyone else goes where they came from
+      if (session && session.role === 'admin') {
+        history.push('/admin');
+        return;
+      }
       const from = location.state && location.state.from;
       history.push(typeof from === 'string' ? from : '/');
     } catch (error) {

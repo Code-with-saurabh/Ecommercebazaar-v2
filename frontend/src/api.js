@@ -1,6 +1,7 @@
 ﻿import axios from 'axios';
 import config, { apiUrl } from './config';
 import ApiError from './utils/ApiError';
+import { getToken, setSession, clearSession } from './utils/session';
 
 export const TOKEN_KEY = config.storageKeys.token;
 
@@ -11,6 +12,10 @@ export const TOKEN_KEY = config.storageKeys.token;
  *   { success, message, data, meta }  ->  returns the whole envelope
  *   errors                            ->  rejected ApiError (message/status/details)
  *
+ * On a 401 it first tries the httpOnly refresh cookie once (POST /auth/refresh)
+ * and replays the original request with the new access token - so a 15-minute
+ * access token expiring mid-session is invisible to the user.
+ *
  *   import api, { get, post } from './api';
  *   const { data } = await get('/products');        // data = envelope.data
  */
@@ -18,26 +23,75 @@ const api = axios.create({
   baseURL: apiUrl,
   timeout: config.apiTimeout,
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true, // send the bazaar_rt refresh cookie
 });
 
 api.interceptors.request.use(request => {
-  const token = localStorage.getItem(TOKEN_KEY);
+  const token = getToken();
   if (token) request.headers.Authorization = `Bearer ${token}`;
   return request;
 });
 
+// One refresh at a time: several parallel 401s share a single refresh call.
+let refreshPromise = null;
+
+async function refreshSession() {
+  if (!refreshPromise) {
+    refreshPromise = axios
+      .post(`${apiUrl}/auth/refresh`, null, {
+        withCredentials: true,
+        timeout: config.apiTimeout,
+      })
+      .then(res => {
+        const data = res.data && res.data.data;
+        if (data && data.accessToken) {
+          setSession(data); // stores new token + refreshed profile
+          return data.accessToken;
+        }
+        return null;
+      })
+      .catch(() => null)
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
+}
+
+function shouldAttemptRefresh(error) {
+  const config_ = error.config;
+  if (!config_ || config_._retried) return false; // never loop
+  if (!error.response || error.response.status !== 401) return false;
+  if (!getToken()) return false; // nothing to restore - real 401
+  // wrong password / bad session - not an expired-token situation
+  if (/\/users\/login|\/auth\/refresh|\/auth\/logout/.test(config_.url || '')) return false;
+  return true;
+}
+
 api.interceptors.response.use(
   response => response.data,
-  error => Promise.reject(normalizeError(error))
+  async error => {
+    if (shouldAttemptRefresh(error)) {
+      error.config._retried = true;
+      const freshToken = await refreshSession();
+      if (freshToken) {
+        error.config.headers = { ...error.config.headers, Authorization: `Bearer ${freshToken}` };
+        return api(error.config); // replay with the new token (goes through this same interceptor)
+      }
+      // refresh cookie dead too -> the session is genuinely over
+      clearSession();
+    }
+
+    return Promise.reject(normalizeError(error));
+  }
 );
 
 function normalizeError(error) {
   if (error.response) {
     const { status, data } = error.response;
 
-    // Token expired / invalid -> drop it so the header UI resets
-    if (status === 401) localStorage.removeItem(TOKEN_KEY);
-
+    // (401 no longer clears the session here: the interceptor above decides,
+    //  so a wrong password on the login form cannot log you out of a tab)
     return new ApiError(
       (data && data.message) || `Request failed (${status})`,
       status,

@@ -28,6 +28,7 @@ const Help = lazy(() => import('./pages/Help/Help'));
 const Contact = lazy(() => import('./pages/Contact/Contact'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const ByNow = lazy(() => import('./pages/ByNow/ByNow'));
+const Admin = lazy(() => import('./pages/Admin/Admin'));
 
 /**
  * LazyRoute — a route whose page chunk is loaded on demand, showing a
@@ -88,6 +89,8 @@ function App() {
           <LazyRoute path="/contact" component={Contact} />
           <LazyRoute path="/search" component={SearchPage} fallback={<ProductGridSkeleton count={6} />} />
           <LazyRoute path="/ByNow" component={ByNow} />
+          {/* role guard lives inside the page (redirects non-admins to /login) */}
+          <LazyRoute path="/admin" component={Admin} fallback={<PageSkeleton sections={4} />} />
           {/* Unknown URLs used to render a blank page - now an explicit 404 */}
           <LazyRoute component={ErrorPage} />
         </Switch>

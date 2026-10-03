@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import BGV2 from '../../assets/video/background2.mp4';
 import { post } from '../../api';
+import { setSession } from '../../utils/session';
 import { validateRegister, trimmedCredentials } from '../../utils/validation';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import FormField from '../../components/FormField/FormField';
@@ -52,12 +53,16 @@ function Signup() {
     setFieldErrors({});
     setSubmitting(true);
     try {
-      await post('/users/register', values);
+      const created = await post('/users/register', values);
       setFormData({ username: '', email: '', phone: '', password: '' });
-      toast.success('Account created. Please log in.');
+
+      // The API issues the token pair on register -> straight into the app,
+      // no second trip through the login form
+      if (created && created.accessToken) setSession(created);
+      toast.success('Account created. Welcome to Bazaar!');
       // Navigate only AFTER the API confirmed success (the old code redirected
       // immediately, so failures landed on /login anyway)
-      history.push('/login');
+      history.push('/');
     } catch (error) {
       const mapped = error.fieldErrors; // 400 -> { field: message }
       if (mapped) {
