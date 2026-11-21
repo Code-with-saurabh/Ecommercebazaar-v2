@@ -23,6 +23,11 @@ const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
 const productsRouter = require('./routes/products');
 const cartRouter = require('./routes/cart');
+const ordersRouter = require('./routes/orders');
+const couponsRouter = require('./routes/coupons');
+const addressesRouter = require('./routes/addresses');
+const wishlistRouter = require('./routes/wishlist');
+const reviewsRouter = require('./routes/reviews');
 
 const app = express();
 
@@ -71,6 +76,16 @@ app.use(`${env.apiPrefix}/admin`, adminRouter);
 app.use(`${env.apiPrefix}/products`, productsRouter);
 // server cart: Bearer or guest cookie, inherits apiCache + apiLimiter
 app.use(`${env.apiPrefix}/cart`, cartRouter);
+// checkout: account-only, server-priced (inherits apiCache + apiLimiter)
+app.use(`${env.apiPrefix}/orders`, ordersRouter);
+// coupon preview: optionalAuth (guest cookie cart still evaluates)
+app.use(`${env.apiPrefix}/coupons`, couponsRouter);
+// account address book
+app.use(`${env.apiPrefix}/addresses`, addressesRouter);
+// wishlist / save-for-later
+app.use(`${env.apiPrefix}/wishlist`, wishlistRouter);
+// reviews nest under the catalog path: /api/products/:productId/reviews
+app.use(`${env.apiPrefix}/products`, reviewsRouter);
 
 // --- built SPA (production: `npm run build` in frontend/) -------------------
 mountSpa(app);

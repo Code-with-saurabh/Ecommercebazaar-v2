@@ -127,6 +127,9 @@ router.put(
     for (const entry of entries) {
       const product = byId.get(entry.productId);
       if (!product) continue;
+      // out-of-stock lines are dropped, not clamped to 1: a zero-stock
+      // product must not survive the sync and then fail checkout
+      if ((Number(product.stock) || 0) <= 0) continue;
       const size = entry.size || null;
       const color = entry.color || null;
       const key = `${entry.productId}|${size}|${color}`;
@@ -153,17 +156,28 @@ router.put(
   })
 );
 
-// PATCH /api/cart/items - one line's quantity (0 removes the line)
+// PATCH /api/cart/items - one line's quantity (0 removes the line).
+// Quantity is stock-capped here: setQty only clamps to 99, so without this
+// read a client could push qty=99 onto a stock=1 product.
 router.patch(
   '/items',
   validateBody(patchSchema),
   asyncHandler(async (req, res) => {
     const { productId, qty, size, color } = req.body;
+
+    let targetQty = qty;
+    if (qty > 0) {
+      const product = await Product.findOne({ _id: productId, isActive: true });
+      if (!product) throw ApiError.notFound('Product not found');
+      if ((Number(product.stock) || 0) <= 0) throw ApiError.conflict('This product is out of stock');
+      targetQty = Math.min(qty, product.stock);
+    }
+
     const cart = await resolveCart(req, res);
 
     const updated = await Cart.setQty(cart._id, {
       productId,
-      qty,
+      qty: targetQty,
       size: size || null,
       color: color || null,
     });

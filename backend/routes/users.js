@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const { z } = require('zod');
 
 const User = require('../models/User');
 const Cart = require('../models/Cart');
@@ -8,12 +9,15 @@ const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
 const { validateBody, schemas } = require('../middleware/validate');
 const { loginLimiter } = require('../middleware/rateLimit');
+const { requireAuth } = require('../middleware/auth');
 const { readGuestId, clearGuestCookie } = require('../utils/guestCookie');
 const {
   signAccessToken,
   signRefreshToken,
   setRefreshCookie,
+  clearRefreshCookie,
 } = require('../utils/token');
+const { EMAIL_RE, PHONE_RE } = require('../utils/validation');
 
 const router = express.Router();
 
@@ -138,6 +142,89 @@ router.post(
       role: user.role,
       accessToken: signAccessToken(user),
     });
+  })
+);
+
+// ---------------------------------------------------------------------------
+// Profile (account page) — /api/auth/me still answers "who am I"; these two
+// are the only places that MUTATE the signed-in account.
+// ---------------------------------------------------------------------------
+
+const profileSchema = z
+  .object({
+    name: z.string().trim().min(2, 'name must be at least 2 characters').max(80).optional(),
+    email: z.string().trim().toLowerCase().max(254).regex(EMAIL_RE, 'must be a valid email address').optional(),
+    phone: z.string().trim().max(20).regex(PHONE_RE, 'phone must be 7-15 digits, optional leading +').optional(),
+  })
+  .refine(data => Object.keys(data).length > 0, { message: 'Nothing to update' });
+
+const passwordSchema = z.object({
+  currentPassword: z.string().trim().min(1, 'current password is required'),
+  newPassword: z
+    .string()
+    .trim()
+    .min(8, 'password must be at least 8 characters')
+    .max(72, 'password must be at most 72 characters'),
+});
+
+// PATCH /api/users/me - edit profile fields (username stays the login handle)
+router.patch(
+  '/me',
+  requireAuth,
+  validateBody(profileSchema),
+  asyncHandler(async (req, res) => {
+    const { name, email, phone } = req.body;
+
+    // Uniqueness excluding yourself: a field you are not changing never
+    // trips the check, and someone else's value collides -> 409.
+    const clash = await User.findOne({
+      $or: [
+        ...(email ? [{ email }] : []),
+        ...(phone ? [{ phone }] : []),
+      ],
+      _id: { $ne: req.user._id },
+    }).exec();
+
+    if (clash) {
+      const fields = ['email', 'phone'].filter(field => req.body[field] && clash[field] === req.body[field]);
+      throw ApiError.conflict(`That ${fields.join(' / ')} already belongs to another account`, { fields });
+    }
+
+    if (name !== undefined) req.user.name = name;
+    if (email !== undefined) req.user.email = email;
+    if (phone !== undefined) req.user.phone = phone;
+    await req.user.save();
+
+    return ApiResponse.ok(res, 'Profile updated', {
+      id: req.user._id,
+      username: req.user.username,
+      name: req.user.name,
+      email: req.user.email,
+      phone: req.user.phone,
+      role: req.user.role,
+    });
+  })
+);
+
+// POST /api/users/me/password - change password, revoke every session.
+// Bumping tokenVersion kills all outstanding refresh AND access tokens:
+// a stolen token dies with the password, not at its natural 15-minute expiry.
+router.post(
+  '/me/password',
+  requireAuth,
+  validateBody(passwordSchema),
+  asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id).select('+password');
+
+    const ok = await bcrypt.compare(req.body.currentPassword, user.password);
+    if (!ok) throw ApiError.unauthorized('Current password is incorrect');
+
+    user.password = await bcrypt.hash(req.body.newPassword, SALT_ROUNDS);
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
+    await user.save();
+
+    clearRefreshCookie(res);
+    return ApiResponse.ok(res, 'Password changed - please sign in again', { reauth: true });
   })
 );
 

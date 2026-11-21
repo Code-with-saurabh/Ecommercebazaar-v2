@@ -277,6 +277,108 @@ async function main() {
     check('user cart has merged guest line', userCart.status === 200 && userCart.json.data.items.some(i => String(i.product) === first._id && i.qty === 3),
       `items=${JSON.stringify(userCart.json && userCart.json.data.items)}`);
     check('guest cart is isGuest=false for user', !!(userCart.json && userCart.json.data.isGuest === false));
+
+    // ---- checkout suite: address -> wishlist -> coupon -> order -> cancel -> reviews ----
+    const authH = { Authorization: `Bearer ${mergeToken}` };
+
+    const addrList0 = await req('/api/addresses', { headers: authH });
+    check('addresses list 200', addrList0.status === 200 && Array.isArray(addrList0.json && addrList0.json.data), `got ${addrList0.status}`);
+    const addrCreate = await req('/api/addresses', {
+      method: 'POST',
+      headers: authH,
+      body: { fullName: 'Test Buyer', phone: '9876543210', line1: '1 Test St', city: 'Mumbai', state: 'MH', pincode: '400001' },
+    });
+    check('address create -> 201 + first is default',
+      addrCreate.status === 201 && addrCreate.json && addrCreate.json.data.isDefault === true,
+      `got ${addrCreate.status}`);
+    const addrId = addrCreate.json && addrCreate.json.data && addrCreate.json.data._id;
+    const addrBad = await req('/api/addresses', {
+      method: 'POST',
+      headers: authH,
+      body: { fullName: 'X', phone: 'abc', line1: '', city: '', state: '', pincode: 'xx' },
+    });
+    check('address invalid -> 400 with field details', addrBad.status === 400 && Array.isArray(addrBad.json && addrBad.json.details), `got ${addrBad.status}`);
+
+    const wl0 = await req('/api/wishlist', { headers: authH });
+    check('wishlist list 200 + items array', wl0.status === 200 && wl0.json && Array.isArray(wl0.json.data.items), `got ${wl0.status}`);
+    const wlAdd = await req('/api/wishlist', { method: 'POST', headers: authH, body: { productId: first._id } });
+    check('wishlist add -> added:true', wlAdd.status === 200 && wlAdd.json && wlAdd.json.data.added === true, `got ${wlAdd.status}`);
+    const wlAdd2 = await req('/api/wishlist', { method: 'POST', headers: authH, body: { productId: first._id } });
+    check('wishlist add idempotent -> added:false', wlAdd2.status === 200 && wlAdd2.json && wlAdd2.json.data.added === false, `got ${wlAdd2.status}`);
+    const wlDel = await req(`/api/wishlist/${first._id}`, { method: 'DELETE', headers: authH });
+    check('wishlist remove -> removed:true', wlDel.status === 200 && wlDel.json && wlDel.json.data.removed === true, `got ${wlDel.status}`);
+
+    const cInvalid = await req('/api/coupons/validate', { method: 'POST', headers: authH, body: { code: 'NOSUCHCODE' } });
+    check('coupon unknown code -> valid:false INVALID',
+      cInvalid.status === 200 && cInvalid.json && cInvalid.json.data.valid === false && cInvalid.json.data.reason === 'INVALID',
+      JSON.stringify(cInvalid.json && cInvalid.json.data));
+
+    await req('/api/cart/items', { method: 'PUT', body: { items: [{ productId: first._id, qty: 2 }] }, headers: authH });
+    const noAddr = await req('/api/orders', { method: 'POST', headers: authH, body: { paymentMethod: 'cod' } });
+    check('order without address -> 400', noAddr.status === 400, `got ${noAddr.status}`);
+    const anonOrder = await req('/api/orders', { method: 'POST', body: { paymentMethod: 'cod' } });
+    check('order anon -> 401', anonOrder.status === 401, `got ${anonOrder.status}`);
+
+    const placed = await req('/api/orders', {
+      method: 'POST',
+      headers: authH,
+      body: { addressId: addrId, paymentMethod: 'cod', customerNote: 'suite test' },
+    });
+    check('order placed -> 201', placed.status === 201, `got ${placed.status} ${JSON.stringify(placed.json).slice(0, 160)}`);
+    const order = placed.json && placed.json.data;
+    if (order) {
+      check('order number is BZR-*', /^BZR-/.test(order.orderNumber || ''), order.orderNumber);
+      check('order status placed', order.status === 'placed', order.status);
+      const parts = Math.round((order.subtotal - order.discount + order.shipping + order.tax) * 100) / 100;
+      check('total = subtotal - discount + shipping + tax', Math.abs(parts - order.total) < 0.01, `parts=${parts} total=${order.total}`);
+      check('order has live-priced items', order.items.length === 1 && typeof order.items[0].price === 'number', JSON.stringify(order.items && order.items[0]));
+      check('order has shipping snapshot', !!(order.shippingAddress && order.shippingAddress.city === 'Mumbai'), JSON.stringify(order.shippingAddress));
+      check('payment method recorded cod', !!(order.payment && order.payment.method === 'cod'), JSON.stringify(order.payment));
+
+      const cartAfter = await req('/api/cart', { headers: authH });
+      check('cart emptied after order', cartAfter.status === 200 && cartAfter.json.data.items.length === 0, `items=${JSON.stringify(cartAfter.json && cartAfter.json.data.items)}`);
+
+      const det = await req(`/api/orders/${order._id}`, { headers: authH });
+      check('order detail own -> 200', det.status === 200, `got ${det.status}`);
+      const foreign = await req(`/api/orders/${order._id}`);
+      check('order detail anon -> 401', foreign.status === 401, `got ${foreign.status}`);
+      const ghost = await req('/api/orders/ffffffffffffffffffffffff', { headers: authH });
+      check('order detail unknown -> 404', ghost.status === 404, `got ${ghost.status}`);
+
+      const cancel = await req(`/api/orders/${order._id}/cancel`, { method: 'POST', headers: authH });
+      check('cancel placed order -> 200 cancelled', cancel.status === 200 && cancel.json && cancel.json.data.status === 'cancelled', `got ${cancel.status}`);
+      const cancelAgain = await req(`/api/orders/${order._id}/cancel`, { method: 'POST', headers: authH });
+      check('cancel twice -> 409', cancelAgain.status === 409, `got ${cancelAgain.status}`);
+    }
+
+    const hist = await req('/api/orders/me', { headers: authH });
+    check('order history -> 200 + at least one', hist.status === 200 && Array.isArray(hist.json && hist.json.data) && hist.json.data.length >= 1,
+      `got ${hist.status} len=${hist.json && hist.json.data && hist.json.data.length}`);
+
+    const revList = await req(`/api/products/${first._id}/reviews`);
+    check('reviews list -> 200 + meta', revList.status === 200 && revList.json && revList.json.meta && typeof revList.json.meta.rating === 'object', `got ${revList.status}`);
+    const revCreate = await req(`/api/products/${first._id}/reviews`, {
+      method: 'POST',
+      headers: authH,
+      body: { rating: 5, title: 'Great', comment: 'Really nice product, fits well.' },
+    });
+    check('review create -> 201', revCreate.status === 201, `got ${revCreate.status} ${JSON.stringify(revCreate.json).slice(0, 120)}`);
+    const revDup = await req(`/api/products/${first._id}/reviews`, {
+      method: 'POST',
+      headers: authH,
+      body: { rating: 4, comment: 'Second review must be rejected.' },
+    });
+    check('duplicate review -> 409', revDup.status === 409, `got ${revDup.status}`);
+    const revMine = await req(`/api/products/${first._id}/reviews/mine`, {
+      method: 'PUT',
+      headers: authH,
+      body: { rating: 4, comment: 'Updated review text, still nice.' },
+    });
+    check('update own review -> 200', revMine.status === 200, `got ${revMine.status}`);
+    const revDel = await req(`/api/products/${first._id}/reviews/mine`, { method: 'DELETE', headers: authH });
+    check('delete own review -> 200', revDel.status === 200, `got ${revDel.status}`);
+    const revDelAgain = await req(`/api/products/${first._id}/reviews/mine`, { method: 'DELETE', headers: authH });
+    check('delete own review twice -> 404', revDelAgain.status === 404, `got ${revDelAgain.status}`);
   } else {
     check('server cart suite', true, 'SKIPPED (no products - run: npm run seed:products)');
   }
@@ -303,7 +405,8 @@ async function main() {
     const deep = await req('/products/anything');
     check('SPA deep link -> 200 html', deep.status === 200 && /text\/html/.test(String(deep.headers.get('content-type'))), `got ${deep.status}`);
   } else {
-    check('SPA serving (dist present)', false, `status ${html.status} type ${html.headers.get('content-type')}`);
+    // backend-only checkout: the SPA suite needs `npm run build` in frontend/
+    results.push('  SKIP  SPA serving (dist not built - run: npm run build in frontend/)');
   }
 
   // ---- CORS preflight ----

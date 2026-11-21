@@ -60,6 +60,17 @@ const env = {
     keySecret: process.env.RAZORPAY_KEY_SECRET || '',
   },
 
+  // money (utils/pricing.js is the only consumer - routes never hardcode)
+  pricing: {
+    currency: process.env.CURRENCY || 'USD',
+    // free shipping at/above this (pre-discount) subtotal
+    freeShippingOver: Number(process.env.FREE_SHIPPING_OVER ?? 100),
+    // flat fee below the threshold
+    shippingFlat: Number(process.env.SHIPPING_FLAT ?? 10),
+    // applied to the after-discount subtotal (0.08 = 8%)
+    taxRate: Number(process.env.TAX_RATE ?? 0.08),
+  },
+
   // anonymous carts: id lives in an httpOnly cookie, TTL'd in Mongo
   cart: {
     cookie: process.env.CART_COOKIE || 'guest_cart',

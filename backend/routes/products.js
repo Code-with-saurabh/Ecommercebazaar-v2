@@ -62,6 +62,7 @@ router.get(
     if (tag) filter.tags = tag.trim().toLowerCase();
     if (featured === 'true') filter.isFeatured = true;
     if (inStock === 'true') filter.stock = { $gt: 0 };
+    else if (inStock === 'false') filter.stock = { $lte: 0 };
     if (minPrice !== undefined || maxPrice !== undefined) {
       filter.price = {};
       if (minPrice !== undefined) filter.price.$gte = minPrice;
