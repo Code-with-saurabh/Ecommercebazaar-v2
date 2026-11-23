@@ -1,1 +1,232 @@
-﻿/* Phase 2 - wishlist styles */
+﻿/* /wishlist - responsive card grid. auto-fill + minmax means 1 column on
+   phones, 2 on tablets, 3-4 on desktops with no per-breakpoint counts. */
+
+.wishlist-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(18px, 3.5vw, 40px) clamp(14px, 4vw, 32px) 64px;
+  box-sizing: border-box;
+}
+
+.wishlist-loading {
+  display: flex;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.wishlist-head {
+  margin-bottom: clamp(16px, 3vw, 26px);
+}
+
+.wishlist-head h1 {
+  margin: 0 0 4px;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+}
+
+.wishlist-head p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.wishlist-empty {
+  text-align: center;
+  padding: clamp(40px, 10vh, 90px) 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.wishlist-empty h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+}
+
+.wishlist-empty p {
+  margin: 0;
+  color: #666;
+  max-width: 420px;
+}
+
+.wishlist-error {
+  background: #fdeeee;
+  color: #a03030;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0 0 14px;
+}
+
+/* ---- grid ---------------------------------------------------------------- */
+
+.wishlist-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: clamp(14px, 2vw, 22px);
+}
+
+.wl-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.wl-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.wl-media {
+  position: relative;
+  display: block;
+  background: #f6f6f6;
+}
+
+.wl-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.wl-oos {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(20, 20, 20, 0.82);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.wl-body {
+  padding: 14px 14px 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.wl-brand {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  font-weight: 600;
+}
+
+.wl-body h2 {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.wl-title {
+  color: #141414;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.wl-title:hover {
+  color: #088178;
+}
+
+.wl-price {
+  margin: 6px 0 0;
+  font-weight: 700;
+  color: #088178;
+  font-size: 1.02rem;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.wl-price s {
+  color: #999;
+  font-weight: 400;
+  font-size: 0.86rem;
+}
+
+.wl-actions {
+  padding: 10px 14px 14px;
+  display: flex;
+  gap: 8px;
+}
+
+/* ---- buttons ------------------------------------------------------------- */
+
+.wl-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #333;
+  border: 1.5px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  min-height: 42px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.wl-btn:hover:not(:disabled) {
+  background: #f6f8f9;
+}
+
+.wl-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.wl-btn--primary {
+  background: #088178;
+  border-color: #088178;
+  color: #fff;
+}
+
+.wl-btn--primary:hover:not(:disabled) {
+  background: #066b64;
+}
+
+.wl-btn--danger {
+  color: #b03a3a;
+  border-color: #e7bcbc;
+  flex: 0 0 auto;
+}
+
+.wl-btn--danger:hover:not(:disabled) {
+  background: #fdeeee;
+}
+
+/* ---- responsive ---------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .wl-actions {
+    flex-direction: column;
+  }
+
+  .wl-btn--danger {
+    flex: 1;
+  }
+}

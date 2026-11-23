@@ -28,7 +28,10 @@ const Cart = lazy(() => import('./pages/Cart/Cart'));
 const Help = lazy(() => import('./pages/Help/Help'));
 const Contact = lazy(() => import('./pages/Contact/Contact'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
-const ByNow = lazy(() => import('./pages/ByNow/ByNow'));
+const Checkout = lazy(() => import('./pages/Checkout/Checkout'));
+const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation/OrderConfirmation'));
+const Account = lazy(() => import('./pages/Account/Account'));
+const Wishlist = lazy(() => import('./pages/Wishlist/Wishlist'));
 const Admin = lazy(() => import('./pages/Admin/Admin'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'));
 
@@ -100,7 +103,17 @@ function App() {
           <LazyRoute path="/help" component={Help} />
           <LazyRoute path="/contact" component={Contact} />
           <LazyRoute path="/search" component={SearchPage} fallback={<ProductGridSkeleton count={6} />} />
-          <LazyRoute path="/ByNow" component={ByNow} />
+          {/* checkout is the real flow; /ByNow stays as a legacy alias so old
+              links and bookmarks land on it instead of the dead placeholder */}
+          <LazyRoute path="/checkout" component={Checkout} fallback={<PageSkeleton sections={3} />} />
+          <LazyRoute path="/ByNow" component={Checkout} fallback={<PageSkeleton sections={3} />} />
+          <LazyRoute
+            path="/order/:id/confirmed"
+            component={OrderConfirmation}
+            fallback={<PageSkeleton sections={3} />}
+          />
+          <LazyRoute path="/account" component={Account} fallback={<PageSkeleton sections={3} />} />
+          <LazyRoute path="/wishlist" component={Wishlist} fallback={<ProductGridSkeleton count={4} />} />
           {/* role guard lives inside the page (redirects non-admins to /login) */}
           <LazyRoute path="/admin" component={Admin} fallback={<PageSkeleton sections={4} />} />
           {/* Unknown URLs used to render a blank page - now an explicit 404 */}

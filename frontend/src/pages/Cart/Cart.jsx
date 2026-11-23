@@ -105,8 +105,9 @@ function Cart() {
             <div className="remove">
               {/* Styled Link instead of <Link><button></button></Link>
                   (nested interactive elements are invalid HTML) */}
-              <Link to="/ByNow" className="css-button-3d--blue">
-                By Now
+              {/* Checkout (replaced the /ByNow "working on it" placeholder) */}
+              <Link to="/checkout" className="css-button-3d--blue">
+                Checkout
               </Link>
               <button
                 type="button"

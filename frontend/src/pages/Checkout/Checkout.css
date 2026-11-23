@@ -1,1 +1,543 @@
-﻿/* Phase 2 - checkout styles */
+﻿/* /checkout - two-column layout that collapses to one on small screens.
+   Money column sticks beside the form on wide screens, stacks below it
+   on mobile so the Place-order button stays reachable with one thumb. */
+
+.checkout-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 40px) clamp(14px, 4vw, 32px) 64px;
+  box-sizing: border-box;
+}
+
+.checkout-head {
+  margin-bottom: clamp(16px, 3vw, 28px);
+}
+
+.checkout-head h1 {
+  margin: 0 0 4px;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+}
+
+.checkout-head p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.checkout-loading,
+.checkout-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  padding: clamp(40px, 10vh, 90px) 16px;
+}
+
+.checkout-empty h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+}
+
+.checkout-empty p {
+  margin: 0;
+  color: #666;
+}
+
+/* ---- grid ---------------------------------------------------------------- */
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+  gap: clamp(16px, 2.5vw, 28px);
+  align-items: start;
+}
+
+.checkout-main {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vw, 20px);
+  min-width: 0;
+}
+
+/* ---- cards --------------------------------------------------------------- */
+
+.co-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: clamp(16px, 2.5vw, 24px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.co-card h2 {
+  margin: 0 0 14px;
+  font-size: clamp(1.02rem, 2.5vw, 1.15rem);
+}
+
+/* ---- address ------------------------------------------------------------- */
+
+.co-address-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.co-address {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1.5px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.co-address:hover {
+  border-color: #b9d9d5;
+}
+
+.co-address.is-selected {
+  border-color: #088178;
+  background: #f2faf9;
+}
+
+.co-address input {
+  margin-top: 3px;
+  accent-color: #088178;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.co-address-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  font-size: 0.92rem;
+  color: #444;
+}
+
+.co-address-body strong {
+  color: #111;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.co-chip {
+  font-style: normal;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #088178;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.co-chip--type {
+  background: #eef1f4;
+  color: #556;
+}
+
+.co-toggle {
+  background: none;
+  border: none;
+  color: #088178;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 8px 0 2px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.co-toggle:hover,
+.co-toggle:focus-visible {
+  text-decoration: underline;
+}
+
+.co-address-form {
+  margin-top: 12px;
+  border-top: 1px dashed #e5e5e5;
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* FormField is shared with the dark auth pages - re-theme it for white cards */
+.checkout-page .floating-input,
+.account-page .floating-input,
+.wishlist-page .floating-input {
+  background: #fff;
+  color: #141414;
+  border-color: #dcdcdc;
+}
+
+.checkout-page .floating-input:focus,
+.account-page .floating-input:focus,
+.wishlist-page .floating-input:focus {
+  border-color: #088178;
+}
+
+.checkout-page .input-wrapper label,
+.account-page .input-wrapper label,
+.wishlist-page .input-wrapper label {
+  color: #777;
+}
+
+.checkout-page .floating-input:focus + label,
+.checkout-page .floating-input:not(:placeholder-shown) + label,
+.account-page .floating-input:focus + label,
+.account-page .floating-input:not(:placeholder-shown) + label,
+.wishlist-page .floating-input:focus + label,
+.wishlist-page .floating-input:not(:placeholder-shown) + label {
+  color: #088178;
+}
+
+.co-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 14px;
+}
+
+.co-field-row--3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* ---- coupon -------------------------------------------------------------- */
+
+.co-coupon-form {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.co-coupon-form .input-wrapper {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.co-coupon-applied {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #f2faf9;
+  border: 1px solid #cfe9e5;
+  color: #0a5f58;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+}
+
+.co-link {
+  background: none;
+  border: none;
+  color: #b03a3a;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 2px;
+}
+
+.co-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- payment ------------------------------------------------------------- */
+
+.co-pay {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1.5px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 13px 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.co-pay:last-child {
+  margin-bottom: 0;
+}
+
+.co-pay.is-selected {
+  border-color: #088178;
+  background: #f2faf9;
+}
+
+.co-pay.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.co-pay input {
+  margin-top: 3px;
+  accent-color: #088178;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.co-pay span span {
+  display: block;
+  font-size: 0.87rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* ---- note ---------------------------------------------------------------- */
+
+.co-note {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 64px;
+}
+
+.co-note:focus {
+  outline: none;
+  border-color: #088178;
+}
+
+/* ---- summary ------------------------------------------------------------- */
+
+.co-summary {
+  position: sticky;
+  top: 84px; /* clears the sticky header */
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: clamp(16px, 2.5vw, 24px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.co-summary h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+
+.co-items {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0 0 14px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.co-items li {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.co-item-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f4f4f4;
+}
+
+.co-item-name {
+  font-size: 0.86rem;
+  line-height: 1.3;
+  color: #333;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.co-item-name em {
+  display: block;
+  font-style: normal;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.co-item-price {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.co-totals {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 0.95rem;
+}
+
+.co-totals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.co-totals dt {
+  color: #555;
+  font-weight: 400;
+}
+
+.co-totals dd {
+  margin: 0;
+  font-weight: 600;
+  color: #222;
+}
+
+.co-save dt,
+.co-save dd {
+  color: #0a7d46;
+}
+
+.co-grand {
+  border-top: 1px solid #eee;
+  padding-top: 11px;
+  margin-top: 3px;
+  font-size: 1.08rem;
+}
+
+.co-grand dt,
+.co-grand dd {
+  color: #111;
+  font-weight: 700;
+}
+
+.co-error {
+  margin: 12px 0 0;
+  color: #b03a3a;
+  font-size: 0.9rem;
+}
+
+.co-place {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.co-place:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.co-fineprint {
+  margin: 10px 0 0;
+  font-size: 0.78rem;
+  color: #888;
+  line-height: 1.45;
+}
+
+.co-ship-to {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* ---- shared buttons ------------------------------------------------------ */
+
+.btn-primary {
+  display: inline-block;
+  background: #088178;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.15s ease;
+  min-height: 44px; /* touch target */
+}
+
+.btn-primary:hover {
+  background: #066b64;
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid #9fd8d3;
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #088178;
+  border: 1.5px solid #088178;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  min-height: 42px;
+  align-self: flex-start;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f2faf9;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- responsive ---------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* summary moves under the form but keeps its numbers visible */
+  .co-summary {
+    position: static;
+    order: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .co-field-row,
+  .co-field-row--3 {
+    grid-template-columns: 1fr;
+  }
+
+  .co-coupon-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .co-coupon-form .btn-secondary {
+    align-self: stretch;
+  }
+
+  .co-items li {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+  }
+
+  .checkout-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

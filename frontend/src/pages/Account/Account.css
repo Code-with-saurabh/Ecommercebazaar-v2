@@ -1,1 +1,460 @@
-﻿/* Phase 2 - account styles */
+﻿/* /account - tabbed layout: vertical tab rail on desktop, horizontal
+   scrollable tab strip on mobile. Panels are plain cards so the three
+   sections share one visual rhythm. */
+
+.account-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: clamp(18px, 3.5vw, 40px) clamp(14px, 4vw, 32px) 64px;
+  box-sizing: border-box;
+}
+
+.acc-head {
+  margin-bottom: clamp(16px, 3vw, 26px);
+}
+
+.acc-head h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+}
+
+.acc-layout {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: clamp(16px, 2.5vw, 28px);
+  align-items: start;
+}
+
+/* ---- tabs ---------------------------------------------------------------- */
+
+.acc-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: sticky;
+  top: 84px;
+}
+
+.acc-tab {
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.acc-tab:hover {
+  background: #f2f5f7;
+  color: #222;
+}
+
+.acc-tab.is-active {
+  background: #088178;
+  color: #fff;
+}
+
+.acc-tab:focus-visible {
+  outline: 3px solid #9fd8d3;
+  outline-offset: 1px;
+}
+
+/* ---- panel --------------------------------------------------------------- */
+
+.acc-panel {
+  min-width: 0;
+}
+
+.acc-sections {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vw, 20px);
+}
+
+.acc-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: clamp(16px, 2.5vw, 24px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.acc-card h2 {
+  margin: 0 0 12px;
+  font-size: 1.08rem;
+}
+
+.acc-muted {
+  color: #777;
+  font-size: 0.92rem;
+  margin: 0 0 14px;
+}
+
+.acc-role {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #eef1f4;
+  color: #445;
+  border-radius: 999px;
+  padding: 2px 9px;
+  vertical-align: middle;
+}
+
+.acc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.acc-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 14px;
+}
+
+.acc-row--3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.acc-fineprint {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+/* ---- buttons ------------------------------------------------------------- */
+
+.acc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #333;
+  border: 1.5px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  min-height: 42px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  align-self: flex-start;
+}
+
+.acc-btn:hover:not(:disabled) {
+  background: #f6f8f9;
+}
+
+.acc-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.acc-btn--primary {
+  background: #088178;
+  border-color: #088178;
+  color: #fff;
+}
+
+.acc-btn--primary:hover:not(:disabled) {
+  background: #066b64;
+}
+
+.acc-btn--danger {
+  color: #b03a3a;
+  border-color: #e7bcbc;
+}
+
+.acc-btn--danger:hover:not(:disabled) {
+  background: #fdeeee;
+}
+
+.acc-btn--small {
+  padding: 8px 14px;
+  font-size: 0.86rem;
+  min-height: 36px;
+  border-radius: 8px;
+}
+
+.acc-add {
+  margin-top: 16px;
+}
+
+/* ---- orders -------------------------------------------------------------- */
+
+.acc-orders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.acc-order {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: clamp(14px, 2vw, 20px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.acc-order-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.acc-order-top > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.acc-order-number {
+  font-weight: 700;
+  color: #111;
+  font-family: ui-monospace, monospace;
+  text-decoration: none;
+}
+
+.acc-order-number:hover {
+  color: #088178;
+  text-decoration: underline;
+}
+
+.acc-order-mid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.93rem;
+  color: #333;
+}
+
+.acc-order-mid .acc-muted {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acc-order-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.acc-order-actions .acc-btn {
+  align-self: auto;
+}
+
+/* status pills (shared names with OrderConfirmation.css) */
+.status-pill {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: #eef1f4;
+  color: #445;
+  white-space: nowrap;
+}
+
+.status-pill--placed {
+  background: #fff3d6;
+  color: #8a6100;
+}
+
+.status-pill--packed {
+  background: #e3edff;
+  color: #2b5299;
+}
+
+.status-pill--shipped {
+  background: #e3f0ff;
+  color: #1b62b5;
+}
+
+.status-pill--delivered {
+  background: #e2f6e9;
+  color: #0a7d46;
+}
+
+.status-pill--cancelled {
+  background: #fde8e8;
+  color: #a03030;
+}
+
+.acc-pagination {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.92rem;
+  color: #555;
+}
+
+/* ---- addresses ----------------------------------------------------------- */
+
+.acc-addresses {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.acc-address {
+  background: #fff;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.acc-address.is-default {
+  border-color: #088178;
+  background: #f7fcfb;
+}
+
+.acc-address-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.92rem;
+  color: #555;
+}
+
+.acc-address-body strong {
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.acc-address-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.acc-address-actions .acc-btn {
+  align-self: auto;
+}
+
+.acc-address-form {
+  margin-top: 16px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: clamp(16px, 2.5vw, 24px);
+}
+
+/* ---- states -------------------------------------------------------------- */
+
+.acc-loading {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.acc-error {
+  color: #b03a3a;
+  background: #fdeeee;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0;
+}
+
+.acc-empty {
+  text-align: center;
+  padding: clamp(28px, 6vh, 56px) 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  background: #fff;
+  border: 1px dashed #ddd;
+  border-radius: 14px;
+}
+
+.acc-empty h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.acc-empty p {
+  margin: 0;
+  color: #777;
+}
+
+.acc-empty .acc-btn {
+  align-self: center;
+  margin-top: 6px;
+}
+
+/* ---- responsive ---------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .acc-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* tab rail becomes a horizontal strip that can scroll sideways */
+  .acc-tabs {
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .acc-tab {
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .acc-row,
+  .acc-row--3 {
+    grid-template-columns: 1fr;
+  }
+
+  .acc-order-mid .acc-muted {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 420px) {
+  .acc-order-actions {
+    flex-direction: column;
+  }
+
+  .acc-order-actions .acc-btn {
+    width: 100%;
+  }
+}

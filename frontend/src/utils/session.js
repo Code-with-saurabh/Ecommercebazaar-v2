@@ -82,6 +82,20 @@ export function clearSession() {
   emit();
 }
 
+/**
+ * Merge fields into the stored profile after PATCH /users/me - the access
+ * token and role stay exactly as they were, only editable fields change.
+ */
+export function updateUser(patch) {
+  const current = getUser();
+  if (!current || !patch) return current;
+  const next = { ...current, ...patch };
+  delete next.accessToken; // never let a profile blob smuggle a token
+  write(USER_KEY, JSON.stringify(next));
+  emit();
+  return next;
+}
+
 /** Legacy helper kept for existing call sites: false = log out. */
 export function setLoggedIn(value) {
   if (!value) clearSession();

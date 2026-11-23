@@ -66,9 +66,15 @@ const ForProducts = createSlice({
         }
       }
     },
+
+    // checkout succeeded: wipe locally so useCartSync's next push sends an
+    // empty cart instead of resurrecting the placed order's lines
+    clearCart: state => {
+      state.products = [];
+    },
   },
 });
 
-export const { additems, removeitems, updateQty, hydrateItems } = ForProducts.actions;
+export const { additems, removeitems, updateQty, hydrateItems, clearCart } = ForProducts.actions;
 
 export default ForProducts.reducer;

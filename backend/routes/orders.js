@@ -60,6 +60,14 @@ const createOrderSchema = z
     path: ['address'],
   });
 
+// preview: same context as create, but the address is optional and nothing
+// is written - the checkout page shows these exact numbers before placing.
+const previewSchema = z.object({
+  addressId: z.string().regex(ID_RE, 'addressId must be a valid id').optional(),
+  address: addressSnapshot.optional(),
+  couponCode: z.string().trim().max(40).optional(),
+});
+
 const listQuery = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(10),
@@ -179,7 +187,69 @@ async function reserveStock(lines) {
   }
 }
 
+/**
+ * Everything create and preview share: live cart lines, coupon verdict and
+ * server-computed totals. `requireAddress` is what separates the two:
+ * create always validates a shipping target, preview only when one was sent
+ * (so the summary renders before the user picks an address).
+ */
+async function buildOrderContext(req, { addressId, address, couponCode, requireAddress }) {
+  const userId = req.user._id;
+
+  const cart = await Cart.findOne({ user: userId, status: 'active' });
+  if (!cart || cart.items.length === 0) throw ApiError.badRequest('Your cart is empty');
+
+  const lines = await buildOrderLines(cart);
+
+  let couponDoc = null;
+  let discount = 0;
+  if (couponCode) {
+    const evaluated = await evaluateCoupon(couponCode, { userId, lines });
+    couponDoc = evaluated.coupon;
+    discount = evaluated.discount;
+  }
+
+  const totals = computePricing({
+    items: lines.map(line => ({ price: line.price, qty: line.qty })),
+    discount,
+  });
+
+  let shippingAddress = null;
+  if (requireAddress || addressId || address) {
+    shippingAddress = await resolveShippingAddress(req, { addressId, address });
+  }
+
+  return { cart, lines, couponDoc, totals, shippingAddress };
+}
+
 // --- routes ----------------------------------------------------------------
+
+// POST /api/orders/preview - the exact numbers checkout will charge.
+// No writes: stock is checked (not reserved), coupons are evaluated but not
+// recorded, and the cart is untouched - it can be called on every keystroke.
+router.post(
+  '/preview',
+  validateBody(previewSchema),
+  asyncHandler(async (req, res) => {
+    const { addressId, address, couponCode } = req.body;
+    const { lines, couponDoc, totals, shippingAddress } = await buildOrderContext(req, {
+      addressId,
+      address,
+      couponCode,
+      requireAddress: false,
+    });
+
+    return ApiResponse.ok(res, 'Preview calculated', {
+      itemCount: lines.reduce((sum, line) => sum + line.qty, 0),
+      pricing: totals,
+      coupon: couponDoc
+        ? { code: couponDoc.code, type: couponDoc.type, value: couponDoc.value, discount: totals.discount }
+        : null,
+      shippingAddress,
+      items: lines.map(line => ({ name: line.name, qty: line.qty, price: line.price, image: line.image })),
+    });
+  })
+);
 
 // POST /api/orders - place an order (server-priced, stock-reserved)
 router.post(
@@ -187,31 +257,20 @@ router.post(
   validateBody(createOrderSchema),
   asyncHandler(async (req, res) => {
     const { addressId, address, couponCode, customerNote, paymentMethod } = req.body;
-    const userId = req.user._id;
 
-    const cart = await Cart.findOne({ user: userId, status: 'active' });
-    if (!cart || cart.items.length === 0) throw ApiError.badRequest('Your cart is empty');
-
-    const lines = await buildOrderLines(cart);
-    const pricingItems = lines.map(line => ({ price: line.price, qty: line.qty }));
-
-    let couponDoc = null;
-    let discount = 0;
-    if (couponCode) {
-      const evaluated = await evaluateCoupon(couponCode, { userId, lines });
-      couponDoc = evaluated.coupon;
-      discount = evaluated.discount;
-    }
-
-    const totals = computePricing({ items: pricingItems, discount });
-    const shippingAddress = await resolveShippingAddress(req, { addressId, address });
+    const { cart, lines, couponDoc, totals, shippingAddress } = await buildOrderContext(req, {
+      addressId,
+      address,
+      couponCode,
+      requireAddress: true,
+    });
 
     await reserveStock(lines);
 
     let order;
     try {
       order = await Order.create({
-        user: userId,
+        user: req.user._id,
         items: lines.map(({ category: _category, ...line }) => line), // category was coupon-only
         currency: totals.currency,
         subtotal: totals.subtotal,
@@ -240,7 +299,7 @@ router.post(
     // Post-persistence side effects: best effort, never fail the response.
     if (couponDoc) {
       Coupon.recordUsage(couponDoc.code, {
-        user: userId,
+        user: req.user._id,
         orderId: order._id,
         discount: totals.discount,
       }).catch(err => console.warn('[orders] coupon usage not recorded:', err.message));
