@@ -82,14 +82,17 @@
   background-color: #e0e0e0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .IMGS-CC {
     flex-direction: column; /* Stack items vertically */
     align-items: flex-start; /* Align items at the start */
   }
 
   .IMGS-CC img {
-    max-width: 100%; /* Adjust image width to fit container */
+    /* width:25% made a tiny thumbnail once the row stacked; a bounded
+       full-width image reads properly on a phone */
+    width: 100%;
+    max-width: 280px;
   }
 
   .desc-CC {
@@ -97,9 +100,20 @@
     margin-top: 10px; /* Add top margin for spacing */
   }
 
+  /* the desktop row relies on margin-right:-200px (pulls the buttons under
+     the price) and margin-top:150px (drops them below the tall image);
+     neither survives a stacked column - both caused big empty gaps and
+     right-edge overflow on phones */
   .btn-CC {
     flex-direction: row; /* Stack buttons and input horizontally */
     margin-top: 10px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .remove .css-button-3d--red,
+  .remove .css-button-3d--blue {
+    margin-top: 15px;
   }
 }
 
@@ -266,4 +280,23 @@ a.css-button-3d--blue {
   text-decoration: none;
   text-align: center;
   box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .content-CCc h1 {
+    font-size: 2rem;
+  }
+
+  .content-CCc p {
+    font-size: 1.1rem;
+  }
+
+  .cart-summary-CC {
+    margin: 16px 10px;
+    padding: 12px 14px;
+  }
+
+  .cart-summary-row-CC {
+    font-size: 1rem;
+  }
 }

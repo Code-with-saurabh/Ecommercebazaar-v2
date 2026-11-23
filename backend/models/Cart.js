@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 /**
- * CART — server-side cart (Phase 2.3).
+ * CART â€” server-side cart (Phase 2.3).
  *
  * Relations
  *   Cart.user    -> User      (one active cart per logged-in user)
@@ -49,7 +49,7 @@ const cartItemSchema = new mongoose.Schema(
 
 const cartSchema = new mongoose.Schema(
   {
-    // null for guests — the partial unique index below only sees real users
+    // null for guests â€” the partial unique index below only sees real users
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -194,7 +194,7 @@ cartSchema.methods.addLine = function addLine(product, { qty = 1, size = null, c
 
 /**
  * Money summary computed from the snapshots in the cart.
- * Display only — checkout recomputes against live product prices.
+ * Display only â€” checkout recomputes against live product prices.
  *
  *   cart.summary() -> { lines: 3, qty: 7, subtotal: 249.5 }
  */

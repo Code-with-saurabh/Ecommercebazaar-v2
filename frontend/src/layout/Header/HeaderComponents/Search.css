@@ -1,15 +1,22 @@
  
 
+/* was a hard 700px, which pushed the navbar wider than any phone or
+   small tablet viewport; max-width keeps the desktop look and lets the
+   flex item shrink (min-width:0 is what makes that actually work) */
 .search {
     display: flex;
     align-items: center;
-    width: 700px;  
-    margin: 0 auto;  
+    width: 100%;
+    max-width: 700px;
+    min-width: 0;
+    margin: 0 auto;
 }
 
 .products{
-	 width: 700px;  
-    margin: 0 auto;  
+	width: 100%;
+	max-width: 700px;
+	min-width: 0;
+	margin: 0 auto;
 }
 .search-bar {
     display: flex;

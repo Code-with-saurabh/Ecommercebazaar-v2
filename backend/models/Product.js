@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 /**
- * PRODUCT — the catalog source of truth (Phase 2.1).
+ * PRODUCT â€” the catalog source of truth (Phase 2.1).
  *
  * Relations
  *   Order.items[]  -> product   (ref, snapshot of name/price copied at buy time)
@@ -17,7 +17,7 @@ const mongoose = require('mongoose');
  */
 
 // ---------------------------------------------------------------------------
-// Value objects (embedded, _id:false — they are data, not documents)
+// Value objects (embedded, _id:false â€” they are data, not documents)
 // ---------------------------------------------------------------------------
 
 /** One image of the gallery. `isPrimary` drives card/thumbnail rendering. */
@@ -128,7 +128,7 @@ const productSchema = new mongoose.Schema(
       maxlength: 3,
     },
 
-    // fixed catalog buckets — must stay in sync with the frontend
+    // fixed catalog buckets â€” must stay in sync with the frontend
     // CATEGORY_ALIASES (frontend/src/pages/Products/Products.jsx)
     category: {
       type: String,
@@ -280,7 +280,7 @@ productSchema.virtual('isLowStock').get(function isLowStock() {
 // ---------------------------------------------------------------------------
 
 /**
- * Helper: URL-safe slug. Duplicated here (not a shared util) on purpose —
+ * Helper: URL-safe slug. Duplicated here (not a shared util) on purpose â€”
  * slug rules are a product concern and must never drift with a shared util.
  *
  *   "Air Max 270!" -> "air-max-270"
@@ -288,7 +288,7 @@ productSchema.virtual('isLowStock').get(function isLowStock() {
 function slugify(input) {
   return String(input)
     .toLowerCase()
-    .normalize('NFKD') // split accents: é -> e + combining mark
+    .normalize('NFKD') // split accents: Ã© -> e + combining mark
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 120);
@@ -296,7 +296,7 @@ function slugify(input) {
 
 /**
  * Fill in slug + sku before validation so callers may omit them
- * (admin form, seed script). Existing values are never overwritten —
+ * (admin form, seed script). Existing values are never overwritten â€”
  * changing a slug would break links that are already shared.
  *
  * Mongoose 9 hooks are promise/sync based: never pass a `next` callback.
@@ -349,7 +349,7 @@ productSchema.methods.canFulfil = function canFulfil(qty = 1) {
  * Atomically remove `qty` units.
  *
  * The filter carries `stock: { $gte: qty }`, so two concurrent checkouts can
- * never both succeed on the last unit — MongoDB applies the update to one
+ * never both succeed on the last unit â€” MongoDB applies the update to one
  * document at a time and the other gets `null` (=> "out of stock").
  *
  *   const updated = await Product.decrementStock(id, 2);
@@ -395,7 +395,7 @@ productSchema.statics.applyRating = function applyRating(productId, stats) {
   ).exec();
 };
 
-/** Active products only — the storefront must never see drafts. */
+/** Active products only â€” the storefront must never see drafts. */
 productSchema.statics.findActive = function findActive(filter = {}) {
   return this.find({ ...filter, isActive: true });
 };

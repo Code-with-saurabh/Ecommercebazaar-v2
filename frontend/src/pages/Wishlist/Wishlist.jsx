@@ -83,7 +83,7 @@ function Wishlist() {
   if (loading) {
     return (
       <div className="wishlist-page wishlist-loading" aria-busy="true">
-        <Spinner label="Loading wishlist…" />
+        <Spinner label="Loading wishlistâ€¦" />
       </div>
     );
   }
@@ -171,7 +171,7 @@ function Wishlist() {
                   onClick={() => remove(product)}
                   disabled={busyId === product._id}
                 >
-                  {busyId === product._id ? 'Removing…' : 'Remove'}
+                  {busyId === product._id ? 'Removingâ€¦' : 'Remove'}
                 </button>
               </div>
             </li>

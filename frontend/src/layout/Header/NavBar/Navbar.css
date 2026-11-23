@@ -25,17 +25,34 @@
  
 @media (max-width: 768px) {
     .navbar {
-        padding: 10px;  
-        font-size: 16px;  
+        padding: 10px;
+        font-size: 16px;
+        row-gap: 8px;
+    }
+
+    /* visual order on phones: logo / cart / user, then nav links, then
+       the search box on its own full-width row */
+    .cart {
+        order: 1;
+    }
+
+    .user {
+        order: 2;
+    }
+
+    .nav-links {
+        order: 3;
+        flex: 1 1 100%;
     }
 
     .search {
-        flex: 1 1 100%;  
-        margin-bottom: 10px;  
+        order: 4;
+        flex: 1 1 100%;
+        min-width: 0;
     }
 
     .cart, .user {
-        margin-left: 0;  
+        margin-left: 0;
     }
 }
 

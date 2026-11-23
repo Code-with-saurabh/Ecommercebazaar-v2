@@ -71,4 +71,25 @@
 	 transform: translateY(2px);
 }
 
+/* phones: the fixed 28rem hero kept for zero CLS, but the type scaled
+   down so the copy cannot clip inside it */
+@media (max-width: 480px) {
+  .Hero {
+    padding: 60px 16px 24px;
+    height: 24rem;
+  }
+
+  .Hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .Hero h2 {
+    font-size: 1.35rem;
+  }
+
+  .Hero p {
+    font-size: 1rem;
+  }
+}
+
  

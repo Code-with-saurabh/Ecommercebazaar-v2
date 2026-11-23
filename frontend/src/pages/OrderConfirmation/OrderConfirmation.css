@@ -1,4 +1,4 @@
-﻿/* /order/:id/confirmed - receipt page. Single column on mobile, two cards
+/* /order/:id/confirmed - receipt page. Single column on mobile, two cards
    side by side (items | delivery) once there is room. */
 
 .order-page {
@@ -368,7 +368,7 @@
 
 /* ---- responsive ---------------------------------------------------------- */
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .order-cols {
     grid-template-columns: 1fr;
   }

@@ -1,5 +1,15 @@
 .search-page{
-	margin-left:10%;
+	/* was margin-left:10% - off-center on every viewport and wasted a
+	   tenth of a phone screen; a gutter + max-width centers properly */
+	margin: 0 auto;
+	padding: 0 20px 24px;
+	max-width: 1400px;
+}
+
+@media (max-width: 480px) {
+	.search-page {
+		padding: 0 12px 20px;
+	}
 }
 
  

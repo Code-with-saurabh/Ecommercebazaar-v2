@@ -3,6 +3,9 @@
     margin: 0;
     padding: 0;
     display: flex;
+    /* lets the row wrap between ~769px and 1200px instead of overflowing
+       the navbar when logo + 6 links + search cannot share one line */
+    flex-wrap: wrap;
 }
 
 .nav-links ul li {
@@ -26,4 +29,31 @@
 
 .nav-links ul li a.active {
     font-weight: bold; /* Example: Highlight active link */
+}
+
+/* Phones: links become a centered full-width row of their own (the navbar
+   stacks logo+cart+user / nav / search - see Navbar.css order rules) */
+@media (max-width: 768px) {
+    .nav-links {
+        flex: 1 1 100%;
+        order: 3;
+    }
+
+    .nav-links ul {
+        justify-content: center;
+        gap: 4px 0;
+    }
+
+    .nav-links ul li {
+        margin-right: 8px;
+    }
+
+    .nav-links ul li:last-child {
+        margin-right: 0;
+    }
+
+    .nav-links ul li a {
+        padding: 6px 10px;
+        font-size: 15px;
+    }
 }

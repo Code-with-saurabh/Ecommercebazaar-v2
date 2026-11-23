@@ -1,4 +1,4 @@
-﻿/* /admin - users table + stats.
+/* /admin - users table + stats.
    Shares the site palette: white cards, #ff6347 accent, dense rows. */
 
 .admin-page {
@@ -287,7 +287,7 @@
   cursor: default;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .admin-header {
     flex-direction: column;
     align-items: flex-start;

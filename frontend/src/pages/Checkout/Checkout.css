@@ -1,4 +1,4 @@
-﻿/* /checkout - two-column layout that collapses to one on small screens.
+/* /checkout - two-column layout that collapses to one on small screens.
    Money column sticks beside the form on wide screens, stacks below it
    on mobile so the Place-order button stays reachable with one thumb. */
 
@@ -505,7 +505,7 @@
 
 /* ---- responsive ---------------------------------------------------------- */
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .checkout-grid {
     grid-template-columns: 1fr;
   }
@@ -517,7 +517,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .co-field-row,
   .co-field-row--3 {
     grid-template-columns: 1fr;

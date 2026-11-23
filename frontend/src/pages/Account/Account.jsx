@@ -173,7 +173,7 @@ function ProfileTab({ onLoggedOut }) {
             required
           />
           <button type="submit" className="acc-btn acc-btn--primary" disabled={savingProfile}>
-            {savingProfile ? 'Saving…' : 'Save profile'}
+            {savingProfile ? 'Savingâ€¦' : 'Save profile'}
           </button>
         </form>
       </section>
@@ -215,7 +215,7 @@ function ProfileTab({ onLoggedOut }) {
             required
           />
           <button type="submit" className="acc-btn" disabled={savingPw}>
-            {savingPw ? 'Updating…' : 'Change password'}
+            {savingPw ? 'Updatingâ€¦' : 'Change password'}
           </button>
           <p className="acc-fineprint">Changing your password signs you out on every device.</p>
         </form>
@@ -279,7 +279,7 @@ function OrdersTab() {
   if (loading && orders.length === 0) {
     return (
       <div className="acc-loading" aria-busy="true">
-        <Spinner label="Loading orders…" />
+        <Spinner label="Loading ordersâ€¦" />
       </div>
     );
   }
@@ -324,14 +324,14 @@ function OrdersTab() {
               </div>
               <div className="acc-order-mid">
                 <span>
-                  {itemCount} item{itemCount === 1 ? '' : 's'} · {formatMoney(order.total)}
+                  {itemCount} item{itemCount === 1 ? '' : 's'} Â· {formatMoney(order.total)}
                 </span>
                 <span className="acc-muted">
                   {(order.items || [])
                     .slice(0, 2)
                     .map(item => item.name)
                     .join(', ')}
-                  {(order.items || []).length > 2 ? '…' : ''}
+                  {(order.items || []).length > 2 ? 'â€¦' : ''}
                 </span>
               </div>
               <div className="acc-order-actions">
@@ -345,7 +345,7 @@ function OrdersTab() {
                     onClick={() => cancel(order)}
                     disabled={busyId === order._id}
                   >
-                    {busyId === order._id ? 'Cancelling…' : 'Cancel'}
+                    {busyId === order._id ? 'Cancellingâ€¦' : 'Cancel'}
                   </button>
                 )}
               </div>
@@ -461,7 +461,7 @@ function AddressesTab() {
   if (loading) {
     return (
       <div className="acc-loading" aria-busy="true">
-        <Spinner label="Loading addresses…" />
+        <Spinner label="Loading addressesâ€¦" />
       </div>
     );
   }
@@ -597,7 +597,7 @@ function AddressesTab() {
             />
           </div>
           <button type="submit" className="acc-btn acc-btn--primary" disabled={saving}>
-            {saving ? 'Saving…' : 'Save address'}
+            {saving ? 'Savingâ€¦' : 'Save address'}
           </button>
         </form>
       )}

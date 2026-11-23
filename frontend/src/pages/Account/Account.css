@@ -1,4 +1,4 @@
-﻿/* /account - tabbed layout: vertical tab rail on desktop, horizontal
+/* /account - tabbed layout: vertical tab rail on desktop, horizontal
    scrollable tab strip on mobile. Panels are plain cards so the three
    sections share one visual rhythm. */
 
@@ -419,7 +419,7 @@
 
 /* ---- responsive ---------------------------------------------------------- */
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .acc-layout {
     grid-template-columns: 1fr;
   }
@@ -449,7 +449,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
   .acc-order-actions {
     flex-direction: column;
   }

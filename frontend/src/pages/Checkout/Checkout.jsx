@@ -281,7 +281,7 @@ function Checkout() {
       <div className="checkout-page" aria-busy="true">
         <div className="checkout-loading">
           <Spinner />
-          <p>Loading checkout…</p>
+          <p>Loading checkoutâ€¦</p>
         </div>
       </div>
     );
@@ -306,7 +306,7 @@ function Checkout() {
       <header className="checkout-head">
         <h1>Checkout</h1>
         <p>
-          {preview.itemCount} item{preview.itemCount === 1 ? '' : 's'} · secure server-side pricing
+          {preview.itemCount} item{preview.itemCount === 1 ? '' : 's'} Â· secure server-side pricing
         </p>
       </header>
 
@@ -442,7 +442,7 @@ function Checkout() {
             {coupon ? (
               <div className="co-coupon-applied">
                 <span>
-                  <strong>{coupon.code}</strong> applied — you save {formatMoney(coupon.discount)}
+                  <strong>{coupon.code}</strong> applied â€” you save {formatMoney(coupon.discount)}
                 </span>
                 <button type="button" className="co-link" onClick={removeCoupon}>
                   Remove
@@ -495,7 +495,7 @@ function Checkout() {
               onChange={e => setNote(e.target.value)}
               maxLength={300}
               rows={2}
-              placeholder="Delivery instructions, gate code…"
+              placeholder="Delivery instructions, gate codeâ€¦"
               aria-label="Order note"
             />
           </section>
@@ -518,7 +518,7 @@ function Checkout() {
                 />
                 <span className="co-item-name">
                   {item.name}
-                  <em>× {item.qty}</em>
+                  <em>Ã— {item.qty}</em>
                 </span>
                 <span className="co-item-price">{formatMoney(item.price * item.qty)}</span>
               </li>
@@ -562,7 +562,7 @@ function Checkout() {
             onClick={placeOrder}
             disabled={placing || !addressId && !showNewAddress}
           >
-            {placing ? 'Placing order…' : `Place order · ${formatMoney(p.total)}`}
+            {placing ? 'Placing orderâ€¦' : `Place order Â· ${formatMoney(p.total)}`}
           </button>
 
           <p className="co-fineprint">
