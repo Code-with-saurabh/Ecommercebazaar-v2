@@ -10,9 +10,14 @@
   background: #f3f4f6;
 }
 
-/* square media (product cards, cart thumbs) */
+/* square media (cart thumbs) */
 .lazy-image--square {
   aspect-ratio: 1 / 1;
+}
+
+/* portrait media (catalog cards, design's 3/4 tile) */
+.lazy-image--3x4 {
+  aspect-ratio: 3 / 4;
 }
 
 .lazy-image__img {

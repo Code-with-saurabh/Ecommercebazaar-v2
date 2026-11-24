@@ -38,6 +38,7 @@ const listQuerySchema = z.object({
   maxPrice: z.coerce.number().min(0).optional(),
   inStock: z.enum(['true', 'false']).optional(),
   featured: z.enum(['true', 'false']).optional(),
+  sale: z.enum(['true', 'false']).optional(),
   sort: z.enum(Object.keys(SORTS)).default('newest'),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(20),
@@ -54,7 +55,7 @@ router.get(
   '/',
   validateQuery(listQuerySchema),
   asyncHandler(async (req, res) => {
-    const { category, q, brand, tag, minPrice, maxPrice, inStock, featured, sort, page, limit } = req.query;
+    const { category, q, brand, tag, minPrice, maxPrice, inStock, featured, sale, sort, page, limit } = req.query;
 
     const filter = { isActive: true };
     if (category) filter.category = category;
@@ -63,6 +64,8 @@ router.get(
     if (featured === 'true') filter.isFeatured = true;
     if (inStock === 'true') filter.stock = { $gt: 0 };
     else if (inStock === 'false') filter.stock = { $lte: 0 };
+    // Archive Sale: compare-at price is actually above today's price.
+    if (sale === 'true') filter.$expr = { $gt: ['$mrp', '$price'] };
     if (minPrice !== undefined || maxPrice !== undefined) {
       filter.price = {};
       if (minPrice !== undefined) filter.price.$gte = minPrice;

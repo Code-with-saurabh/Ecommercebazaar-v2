@@ -1,151 +1,191 @@
-/* Card.css */
+/* Product card — Haute Modernist editorial -------------------------------- */
 
-.card {
-  text-align: center;
+.bz-card {
   display: flex;
-  flex-direction: column; /* Adjusted to column layout for better alignment */
-  align-items: center; /* Center align items horizontally */
-  padding: 20px;
-  margin: 10px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+  flex-direction: column;
+  background: var(--bz-surface-lowest, #fff);
+  border: 1px solid var(--bz-hairline);
+  border-radius: var(--bz-r);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.card:hover {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+.bz-card:hover {
+  box-shadow: var(--bz-shadow-float);
+  border-color: var(--bz-ink-3);
 }
 
-.Pro {
-  width: 100%; /* Ensures item takes full width */
-  max-width: 300px; /* Limits maximum width for better responsiveness */
-  padding: 10px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+/* media + overlays */
+.bz-card__media {
+  position: relative;
+  background: var(--bz-surface-low);
 }
 
-.Pro:hover {
-  transform: translateY(-5px); /* Lifts card slightly on hover */
-}
-
-.Pro .PDF {
-  width: 100%; /* Ensures image takes full width of container */
-  aspect-ratio: 1 / 1; /* fixed box = zero layout shift while images load */
-  height: auto;
-  object-fit: cover;
-  border-radius: 15px;
-  margin-bottom: 10px;
-  background: #f3f4f6;
-}
-
-/* LazyImage wrapper (see components/LazyImage): carries the rounded corners
-   + bottom spacing, which used to live on the bare <img>. */
-.Pro .lazy-image {
-  border-radius: 15px;
-  margin-bottom: 10px;
-}
-
-.start {
-  display: flex;
-  justify-content: left; /* Centers stars horizontally */
-  margin-bottom: 10px;
-  margin-top:5px;
-  
-}
-
-.start img {
-  width: 20px; /* Adjusts the size of the star images */
-  height: 20px; /* fixed box -> no layout shift while the png loads */
-  object-fit: contain;
-  margin-right: 5px; /* Adds space between each star */
-}
-
-.Pro .desc {
-  text-align: left; /* Aligns text content to the left */
-}
-
-.Pro .desc span {
-	font-family:robotl;
-  color: #606063;
-  font-size: 12px;
-}
-
-.Pro .desc h5 {
-	font-family:robotm;
-  color: #1a1a1a;
-  font-size: 14px;
-  margin-top: 5px; /* Adds spacing between elements */
-}
-
-.Pro .desc h4 {
-  color: #088178;
-  font-size: 15px;
-  font-weight: 700;
-  margin-top: 5px;
-}
-
-.Pro button {
-  font-weight: 500;
-  background-color: #e8f6ea;
-  border: 1px solid #cce7d0;
-  border-radius: 12px;
-  padding: 10px;
-  cursor: pointer;
-  margin-top: 10px; /* Adds space between content and button */
-  box-shadow: 0 4px 8px rgba(146, 169, 193, 0.3);
-}
-
-.Pro button:hover{
-	
-	background: linear-gradient(200deg, #e8f6ea 35%, #d4e3d7 60%);
-	  box-shadow: 0 8px 16px rgba(100, 120, 140, 0.3); 
-	}
-	
-	
-.Pro button:active {
-  transform: scale(0.95);  
-  background-color: #cce7d0; 
-   box-shadow: 0 2px 4px rgba(100, 120, 140, 0.3); 
-}
-
-/* ---- detail-page links + price extras (API-backed card) ---------------- */
-
-.card-media {
+.bz-card__media a {
   display: block;
 }
 
-.card-title {
-  color: inherit;
+.bz-card__img {
+  transition: transform 0.5s ease;
+}
+
+.bz-card:hover .bz-card__img {
+  transform: scale(1.04);
+}
+
+.bz-card__save {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 8px;
+  background: var(--bz-teal);
+  color: #fff;
+  border-radius: var(--bz-r);
+}
+
+.bz-card__wish {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 249, 246, 0.92);
+  border: 0;
+  border-radius: 50%;
+  color: var(--bz-ink);
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.bz-card__wish:hover {
+  color: var(--bz-crimson);
+  transform: scale(1.08);
+}
+
+.bz-card__wish.is-saved {
+  color: var(--bz-crimson);
+}
+
+.bz-card__wish.is-saved .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* body */
+.bz-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bz-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--bz-ink-3);
+}
+
+.bz-card__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bz-ink);
+}
+
+.bz-card__rating .is-star {
+  font-size: 14px;
+  color: var(--bz-crimson);
+}
+
+.bz-card__title {
+  font-family: var(--bz-font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.bz-card__title a {
+  color: var(--bz-ink);
   text-decoration: none;
 }
 
-.card-title:hover {
-  text-decoration: underline;
+.bz-card:hover .bz-card__title a {
+  color: var(--bz-teal);
 }
 
-.card-mrp {
-  margin-left: 6px;
-  color: #9aa0a6;
-  font-size: 12px;
-  font-weight: 400;
+.bz-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 4px;
 }
 
-.card-off {
-  margin-left: 6px;
-  color: #ff6347;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
+.bz-card__now {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--bz-ink);
 }
 
-.card--oos {
-  opacity: 0.65;
+.bz-card__price s {
+  font-size: 13px;
+  color: var(--bz-ink-3);
 }
 
-.Pro button:disabled {
+.bz-card__stock {
+  color: var(--bz-teal);
+}
+
+.bz-card__stock.is-out {
+  color: var(--bz-crimson);
+}
+
+/* quick add */
+.bz-card__actions {
+  padding: 0 16px 16px;
+  margin-top: auto;
+}
+
+.bz-card__add {
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bz-surface-low);
+  border: 1px solid transparent;
+  border-radius: var(--bz-r);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bz-ink);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.bz-card__add .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.bz-card__add:hover:not(:disabled) {
+  background: var(--bz-teal);
+  color: #fff;
+}
+
+.bz-card__add:disabled {
+  background: var(--bz-surface-low);
+  color: var(--bz-ink-3);
   cursor: not-allowed;
-  opacity: 0.7;
-  box-shadow: none;
+}
+
+/* out of stock: mute the media */
+.bz-card--oos .bz-card__media {
+  opacity: 0.6;
 }
