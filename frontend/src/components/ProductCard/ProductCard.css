@@ -104,7 +104,7 @@
 }
 
 .bz-card__title {
-  font-family: var(--bz-font-serif);
+  font-family: var(--bz-serif);
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;

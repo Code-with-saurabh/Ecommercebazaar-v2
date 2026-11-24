@@ -1,95 +1,181 @@
- 
+/* Hero - editorial type block + full-bleed real-product filmstrip ---------- */
 
-.Hero {
-  position: relative; /* anchor for the absolutely positioned LCP image */
-  text-align: center;
-  padding: 100px 20px 30px;
-  background-color: #f0f0f0;
-  height: 28rem; /* fixed box: swapping the image never shifts the page */
-  overflow: hidden;
-  margin-bottom: 10px;
+.bz-hero {
+  padding-top: 4.5rem;
+  background: var(--bz-surface);
 }
 
-/* The banner image fills the fixed-height section -> zero CLS */
-.Hero__bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top 25% right 0%;
-  z-index: 0;
+.bz-hero__eyebrow {
+  color: var(--bz-ink-3);
+  letter-spacing: 0.2em;
 }
 
-.Hero .hero-content {
+.bz-hero__title {
+  font-family: var(--bz-serif);
+  font-weight: 400;
+  font-size: clamp(44px, 7vw, 84px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--bz-ink);
+  margin-top: 1.25rem;
+}
+
+.bz-hero__title em {
+  font-style: italic;
+  color: var(--bz-teal);
+}
+
+.bz-hero__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+}
+
+.bz-hero__sub {
+  font-size: 17px;
+  line-height: 28px;
+  color: var(--bz-ink-2);
+  max-width: 34rem;
+}
+
+.bz-hero__ctas {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* full-bleed filmstrip: hairline-partitioned real catalog photography */
+.bz-film {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: var(--bz-hairline);
+  border-top: 1px solid var(--bz-hairline);
+  border-bottom: 1px solid var(--bz-hairline);
+  margin-top: 3rem;
+}
+
+.bz-film__tile {
   position: relative;
-  z-index: 1;
+  display: block;
+  background: var(--bz-surface-low);
+  overflow: hidden;
 }
 
-.Hero h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  /* font-family:SellenaBrush; */
+.bz-film__img {
+  transition: transform 0.5s ease;
 }
 
-.Hero h2 {
-  font-size: 2rem;
-  color: #333;
+.bz-film__tile:hover .bz-film__img {
+  transform: scale(1.05);
 }
 
-.Hero p {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
+/* skeleton tiles while the six popular products load */
+.bz-film__tile--loading {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(90deg, #f1f0ed 25%, #f7f6f3 40%, #f1f0ed 60%);
+  background-size: 200% 100%;
+  animation: bz-film-shimmer 1.4s ease-in-out infinite;
 }
 
-.hero-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  /* border-radius: 25% 65% 60% 35% / 35% 40% 30% 25%; */
-  transition: background-color 0.3s ease;
-  position:relative;/*this*/
-  background:transparent;/*this*/
- 
-  cursor:pointer;/*this*/
-  z-index:0;/*this*/
-  font-weight:bold;
-  background-image: linear-gradient(318deg, #24a7dc96 0%,#9255b154 75%);
- box-shadow:10px 8px 20px 0px #adb2b459, inset -8px -8px 26px #9255b154;
+@keyframes bz-film-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
-.hero-button:hover {
- background-color: #005ca9; 
- background-image: linear-gradient(131deg, #1f81b185 0%, #7e3a6fbf 75%);
-  background-position: right center;  
+.bz-film__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2.25rem 12px 12px;
+  background: linear-gradient(to top, rgba(26, 28, 26, 0.72), transparent);
+  color: #fff;
+  transform: translateY(4px);
+  opacity: 0.92;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.hero-button:active{
-	 transform: translateY(2px);
+.bz-film__tile:hover .bz-film__caption {
+  transform: translateY(0);
+  opacity: 1;
 }
 
-/* phones: the fixed 28rem hero kept for zero CLS, but the type scaled
-   down so the copy cannot clip inside it */
-@media (max-width: 480px) {
-  .Hero {
-    padding: 60px 16px 24px;
-    height: 24rem;
+.bz-film__caption .bz-caps {
+  color: rgba(250, 249, 246, 0.75);
+  font-size: 10px;
+}
+
+.bz-film__name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* real claims, hairline-divided, no icons (design: no icon-text sections) */
+.bz-hero__claims {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 1.25rem 0;
+  color: var(--bz-ink-2);
+}
+
+.bz-hero__claims li {
+  padding: 4px 1.5rem;
+  border-left: 1px solid var(--bz-hairline);
+}
+
+.bz-hero__claims li:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+/* ---- responsive ---------------------------------------------------------- */
+@media (max-width: 1023px) {
+  .bz-film {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .bz-hero {
+    padding-top: 2.5rem;
   }
 
-  .Hero h1 {
-    font-size: 1.9rem;
+  .bz-hero__row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .Hero h2 {
-    font-size: 1.35rem;
+  .bz-film {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .Hero p {
-    font-size: 1rem;
+  .bz-film__tile {
+    flex: 0 0 62%;
+    scroll-snap-align: start;
+  }
+
+  .bz-hero__claims {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bz-hero__claims li {
+    padding: 0;
+    border-left: 0;
   }
 }
-
- 

@@ -28,6 +28,7 @@ const couponsRouter = require('./routes/coupons');
 const addressesRouter = require('./routes/addresses');
 const wishlistRouter = require('./routes/wishlist');
 const reviewsRouter = require('./routes/reviews');
+const newsletterRouter = require('./routes/newsletter');
 
 const app = express();
 
@@ -86,6 +87,8 @@ app.use(`${env.apiPrefix}/addresses`, addressesRouter);
 app.use(`${env.apiPrefix}/wishlist`, wishlistRouter);
 // reviews nest under the catalog path: /api/products/:productId/reviews
 app.use(`${env.apiPrefix}/products`, reviewsRouter);
+// public newsletter capture (homepage band), inherits apiCache + apiLimiter
+app.use(`${env.apiPrefix}/newsletter`, newsletterRouter);
 
 // --- built SPA (production: `npm run build` in frontend/) -------------------
 mountSpa(app);

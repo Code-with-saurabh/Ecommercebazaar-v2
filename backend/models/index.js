@@ -18,6 +18,7 @@ const Cart = require('./Cart');
 const Coupon = require('./Coupon');
 const Review = require('./Review');
 const Order = require('./Order');
+const Newsletter = require('./Newsletter');
 
 module.exports = {
   User,
@@ -27,4 +28,5 @@ module.exports = {
   Coupon,
   Review,
   Order,
+  Newsletter,
 };

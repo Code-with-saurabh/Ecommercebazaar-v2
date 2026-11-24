@@ -409,6 +409,21 @@ async function main() {
     results.push('  SKIP  SPA serving (dist not built - run: npm run build in frontend/)');
   }
 
+  // ---- newsletter capture (public, idempotent) ----
+  const nlBad = await req('/api/newsletter', { method: 'POST', body: { email: 'not-an-email' } });
+  check('newsletter invalid email -> 400', nlBad.status === 400, `got ${nlBad.status}`);
+  const nlMissing = await req('/api/newsletter', { method: 'POST', body: {} });
+  check('newsletter missing email -> 400', nlMissing.status === 400, `got ${nlMissing.status}`);
+  const nlEmail = `nl-${Date.now()}@example.com`;
+  const nlNew = await req('/api/newsletter', { method: 'POST', body: { email: nlEmail } });
+  check('newsletter subscribe -> 201', nlNew.status === 201, `got ${nlNew.status}`);
+  check('newsletter new flags already:false', nlNew.json && nlNew.json.data && nlNew.json.data.already === false,
+    JSON.stringify(nlNew.json && nlNew.json.data));
+  const nlAgain = await req('/api/newsletter', { method: 'POST', body: { email: nlEmail } });
+  check('newsletter re-subscribe idempotent -> 200', nlAgain.status === 200, `got ${nlAgain.status}`);
+  check('newsletter re-subscribe flags already:true', nlAgain.json && nlAgain.json.data && nlAgain.json.data.already === true,
+    JSON.stringify(nlAgain.json && nlAgain.json.data));
+
   // ---- CORS preflight ----
   const pre = await fetch(BASE + '/api/users/login', {
     method: 'OPTIONS',
