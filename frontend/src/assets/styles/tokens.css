@@ -1,0 +1,349 @@
+/* ==========================================================================
+   Bazaar design system — "Haute Modernist Editorial"
+   Source: frontend/Design/haute_modernist_editorial/DESIGN.md
+   One place for tokens + shared primitives. Page styles consume the
+   variables; nothing here is page-specific.
+   ========================================================================== */
+
+:root {
+  /* surfaces */
+  --bz-bg: #faf9f6;
+  --bz-surface: #ffffff;
+  --bz-surface-low: #f4f3f0;
+  --bz-surface-mid: #efeeeb;
+  --bz-surface-high: #e9e8e5;
+  --bz-hairline: #e5e4de;
+
+  /* ink */
+  --bz-ink: #1e1e1e;
+  --bz-ink-2: #4a4a48;
+  --bz-ink-3: #767571;
+
+  /* accents (brand) */
+  --bz-teal: #088178;
+  --bz-teal-deep: #00665f;
+  --bz-teal-hover: #066760;
+  --bz-crimson: #ef233c;
+  --bz-crimson-deep: #b80025;
+  --bz-grad-from: #ff6b6b;
+  --bz-grad-to: #caca2b;
+
+  /* type */
+  --bz-serif: 'Playfair Display', Georgia, serif;
+  --bz-sans: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+
+  /* layout */
+  --bz-max: 1320px;
+  --bz-gutter: 1.5rem;
+
+  /* radii: sharp, hangtag-like (2-4px only) */
+  --bz-r: 2px;
+  --bz-r-md: 4px;
+
+  /* only for genuinely floating layers (dropdowns, sticky bars) */
+  --bz-shadow-float: 0 12px 32px -8px rgba(30, 30, 30, 0.05),
+    0 2px 6px 0 rgba(30, 30, 30, 0.02);
+  --bz-shadow-lift: 0 1px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ---------- base ---------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bz-bg);
+  color: var(--bz-ink);
+  font-family: var(--bz-sans);
+  font-size: 15px;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--bz-serif);
+  font-weight: 500;
+  color: var(--bz-ink);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+img {
+  display: block;
+}
+
+/* Material Symbols ligature icons (name inside the span = the glyph) */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  -webkit-font-feature-settings: 'liga';
+  user-select: none;
+}
+
+/* ---------- layout primitives --------------------------------------------- */
+
+.bz-shell {
+  max-width: var(--bz-max);
+  margin: 0 auto;
+  padding: 0 var(--bz-gutter);
+}
+
+@media (min-width: 1024px) {
+  .bz-shell {
+    padding: 0 3rem;
+  }
+}
+
+/* uppercase micro-label (label-caps token) */
+.bz-caps {
+  font-family: var(--bz-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* gradient wordmark */
+.bz-wordmark {
+  font-family: var(--bz-serif);
+  font-weight: 500;
+  background: linear-gradient(90deg, var(--bz-grad-from), var(--bz-grad-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* editorial section heading (serif) */
+.bz-title {
+  font-family: var(--bz-serif);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.bz-rule {
+  border: 0;
+  border-top: 1px solid var(--bz-hairline);
+  margin: 0;
+}
+
+/* ---------- buttons ------------------------------------------------------- */
+
+.bz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 14px 28px;
+  border: 1px solid transparent;
+  border-radius: var(--bz-r-md);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  background: none;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.bz-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.bz-btn--primary {
+  background: var(--bz-teal);
+  color: #fff;
+}
+
+.bz-btn--primary:hover:not(:disabled) {
+  background: var(--bz-teal-hover);
+}
+
+.bz-btn--ink {
+  background: var(--bz-ink);
+  color: #fff;
+}
+
+.bz-btn--ink:hover:not(:disabled) {
+  background: #000;
+}
+
+.bz-btn--outline {
+  background: var(--bz-surface);
+  color: var(--bz-ink);
+  border-color: var(--bz-ink);
+}
+
+.bz-btn--outline:hover:not(:disabled) {
+  background: var(--bz-ink);
+  color: #fff;
+}
+
+/* quiet card-level action (Quick Add etc.) */
+.bz-btn--quiet {
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--bz-surface-low);
+  color: var(--bz-ink);
+  border-radius: var(--bz-r);
+}
+
+.bz-btn--quiet:hover:not(:disabled) {
+  background: var(--bz-teal);
+  color: #fff;
+}
+
+/* editorial text link: underline offset with arrow */
+.bz-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bz-ink);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+}
+
+.bz-link:hover {
+  color: var(--bz-teal);
+}
+
+/* ---------- forms --------------------------------------------------------- */
+
+.bz-input,
+.bz-select,
+.bz-textarea {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--bz-surface);
+  border: 1px solid var(--bz-hairline);
+  border-radius: var(--bz-r);
+  font-size: 15px;
+  color: var(--bz-ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.bz-textarea {
+  height: auto;
+  padding: 12px 16px;
+  resize: vertical;
+}
+
+.bz-input::placeholder,
+.bz-textarea::placeholder {
+  color: var(--bz-ink-3);
+}
+
+.bz-input:focus,
+.bz-select:focus,
+.bz-textarea:focus {
+  border-color: var(--bz-ink); /* crisp switch, no glow halo */
+}
+
+.bz-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bz-field > label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--bz-ink-2);
+}
+
+/* ---------- badges & chips ------------------------------------------------ */
+
+.bz-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: var(--bz-r);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.bz-badge--save {
+  background: var(--bz-teal);
+}
+
+.bz-badge--sale {
+  background: var(--bz-crimson);
+}
+
+.bz-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--bz-surface);
+  border: 1px solid var(--bz-hairline);
+  border-radius: var(--bz-r);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bz-ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.bz-chip:hover {
+  border-color: var(--bz-ink);
+}
+
+.bz-chip.is-active {
+  background: var(--bz-ink);
+  border-color: var(--bz-ink);
+  color: #fff;
+}
+
+/* ---------- states -------------------------------------------------------- */
+
+.bz-empty {
+  padding: 4rem 1rem;
+  text-align: center;
+  color: var(--bz-ink-3);
+}
+
+.bz-empty h2 {
+  font-family: var(--bz-serif);
+  font-weight: 400;
+  font-size: 30px;
+  color: var(--bz-ink);
+  margin: 0 0 0.5rem;
+}

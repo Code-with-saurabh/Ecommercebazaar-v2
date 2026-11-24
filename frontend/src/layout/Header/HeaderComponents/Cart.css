@@ -1,52 +1,52 @@
-.cart {
-    position: relative;
-    display: flex;
-    align-items: center;
+.bz-bag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: var(--bz-surface);
+  border: 1px solid var(--bz-hairline);
+  border-radius: var(--bz-r);
+  text-decoration: none;
+  color: var(--bz-ink);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.15s ease;
 }
 
-.cart-image-container {
-    position: relative;
+.bz-bag:hover {
+  border-color: var(--bz-ink);
 }
 
-.cart-image {
-	margin-left:10px;
-    width: 40px;  
-    height: 40px; /* fixed box -> no shift while png loads */
-    object-fit: contain;  
+.bz-bag__icon {
+  font-size: 20px;
+  color: var(--bz-teal);
 }
 
-.badge {
-	text-align:center;
-    position: absolute;
-    top: 3px;
-    right: 3px;
-    background-color: red;  
-    color: black;  
-    padding: 6px;
-    border-radius: 50%;  
-    font-size: 10px;  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 4px;  
-    height: 4px;  
-	font-weight: bolder;
+.bz-bag__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
 }
 
-.empty-badge {
-    position: absolute;
-    top: 2px;
-    right: 4px;
-    color: red;
-    font-size: 12px;
-	font-weight: bolder;
-}
-.cart-text {
-	font-family:robotm;
-	color:lightgray;
+.bz-bag__label {
+  font-size: 10px;
+  color: var(--bz-ink-3);
 }
 
+.bz-bag__total {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-top: 3px;
+}
 
-.cart:active{
-	top:2px;
+@media (max-width: 768px) {
+  /* keep the icon, drop the price text — room is tight next to search */
+  .bz-bag__meta {
+    display: none;
+  }
+
+  .bz-bag {
+    padding: 8px;
+  }
 }

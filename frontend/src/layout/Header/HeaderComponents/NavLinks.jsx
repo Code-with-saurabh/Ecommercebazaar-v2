@@ -1,33 +1,54 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // If using react-router for navigation
-import { isAdmin, isLoggedIn, subscribeAuth } from '../../../utils/session';
+import { NavLink } from 'react-router-dom';
+import { isAdmin, subscribeAuth } from '../../../utils/session';
 import './NavLinks.css';
 
+/**
+ * Editorial nav row. Category links go through the catalog's query params
+ * (/products?category=Shirts&brand=…&sale=true) so every item is a real,
+ * shareable filter — not a dead anchor.
+ */
+const LINKS = [
+  { to: '/products', label: 'Shop' },
+  { to: '/products', label: 'All Products', end: true },
+  { to: '/products/tshirt', label: 'T-Shirts' },
+  { to: '/products?category=Shirts', label: 'Shirts' },
+  { to: '/products?category=Pants', label: 'Pants' },
+  { to: '/products/shoes', label: 'Footwear' },
+  { to: '/products?sale=true', label: 'Archive Sale', sale: true },
+];
+
 const NavLinks = () => {
-    // the Admin link only exists for role=admin sessions
-    const [admin, setAdmin] = useState(isAdmin);
-    // wishlist + account are personal pages - only for signed-in sessions
-    const [loggedIn, setLoggedIn] = useState(isLoggedIn);
+  const [admin, setAdmin] = useState(isAdmin);
 
-    useEffect(() =>
-        subscribeAuth(() => {
-            setAdmin(isAdmin());
-            setLoggedIn(isLoggedIn());
-        }), []);
+  useEffect(() => subscribeAuth(() => setAdmin(isAdmin())), []);
 
-    return (
-        <nav className="nav-links">
-            <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/products">Products</Link></li>
-                <li><Link to="/wishlist">Wishlist</Link></li>
-                {loggedIn && <li><Link to="/account">Account</Link></li>}
-                <li><Link to="/about">About</Link></li>
-                {admin && <li><Link to="/admin">Admin</Link></li>}
-            </ul>
-        </nav>
-		
-    );
-}
+  return (
+    <nav className="bz-navlinks" aria-label="Primary">
+      <ul>
+        {LINKS.map(link => (
+          <li key={link.label}>
+            <NavLink
+              to={link.to}
+              end={link.end}
+              className="bz-navlinks__link"
+              activeClassName="is-active"
+            >
+              {link.sale && <span className="bz-navlinks__dot" aria-hidden="true" />}
+              {link.label}
+            </NavLink>
+          </li>
+        ))}
+        {admin && (
+          <li>
+            <NavLink to="/admin" className="bz-navlinks__link" activeClassName="is-active">
+              Admin
+            </NavLink>
+          </li>
+        )}
+      </ul>
+    </nav>
+  );
+};
 
 export default NavLinks;

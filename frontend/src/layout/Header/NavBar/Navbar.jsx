@@ -1,21 +1,49 @@
-import './Navbar.css'; // Assuming you have a separate CSS file for styling
+import './Navbar.css';
+
+import { Link } from 'react-router-dom';
 
 import NavLinks from '../HeaderComponents/NavLinks.jsx';
 import Logo from '../HeaderComponents/Logo.jsx';
 import Search from '../HeaderComponents/Search.jsx';
 import Cart from '../HeaderComponents/Cart.jsx';
 import User from '../HeaderComponents/User.jsx';
-// import ImageSlider from '../../Slider/ImageSlider';
-const Navbar = () => {
-    return (
-        <div className="navbar">
-            <Logo />
-            <NavLinks />
-            <Search />
-            <Cart/>
-            <User />
-        </div>
-		 );
-}
+
+/**
+ * Site chrome: dark announcement bar (real shipping/COD/pricing claims)
+ * over the main nav row. All interactive pieces stay in HeaderComponents.
+ */
+const Navbar = () => (
+  <header className="bz-header">
+    <div className="bz-announce">
+      <div className="bz-shell bz-announce__inner">
+        <p className="bz-caps">
+          <strong>Complimentary</strong> Delivery Over $100
+          <span className="bz-announce__sep">|</span>
+          Cash on Delivery Available
+          <span className="bz-announce__sep">|</span>
+          Server-Verified Pricing
+        </p>
+      </div>
+    </div>
+
+    <div className="bz-shell bz-nav">
+      <Logo />
+      <NavLinks />
+      <Search />
+      <div className="bz-nav__tools">
+        <span className="bz-nav__currency bz-caps" title="Prices are charged in USD">
+          USD
+        </span>
+        <Link to="/wishlist" className="bz-icon-btn" aria-label="Wishlist" title="Wishlist">
+          <span className="material-symbols-outlined" aria-hidden="true">
+            favorite
+          </span>
+        </Link>
+        <Cart />
+        <User />
+      </div>
+    </div>
+  </header>
+);
 
 export default Navbar;

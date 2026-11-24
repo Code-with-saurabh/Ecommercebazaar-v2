@@ -1,28 +1,23 @@
-.logo-img {
-  max-width: 100%;
-  height: auto;
-  display: inline-block;
-  margin: 0 auto;
-  background: linear-gradient(18deg, #ff6b6b 35%, #caca2b 60%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-	position:relative;
+.bz-logo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
-.logo a {
-	 text-decoration: none;  
-	color: white; 
+.bz-logo__word {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.01em;
 }
 
-.logo-img:hover{
-	  background: linear-gradient(164deg, #caca2b 35%,#ff6b6b  60%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  
+.bz-logo__tag {
+  color: var(--bz-ink-3);
+  letter-spacing: 0.25em;
+  font-size: 10px;
+  transition: color 0.15s ease;
 }
-.logo-img:active{
-	 top:2px;
-  
+
+.bz-logo:hover .bz-logo__tag {
+  color: var(--bz-teal);
 }

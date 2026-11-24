@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"secondary-container":"#e2dfde","on-tertiary-fixed-variant":"#92001c","surface-container-low":"#f4f3f0","error":"#ba1a1a","inverse-primary":"#77d7cc","inverse-on-surface":"#f2f1ee","primary-container":"#088178","secondary-fixed":"#e5e2e1","on-error":"#ffffff","on-secondary-fixed-variant":"#474746","secondary-fixed-dim":"#c8c6c5","on-secondary":"#ffffff","on-primary-fixed-variant":"#00504a","on-primary":"#ffffff","surface-bright":"#faf9f6","on-primary-container":"#e7fffb","surface-container-highest":"#e3e2df","on-secondary-container":"#636262","on-tertiary-container":"#fff9f8","tertiary-container":"#e31635","primary-fixed-dim":"#77d7cc","on-tertiary":"#ffffff","on-tertiary-fixed":"#410007","surface":"#faf9f6","surface-container":"#efeeeb","tertiary-fixed":"#ffdad8","on-error-container":"#93000a","tertiary-fixed-dim":"#ffb3b1","on-primary-fixed":"#00201d","primary-fixed":"#94f3e8","error-container":"#ffdad6","surface-variant":"#e3e2df","surface-container-lowest":"#ffffff","surface-container-high":"#e9e8e5","background":"#faf9f6","on-background":"#1a1c1a","outline-variant":"#bdc9c6","tertiary":"#b80025","secondary":"#5f5e5e","surface-tint":"#006a63","on-secondary-fixed":"#1b1b1c","on-surface":"#1a1c1a","primary":"#00665f","outline":"#6e7977","surface-dim":"#dbdad7","on-surface-variant":"#3e4947","inverse-surface":"#2f312f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xl":"2.5rem","space-sm":"0.5rem","space-2xl":"4rem","space-md":"1rem","space-xs":"0.25rem","margin":"1.25rem","space-lg":"1.5rem","gutter-desktop":"2rem","margin-desktop":"3rem","gutter":"1.5rem","space-3xl":"6rem"},"fontFamily":{"body-lg":["Manrope"],"display-xl-mobile":["Playfair Display"],"price-focal":["Manrope"],"body-md":["Manrope"],"display-lg":["Playfair Display"],"display-xl":["Playfair Display"],"headline-md":["Playfair Display"],"display-lg-mobile":["Playfair Display"],"label-sm":["Manrope"],"label-caps":["Manrope"],"body-sm":["Manrope"],"label-md":["Manrope"],"headline-sm":["Playfair Display"],"title-editorial":["Playfair Display"],"headline-lg":["Playfair Display"]},"fontSize":{"body-lg":["17px",{"lineHeight":"28px","letterSpacing":"-0.005em","fontWeight":"400"}],"display-xl-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.015em","fontWeight":"400"}],"price-focal":["16px",{"lineHeight":"22px","letterSpacing":"0.02em","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"400"}],"display-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.015em","fontWeight":"400"}],"display-xl":["56px",{"lineHeight":"64px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0em","fontWeight":"500"}],"display-lg-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.01em","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"label-caps":["11px",{"lineHeight":"14px","letterSpacing":"0.12em","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"400"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"0em","fontWeight":"500"}],"title-editorial":["18px",{"lineHeight":"26px","letterSpacing":"0.02em","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"500"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="bg-on-surface text-surface py-1.5 px-4 text-center"><div class="max-w-[1320px] mx-auto flex items-center justify-center gap-4 text-center"><p class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-surface/90"><span class="text-primary-fixed font-bold">Complimentary</span> Delivery Over $100 <span class="text-surface/40 mx-2">|</span> Cash on Delivery Available <span class="text-surface/40 mx-2">|</span> Server-Verified Architectural Pricing</p></div></div><div class="h-20 max-w-[1320px] mx-auto px-6 lg:px-12 flex items-center justify-between gap-6"><div class="flex items-center gap-6 shrink-0"><a class="flex flex-col group" data-path="shop" href="#"><span class="font-headline-md text-headline-md tracking-tight bg-gradient-to-r from-[#ff6b6b] to-[#caca2b] bg-clip-text text-transparent font-medium">Bazaar</span><span class="font-label-caps text-label-caps tracking-[0.25em] text-outline-variant -mt-1 group-hover:text-primary transition-colors">EST. SURAT</span></a></div><nav class="hidden xl:flex items-center gap-7" data-active-classes="text-on-surface font-semibold underline underline-offset-8 decoration-primary decoration-2"><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="shop" href="#">Shop</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="all-products" href="#">All Products</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="t-shirts" href="#">T-Shirts</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="shirts" href="#">Shirts</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="pants" href="#">Pants</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="footwear" href="#">Footwear</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2 flex items-center gap-1.5" data-path="archive-sale" href="#"><span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>Archive Sale</a></nav><div class="flex items-center gap-5 shrink-0"><div class="hidden md:flex items-center text-on-surface-variant text-label-sm font-label-sm gap-1 bg-surface-container-low px-2.5 py-1 rounded-sm"><span class="font-price-focal text-price-focal text-on-surface">USD</span><span class="material-symbols-outlined text-[16px]">expand_more</span></div><div class="relative hidden lg:flex items-center"><span class="material-symbols-outlined absolute left-3 text-outline text-[18px]">search</span><input class="w-48 xl:w-60 h-9 pl-9 pr-3 text-body-sm font-body-sm bg-surface-container-lowest rounded-sm placeholder:text-outline/70 focus:outline-none focus:w-64 transition-all duration-300 shadow-[0_1px_3px_rgba(0,0,0,0.02)]" placeholder="Search editorial archive..." type="text"/></div><button aria-label="Wishlist" class="relative p-1.5 text-on-surface-variant hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">favorite</span><span class="absolute top-0.5 right-0.5 w-4 h-4 bg-primary text-on-primary font-label-caps text-[9px] flex items-center justify-center rounded-full">2</span></button><button aria-label="Account" class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">person</span></button><button aria-label="Cart" class="flex items-center gap-2.5 py-1.5 px-3 bg-surface-container-lowest rounded-sm hover:bg-surface-container transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.03)]" type="button"><span class="material-symbols-outlined text-[20px] text-primary">shopping_bag</span><div class="flex flex-col text-left"><span class="font-label-caps text-[10px] uppercase text-outline tracking-wider">Bag (3)</span><span class="font-price-focal text-body-sm text-on-surface">$340.00</span></div></button><div class="pl-2 flex items-center"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/ALJJyrBV6RI_QMMaRXwqhPkyYc6DfqJ_tMtk--vQuvi4yun_0AE4npCOm52an2TVOohDDOI09ib21gMYZsTVvrdwQwnzYl2aUFXnyPrMhvo6ScP9Bmrq1TplEgXs7ZA3QBK7M_9U9DhbmYVbLZOszOZ2mp4jfQmcXZCCSFoQ17mqK2uHjOzHnZrLDAa15jc1ZLvCUElbRbh6V7L9ogO1kj6THH7cOjw6bvO33UT0a0MaEkNOdw"/></div></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-80px)]"><div class="flex flex-col w-full">
+<!-- Editorial Breadcrumb Bar -->
+<div class="w-full bg-surface-container-low/70 py-3.5 px-6 lg:px-12">
+<div class="max-w-[1320px] mx-auto flex items-center justify-between text-body-sm font-body-sm text-outline">
+<nav aria-label="Breadcrumb" class="flex items-center gap-2">
+<a class="hover:text-on-surface transition-colors" href="#">Archive</a>
+<span class="text-outline-variant text-[11px]">/</span>
+<a class="hover:text-on-surface transition-colors" href="#">Footwear &amp; Boots</a>
+<span class="text-outline-variant text-[11px]">/</span>
+<a class="hover:text-on-surface transition-colors" href="#">Dr. Martens</a>
+<span class="text-outline-variant text-[11px]">/</span>
+<span class="text-on-surface font-medium truncate max-w-[260px] md:max-w-none">1460 8-Eye Smooth Leather Boot</span>
+</nav>
+<div class="hidden sm:flex items-center gap-4 text-label-caps font-label-caps uppercase tracking-wider text-outline">
+<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>Vault Serial #DM-1460-SRT</span>
+<span class="text-outline-variant">•</span>
+<span>Surat Atelier Dispatched</span>
+</div>
+</div>
+</div>
+<!-- Primary PDP Spread -->
+<div class="w-full max-w-[1320px] mx-auto px-6 lg:px-12 pt-8 lg:pt-12 pb-space-3xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+<!-- Left Column: Visual Gallery & Material Spread (~58% / col-span-7) -->
+<section class="lg:col-span-7 flex flex-col gap-6">
+<!-- Main Interactive Visual Frame -->
+<div class="relative w-full bg-surface-container-lowest overflow-hidden group shadow-sm">
+<!-- Curatorial Floating Badges -->
+<div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
+<span class="bg-on-surface text-surface text-label-caps font-label-caps px-3 py-1.5 uppercase tracking-[0.14em] shadow-sm">
+              Authorized Distribution
+            </span>
+<span class="bg-tertiary-container text-on-tertiary text-label-caps font-label-caps px-3 py-1 uppercase tracking-[0.14em] self-start font-semibold">
+              Sale -21%
+            </span>
+</div>
+<div class="absolute top-4 right-4 z-20">
+<button aria-label="Expand High Resolution Visual" class="w-10 h-10 bg-surface/90 backdrop-blur-md rounded-full flex items-center justify-center text-on-surface hover:bg-surface hover:scale-105 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">zoom_in</span>
+</button>
+</div>
+<!-- Hero Image Frame -->
+<div class="aspect-[4/5] w-full relative overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img alt="Dr. Martens 1460 8-Eye Smooth Leather Boot editorial showcase on sandstone plinth" class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" data-alt="A striking minimalist editorial fashion photograph of a pair of rich dark brown oiled leather combat boots sitting beside clean white luxury minimalist sneakers on a sand-colored stone exhibition block in an airy daylight-filled museum gallery setting. Clean off-white stone textures, architectural softness, subtle warm shadows, high-end European magazine look." id="main-product-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOZBdsB7AZciZ9NeBCVuDj9XF0Sz5TF-KDSyYhtvQcfYLi5YP-3faeLiL4HQXNhw6RWcBXdnYRrTEyOzPw4SrvgyenH8DRBwYHYLeIecreqqO99VMjO1VYVOJpiedRAmbxOv_Wd2dbjzonLYepdzWiuoimlHR1DfJ_x8sOM0BCB6vLcxL6x2ukqfwf90Xfib0SvgkP1cFu6Cdn7hcmdaZrgt-sL_L4S4nSJsabZfxU"/>
+<div class="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+<div class="bg-surface/85 backdrop-blur-sm px-3 py-1.5 text-label-caps font-label-caps text-on-surface uppercase tracking-wider">
+                Plate 01 / Goodyear Welt Architectural Profile
+              </div>
+<div class="bg-primary-container text-on-primary-container px-2.5 py-1 text-label-caps font-label-caps uppercase tracking-wider font-semibold">
+                Verified Provenance
+              </div>
+</div>
+</div>
+</div>
+<!-- Thumbnail Gallery Strip -->
+<div class="grid grid-cols-4 gap-3 lg:gap-4">
+<button class="thumb-btn aspect-square bg-surface-container-lowest overflow-hidden transition-all duration-200 relative group p-0.5 ring-2 ring-primary" data-img-idx="0" type="button">
+<img alt="Plinth Angle" class="w-full h-full object-cover" data-alt="Minimalist fashion still-life closeup of classic brown leather lace-up combat boots rested on a solid stone pedestal inside a bright modernist studio atelier, neutral beige tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz0d74XTYRpTW-xFuyc1b2mP0dSzoY7J6u0mMvTcKyI0MWRffGNGhv3jCtyM5xtT_oKtIoGPjRkMcomAOC7m5fu-vSD5ihFV63aREZ2b5E-i8Yp7WSpUHEwEu0oL7TAYc1tM2Ddtp1jzSSO6BrjCQBBiQQbpDU8TRP_YfyXZtxH5lrn0VE-IAkIuoTUjWjkbMywzgfTKXc6IQWCIyFeivOUCp99u0JdyvQ2NJriJPE"/>
+<span class="absolute bottom-1 right-1 bg-on-surface/80 text-surface text-[9px] font-label-caps px-1 py-0.5">01</span>
+</button>
+<button class="thumb-btn aspect-square bg-surface-container-lowest overflow-hidden transition-all duration-200 relative group p-0.5 opacity-70 hover:opacity-100" data-img-idx="1" type="button">
+<img alt="Material Pairing" class="w-full h-full object-cover" data-alt="Immaculate crisp white luxury cotton formal shirt carefully folded with architectural precision atop an untreated natural porous travertine stone slab, warm sunlight, gentle shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClZpRBt8d4OeGqhAoKCpQs0givZzCxuGweLOyJZPQmkXSe2fWYCWvfeEGkzK1-hjR_x5Dst7NRpZhAwXlxvPj07cYjY6jGbWmURiPuNuFbe3EjSBG6J8pOiBSWsMSjx2g9cPptwaJknI6fDWM4_ZUnJW3ar-KCenrm34chEAps-Ldi2MKld009k0vlPk1WvmoArtIYPuTkpNlcUQThq-9bIRiQcfJhIME5PDYPoYzU"/>
+<span class="absolute bottom-1 right-1 bg-on-surface/80 text-surface text-[9px] font-label-caps px-1 py-0.5">02</span>
+</button>
+<button class="thumb-btn aspect-square bg-surface-container-lowest overflow-hidden transition-all duration-200 relative group p-0.5 opacity-70 hover:opacity-100" data-img-idx="2" type="button">
+<img alt="Editorial On-Model" class="w-full h-full object-cover" data-alt="Full body high fashion editorial photo of a chic model wearing an oversized classic beige trench coat with charcoal tailored pleated trousers in a bright sunlit concrete industrial loft." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCmP9_FTDpsbEds0rATknVSw3k1a-HoB2NNFwYBMO_2tQ6VEbCRJq3202rXckV94ko-gqlUYe2ZekHQKJAvNHMsK_n_VM1aAXPjuTyOIpzucY5lxBQ4SjkYzSpOMdry3fC1ehV1t371gVDsuv0Hi97_WZsN46SpZXV4pRLvKAWdT3yniHgAdc1Ljxqv2V-sI-O8sr7I4oEpM7M7VokElCDbxEeGjhfwNuGC6X-zjQK"/>
+<span class="absolute bottom-1 right-1 bg-on-surface/80 text-surface text-[9px] font-label-caps px-1 py-0.5">03</span>
+</button>
+<button class="thumb-btn aspect-square bg-surface-container-lowest overflow-hidden transition-all duration-200 relative group p-0.5 opacity-70 hover:opacity-100" data-img-idx="3" type="button">
+<img alt="Sole Detail" class="w-full h-full object-cover" data-alt="Extreme macro photographic detail of the iconic yellow Goodyear welt stitching on the grooved edge of a heavy-duty translucent AirWair lug sole, studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkFWj9gnW1f0Q2yJTAM9GQ7DTBQYist7xBPuoy1tgbKv-yIVhpEICcmoVPjWs25_WlrzGoBYatTqXRXTGPij1xvbObEx5MgTixIWWHqAIaONi9q2WM6cm77LEYMfO-phyo3Bhzc1RzGwh1-lQOfTq6v8HcB4GBer32Pt5j0eUOIpy0ojpSAJswfqXscRCD5r_upvm8u7lKsxf8ff2_axPU_6GlLlc8sXG2pNnP2tJZ"/>
+<span class="absolute bottom-1 right-1 bg-on-surface/80 text-surface text-[9px] font-label-caps px-1 py-0.5">04</span>
+</button>
+</div>
+<!-- Craftsmanship & Architectural Dossier Split -->
+<div class="mt-4 bg-surface-container-lowest p-6 lg:p-8 space-y-6">
+<div class="flex items-center justify-between pb-3">
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-[0.18em]">Atelier Sourced Dossier</p>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1">Sartorial Footwear Engineering</h3>
+</div>
+<div class="hidden sm:flex items-center gap-1.5 text-primary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Single-Origin Certified</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+<div class="space-y-1.5 bg-surface-container-low p-4">
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Upper Construction</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">100% Smooth Full-Grain Leather</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Polished to a soft satin sheen; breaks in with a bespoke patina unique to wearer gait.</p>
+</div>
+<div class="space-y-1.5 bg-surface-container-low p-4">
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Welt Mechanics</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Heat-Sealed Goodyear Welt</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Fused at 700°C and reinforced with signature high-tensile welt thread for indefinite resolability.</p>
+</div>
+<div class="space-y-1.5 bg-surface-container-low p-4">
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Sole Compound</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Original AirWair Cushioning</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hydrocarbon, fat, acid, petrol, and alkali resistant compound with air-cushioned chambers.</p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 text-body-sm font-body-sm text-on-surface-variant bg-surface-container p-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[24px]">verified_user</span>
+<span>Inspected and indexed at the Surat Flagship Atelier Vault prior to dispatch.</span>
+</div>
+<a class="text-primary font-semibold hover:underline flex items-center gap-1 shrink-0" href="#specification-compendium">
+              View Inspection Protocol
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Right Column: Sticky Purchase Rail (~42% / col-span-5) -->
+<section class="lg:col-span-5 lg:sticky lg:top-28 flex flex-col gap-6">
+<div class="bg-surface-container-lowest p-6 lg:p-8 space-y-6 shadow-sm">
+<!-- Taxonomy & Brand Row -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps tracking-[0.2em] text-outline uppercase">
+                Dr. Martens · Archival Footwear
+              </span>
+<span class="inline-flex items-center gap-1 bg-surface-container-high px-2 py-0.5 text-label-caps font-label-caps text-on-surface uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                Official Atelier Partner
+              </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface leading-tight">
+              1460 8-Eye Smooth Leather Boot
+            </h1>
+<!-- Ratings Strip -->
+<div class="flex items-center gap-3 pt-1">
+<div aria-label="Rated 4.9 out of 5 stars" class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-price-focal text-body-sm text-on-surface">4.9</span>
+<span class="text-outline-variant">•</span>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4" href="#verified-reviews-section">
+                342 Verified Reviews
+              </a>
+</div>
+</div>
+<!-- Pricing Module -->
+<div class="bg-surface-container-low p-4 flex flex-col gap-2">
+<div class="flex items-baseline gap-3">
+<span class="font-headline-lg text-headline-lg font-semibold text-primary">$190.00</span>
+<span class="font-body-md text-body-md text-outline line-through">$240.00</span>
+<span class="bg-tertiary-container text-on-tertiary font-label-caps text-label-caps px-2 py-0.5 font-bold uppercase tracking-wider">
+                Save 21% ($50)
+              </span>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline">
+<span class="material-symbols-outlined text-[15px] text-primary">lock</span>
+<span>Server-Verified Cryptographic Architectural Pricing</span>
+</div>
+</div>
+<!-- Color Swatch Selector -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between text-label-md font-label-md">
+<span class="text-on-surface font-medium">Colorway:</span>
+<span class="text-on-surface-variant" id="selected-color-label">Heritage Black Smooth</span>
+</div>
+<div class="flex items-center gap-3">
+<button aria-label="Heritage Black Smooth" class="color-swatch-btn w-9 h-9 rounded-full bg-[#1b1b1c] p-0.5 ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest transition-all" data-color="Heritage Black Smooth" type="button"></button>
+<button aria-label="Oxblood Vintage Rub" class="color-swatch-btn w-9 h-9 rounded-full bg-[#4a1c1d] p-0.5 hover:ring-2 hover:ring-outline transition-all" data-color="Oxblood Vintage Rub" type="button"></button>
+<button aria-label="Chalk Bone White" class="color-swatch-btn w-9 h-9 rounded-full bg-[#e8e5dc] p-0.5 hover:ring-2 hover:ring-outline transition-all" data-color="Chalk Bone White" type="button"></button>
+</div>
+</div>
+<!-- Sizing Matrix & Size Compendium -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-label-md font-label-md text-on-surface">
+<span class="font-medium">Sizing:</span>
+<span class="text-outline uppercase text-[12px]">UK Standard / US Mens (+1)</span>
+</div>
+<button class="text-primary hover:underline text-label-sm font-label-sm font-medium flex items-center gap-1" id="size-guide-modal-trigger" type="button">
+<span class="material-symbols-outlined text-[16px]">straighten</span>
+<span>Millimeter Fit Compendium</span>
+</button>
+</div>
+<!-- Size Selector Grid -->
+<div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="size-grid">
+<button class="size-btn py-3 text-center text-label-md font-label-md transition-all bg-surface-container-low hover:bg-surface-container text-on-surface" data-size="UK 7" type="button">
+                UK 7
+              </button>
+<button class="size-btn py-3 text-center text-label-md font-label-md transition-all bg-surface-container-low hover:bg-surface-container text-on-surface" data-size="UK 8" type="button">
+                UK 8
+              </button>
+<button class="size-btn py-3 text-center text-label-md font-label-md transition-all bg-on-surface text-surface ring-2 ring-on-surface" data-size="UK 9" type="button">
+                UK 9
+              </button>
+<button class="size-btn py-3 text-center text-label-md font-label-md transition-all bg-surface-container-low hover:bg-surface-container text-on-surface" data-size="UK 10" type="button">
+                UK 10
+              </button>
+<button class="size-btn py-3 text-center text-label-md font-label-md transition-all bg-surface-container-low hover:bg-surface-container text-on-surface relative" data-size="UK 11" type="button">
+                UK 11
+                <span class="absolute -top-1.5 -right-1 bg-tertiary-container text-on-tertiary text-[9px] px-1 font-label-caps uppercase leading-tight font-bold">1 Left</span>
+</button>
+<button class="size-btn py-3 text-center text-label-md font-label-md transition-all bg-surface-container-high/60 text-outline cursor-not-allowed relative overflow-hidden" data-size="UK 12" disabled="" type="button">
+<span class="line-through">UK 12</span>
+<span class="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
+<span class="w-full h-[1px] bg-outline transform -rotate-45"></span>
+</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-outline-variant flex items-center gap-1.5 pt-1">
+<span class="material-symbols-outlined text-[16px] text-outline">info</span>
+              True to European sartorial measure. If between sizes, recommend sizing down one half.
+            </p>
+</div>
+<!-- Stock Urgency Notice -->
+<div class="bg-[#faf3e8] p-3.5 flex items-start gap-3">
+<span class="material-symbols-outlined text-[20px] text-[#9b660a] shrink-0 mt-0.5">inventory_2</span>
+<div class="text-body-sm font-body-sm">
+<p class="font-medium text-[#5c3e06]">Atelier Vault Allocation: Only 4 pairs available</p>
+<p class="text-[#7d5612] text-[12px] mt-0.5">Physical inventory reserved at Surat atelier. Dispatches in 24h with tamper-evident seal.</p>
+</div>
+</div>
+<!-- Quantity & Action CTAs -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center gap-3">
+<!-- Stepper -->
+<div class="flex items-center bg-surface-container-low h-12 px-2 shrink-0">
+<button aria-label="Decrease quantity" class="w-8 h-8 flex items-center justify-center text-on-surface hover:text-primary transition-colors font-bold" id="qty-minus" type="button">-</button>
+<span class="w-8 text-center font-price-focal text-body-md text-on-surface" id="qty-value">1</span>
+<button aria-label="Increase quantity" class="w-8 h-8 flex items-center justify-center text-on-surface hover:text-primary transition-colors font-bold" id="qty-plus" type="button">+</button>
+</div>
+<!-- Main Primary CTA -->
+<button class="flex-1 h-12 bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold tracking-wide hover:bg-primary transition-all duration-200 flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]" id="add-to-bag-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+<span id="cta-label">Add to Bag — $190.00</span>
+</button>
+</div>
+<!-- Secondary Actions -->
+<div class="grid grid-cols-2 gap-3">
+<button class="h-11 bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center gap-2" id="wishlist-toggle-btn" type="button">
+<span class="material-symbols-outlined text-[18px]" id="wishlist-icon">favorite_border</span>
+<span id="wishlist-text">Save to Wishlist</span>
+</button>
+<button class="h-11 bg-on-surface text-surface hover:bg-on-surface/90 font-label-md text-label-md transition-colors flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span>Express COD Order</span>
+</button>
+</div>
+</div>
+<!-- Micro-Trust Matrix (4 horizontal items) -->
+<div class="grid grid-cols-2 gap-2.5 pt-4 text-body-sm font-body-sm">
+<div class="flex items-center gap-2.5 p-2 bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">local_shipping</span>
+<div>
+<p class="font-medium text-on-surface text-[12px] leading-tight">Complimentary Delivery</p>
+<p class="text-outline text-[11px]">Free over $100 worldwide</p>
+</div>
+</div>
+<div class="flex items-center gap-2.5 p-2 bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">payments</span>
+<div>
+<p class="font-medium text-on-surface text-[12px] leading-tight">Cash on Delivery</p>
+<p class="text-outline text-[11px]">Inspection on receipt</p>
+</div>
+</div>
+<div class="flex items-center gap-2.5 p-2 bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+<div>
+<p class="font-medium text-on-surface text-[12px] leading-tight">100% Provenance</p>
+<p class="text-outline text-[11px]">Direct brand authorized</p>
+</div>
+</div>
+<div class="flex items-center gap-2.5 p-2 bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">history</span>
+<div>
+<p class="font-medium text-on-surface text-[12px] leading-tight">Atelier Return Privilege</p>
+<p class="text-outline text-[11px]">14 days unmarred trial</p>
+</div>
+</div>
+</div>
+<!-- Curatorial Spec Accordions -->
+<div class="pt-4 space-y-2">
+<details class="group bg-surface-container-low open:bg-surface-container-lowest transition-colors" open="">
+<summary class="flex items-center justify-between p-4 cursor-pointer select-none font-label-md text-label-md text-on-surface font-semibold list-none">
+<span>Material Architecture &amp; Construction</span>
+<span class="material-symbols-outlined text-[18px] group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-4 pb-4 pt-1 font-body-sm text-body-sm text-on-surface-variant space-y-2">
+<p><strong class="text-on-surface">Upper:</strong> 100% Full-grain nappa leather, drum-dyed in authentic heritage tones.</p>
+<p><strong class="text-on-surface">Welt:</strong> Signature yellow welt cord sewn into upper leather and insole rib.</p>
+<p><strong class="text-on-surface">Footbed:</strong> Anatomical micro-perforated leather sockliner with EVA heel cushioning.</p>
+<p><strong class="text-on-surface">Dispatched From:</strong> Surat Central Vault, Gujarat, India.</p>
+</div>
+</details>
+<details class="group bg-surface-container-low open:bg-surface-container-lowest transition-colors">
+<summary class="flex items-center justify-between p-4 cursor-pointer select-none font-label-md text-label-md text-on-surface font-semibold list-none">
+<span>Worldwide Dispatch &amp; Courier Logistics</span>
+<span class="material-symbols-outlined text-[18px] group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-4 pb-4 pt-1 font-body-sm text-body-sm text-on-surface-variant space-y-2">
+<p>Standard express fulfillment is handled within 24 operational hours. Domestic India parcels delivered in 2 business days via BlueDart Apex air courier.</p>
+<p>International shipments delivered within 4-7 days via DHL Express Haute Courier with dynamic customs clearance pre-calculated.</p>
+</div>
+</details>
+<details class="group bg-surface-container-low open:bg-surface-container-lowest transition-colors">
+<summary class="flex items-center justify-between p-4 cursor-pointer select-none font-label-md text-label-md text-on-surface font-semibold list-none">
+<span>Care, Conditioning &amp; Preservation</span>
+<span class="material-symbols-outlined text-[18px] group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-4 pb-4 pt-1 font-body-sm text-body-sm text-on-surface-variant space-y-2">
+<p>Clean leather dirt with a damp cloth and allow to dry naturally. Apply Wonder Balsam using the provided sponge applicator to moisturize, protect, and restore leather pliability.</p>
+</div>
+</details>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Editorial Section: The Atelier Anatomy Spread -->
+<section class="w-full bg-surface-container-low py-space-2xl">
+<div class="max-w-[1320px] mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-5 space-y-5">
+<p class="font-label-caps text-label-caps uppercase tracking-[0.2em] text-outline">Anatomy of an Icon</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Engineered for Decades, Not Seasons.</h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Originally created on 01.04.60—hence the 1460 nomenclature—the 8-eye silhouette was tailored as an ergonomic workwear marvel. Today, our Surat atelier sources this archival cut, honoring the original high-density double-stitch construction that defines authentic British manufacturing.
+          </p>
+<div class="space-y-4 pt-2">
+<div class="flex items-start gap-4">
+<span class="w-7 h-7 rounded-full bg-surface-container-highest text-on-surface font-price-focal text-body-sm flex items-center justify-center shrink-0">01</span>
+<div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Z-Welt Heat Fusion</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">The sole and upper are heat-sealed together at 700°C before stitch-locking, eliminating liquid penetration.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="w-7 h-7 rounded-full bg-surface-container-highest text-on-surface font-price-focal text-body-sm flex items-center justify-center shrink-0">02</span>
+<div>
+<h4 class="font-title-editorial text-title-editorial text-on-surface">Bouncing Soles Formulation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Microscopic air pockets embedded into synthetic PVC compound absorb ground shear stress on stone and asphalt.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7">
+<div class="relative bg-surface-container-lowest p-4 lg:p-6 shadow-sm overflow-hidden">
+<div class="aspect-[16/10] w-full bg-surface-container overflow-hidden relative">
+<img alt="Atelier inspection and crafting" class="w-full h-full object-cover" data-alt="Close up architectural detail of artisanal cobbler workstation with natural leather pieces, precision metal awls, beeswax thread, and pristine boots on a minimal stone worktable under directional soft studio light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJsLML9EmR3GBAQm3SFFyl2O7igVV5wOpPGfiK1cpEC0c0j5XGDu7DNpqVu5YAkg42B_yZdRZ1u4Kh_DG0Q4aMuv7_mX-lVh1VbYpcHrjavDI9K9vGTMEdeLu49gFbhkxnV1_zr_hfVn0ZEilGBn_hRmDYzKbJ7XRffuaG6W6hgF-L5KPvvEzHW_SZFp66-wzGhxYsbzOm4YnF-Qk4HB749sYRckXKIg-jRUqmvah5"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 text-surface flex items-end justify-between">
+<div>
+<p class="font-label-caps text-label-caps uppercase tracking-wider text-surface/80">Workshop Batch</p>
+<p class="font-headline-sm text-headline-sm">Surat Verification Atelier #2024</p>
+</div>
+<span class="font-price-focal text-label-md bg-surface text-on-surface px-3 py-1">ISO 9001 Certified Lab</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Curated Editorial Cross-Sell Ensemble ("Frequently Styled With") -->
+<section class="w-full bg-surface py-space-3xl">
+<div class="max-w-[1320px] mx-auto px-6 lg:px-12 space-y-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4">
+<div class="space-y-2">
+<span class="font-label-caps text-label-caps uppercase tracking-[0.2em] text-outline">Editorial Ensemble</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Frequently Styled With</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+          Harmonized silhouettes curated by the Bazaar styling directors to complement heavy boot architecture.
+        </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1: Downtown Oxford Shirt -->
+<article class="bg-surface-container-lowest group flex flex-col justify-between transition-transform duration-300 hover:-translate-y-1 shadow-sm">
+<div class="aspect-[3/4] w-full bg-surface-container-low overflow-hidden relative">
+<img alt="Downtown Designs Oxford Shirt" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" data-alt="Luxurious European white poplin button-down collar dress shirt neatly folded on top of an organic natural travertine plinth, minimalist luxury boutique catalog styling." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNksONaRlV1VFyMoyCRcpyxatzXq19bUJmqyf6BhYzt3rt3BQsNpe1r0SS3xYTzMhB6vPkj3a6WI5sAlGiR1ZxR9t6GvUJz5odcDjU2vZGVZ4kNM9zo606tkmtk0vDzat_uxVWAxb6SSLt6gEsdgxn6Ia49f85QaCbTgAjzi_JiBfNoO0sU_ssmG8LgK69fGTKItFRIXfVXc72ts4bsN0VOplhkxa2o6sqJuqn1fv_"/>
+<span class="absolute top-3 left-3 bg-surface text-on-surface text-[10px] font-label-caps px-2 py-0.5 uppercase tracking-wider">Atelier Core</span>
+</div>
+<div class="p-4 flex flex-col justify-between flex-1 gap-4">
+<div class="space-y-1">
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Downtown Designs</p>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Savile Oxford Crisp Shirt</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">100% Egyptian Giza 87 Cotton</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-price-focal text-body-md text-on-surface">$119.00</span>
+<button aria-label="Add Savile Oxford Shirt to Bag" class="p-2 bg-surface-container-low hover:bg-primary hover:text-on-primary text-on-surface transition-colors rounded-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2: Pleated Chino -->
+<article class="bg-surface-container-lowest group flex flex-col justify-between transition-transform duration-300 hover:-translate-y-1 shadow-sm">
+<div class="aspect-[3/4] w-full bg-surface-container-low overflow-hidden relative">
+<img alt="Tailored Pleated Chino" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" data-alt="Minimalist fashion still of charcoal tailored double-pleated wool trousers hanging against raw textured plaster wall in an art director studio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt6k35RUXX1PGoUlaN-VncgbUz004T8wwkHuoCVCHiMMiy1OFgpHN4qZgd6MVedth1DnrpA43Hp1BxLPfbqV8BRBn2HhHoPcsME8Xc1YiQ0lvmY1mybMkpJa7kozKq-N58p0P39UJbT8STAwisy2WTZaROJXFEUqdmD2C-ZNBkuZaEj-f9BhMVRtzjaSMm3nHiR-U9q43JKSeCLtwNjF_JSUueBD8cVVLoBUxCK7Ds"/>
+<span class="absolute top-3 left-3 bg-surface text-on-surface text-[10px] font-label-caps px-2 py-0.5 uppercase tracking-wider">Tailored</span>
+</div>
+<div class="p-4 flex flex-col justify-between flex-1 gap-4">
+<div class="space-y-1">
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Flying Machine</p>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Pleated Atelier Chino</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Florentine Structured Wool Blend</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-price-focal text-body-md text-on-surface">$145.00</span>
+<button aria-label="Add Pleated Chino to Bag" class="p-2 bg-surface-container-low hover:bg-primary hover:text-on-primary text-on-surface transition-colors rounded-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3: Heavyweight Tee -->
+<article class="bg-surface-container-lowest group flex flex-col justify-between transition-transform duration-300 hover:-translate-y-1 shadow-sm">
+<div class="aspect-[3/4] w-full bg-surface-container-low overflow-hidden relative">
+<img alt="Bazaar 280 GSM Heavyweight Tee" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" data-alt="Heavyweight black crewneck boxy luxury cotton t-shirt flatlay arrangement on warm travertine stone in natural daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVK-LYKHtTElKwa77A0Eed4V1lSmws-igSYqoSji0uSZW7D6ZW9QJ-Vxfx0Ikpi4JAEDpZ5qw7GPSWGc4GcJ3ByeDVqasZqGNBMYofW_P2A6PnD2l8GT3T-C_RYrJoehu6Y8cAj3zDX3TJaw0_0FM7B8D8KgVgPNfO3xufyuYBTaD5PWC8T4YwvaVtsv5fn_tvqvM4Y7slScbVg8pZVPhB8zbECmMOJzAMotCzlyBn"/>
+<span class="absolute top-3 left-3 bg-surface text-on-surface text-[10px] font-label-caps px-2 py-0.5 uppercase tracking-wider">Bazaar House</span>
+</div>
+<div class="p-4 flex flex-col justify-between flex-1 gap-4">
+<div class="space-y-1">
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Bazaar Studio</p>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">280 GSM Compact Tee</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Interlock Ring-Spun Cotton</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-price-focal text-body-md text-on-surface">$79.00</span>
+<button aria-label="Add Heavyweight Tee to Bag" class="p-2 bg-surface-container-low hover:bg-primary hover:text-on-primary text-on-surface transition-colors rounded-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4: Alternative Footwear ASICS Gel-Kayano -->
+<article class="bg-surface-container-lowest group flex flex-col justify-between transition-transform duration-300 hover:-translate-y-1 shadow-sm">
+<div class="aspect-[3/4] w-full bg-surface-container-low overflow-hidden relative">
+<img alt="ASICS Gel-Kayano 30" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" data-alt="Modern technical beige and bone-colored runner sneaker on an elevated gallery plinth next to architectural materials, bright minimal photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVAaa3vPFVOMoRcZlUrWT_zz0pAsXevizWUrt4cgnw_WjK5bNOuqk7QYjcXNS7oyxSBJ1dcHctuHtCXv2ADV1dwyGm1Wx0Ozouej7uulLsqqOW-l4bipoXShwRzC--MPhbn1u4CUuHlzpfDKYgcNLo1npfXGAaHZxAGXwTSpQm3BfUWQJyPBckOv6GDOmqRCc500aXd0qIm94UHghR7rWZ50GnOVIPw1diwoXCZcCC"/>
+<span class="absolute top-3 left-3 bg-primary-container text-on-primary-container text-[10px] font-label-caps px-2 py-0.5 uppercase tracking-wider font-semibold">Technical</span>
+</div>
+<div class="p-4 flex flex-col justify-between flex-1 gap-4">
+<div class="space-y-1">
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">ASICS</p>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Gel-Kayano 30 Atelier</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">4D Guidance Stability Chassis</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-price-focal text-body-md text-on-surface">$160.00</span>
+<button aria-label="Add Gel-Kayano to Bag" class="p-2 bg-surface-container-low hover:bg-primary hover:text-on-primary text-on-surface transition-colors rounded-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- Verified Client Critiques & Aggregate Dossier -->
+<section class="w-full bg-surface-container-low py-space-3xl" id="verified-reviews-section">
+<div class="max-w-[1320px] mx-auto px-6 lg:px-12 space-y-12">
+<!-- Review Overview Header -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-surface-container-lowest p-6 lg:p-10 shadow-sm">
+<div class="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left space-y-2 lg:pr-8">
+<p class="font-label-caps text-label-caps uppercase tracking-[0.2em] text-outline">Verified Provenance</p>
+<div class="flex items-baseline gap-3">
+<span class="font-display-xl text-display-lg font-normal text-on-surface">4.9</span>
+<span class="font-body-md text-body-md text-outline">out of 5.0</span>
+</div>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Based on 342 authenticated client assessments across verified deliveries.</p>
+</div>
+<!-- Rating Distribution Histogram -->
+<div class="lg:col-span-5 space-y-2">
+<div class="flex items-center gap-3 text-label-sm font-label-sm">
+<span class="w-12 text-on-surface">5 Star</span>
+<div class="flex-1 h-2 bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary" style="width: 89%;"></div>
+</div>
+<span class="w-10 text-right text-outline">89%</span>
+</div>
+<div class="flex items-center gap-3 text-label-sm font-label-sm">
+<span class="w-12 text-on-surface">4 Star</span>
+<div class="flex-1 h-2 bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary" style="width: 8%;"></div>
+</div>
+<span class="w-10 text-right text-outline">8%</span>
+</div>
+<div class="flex items-center gap-3 text-label-sm font-label-sm">
+<span class="w-12 text-on-surface">3 Star</span>
+<div class="flex-1 h-2 bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary" style="width: 2%;"></div>
+</div>
+<span class="w-10 text-right text-outline">2%</span>
+</div>
+<div class="flex items-center gap-3 text-label-sm font-label-sm">
+<span class="w-12 text-on-surface">2 Star</span>
+<div class="flex-1 h-2 bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary" style="width: 1%;"></div>
+</div>
+<span class="w-10 text-right text-outline">1%</span>
+</div>
+<div class="flex items-center gap-3 text-label-sm font-label-sm">
+<span class="w-12 text-on-surface">1 Star</span>
+<div class="flex-1 h-2 bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary" style="width: 0%;"></div>
+</div>
+<span class="w-10 text-right text-outline">0%</span>
+</div>
+</div>
+<div class="lg:col-span-3 flex flex-col justify-center items-center lg:items-end gap-3">
+<button class="w-full sm:w-auto px-6 py-3 bg-on-surface text-surface hover:bg-on-surface/90 text-label-md font-label-md transition-colors" type="button">
+            Submit Curatorial Review
+          </button>
+<span class="text-label-caps font-label-caps text-outline uppercase tracking-wider text-[10px]">Verified Purchases Only</span>
+</div>
+</div>
+<!-- Review Cards Matrix -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Review 1 -->
+<article class="bg-surface-container-lowest p-6 space-y-4 shadow-sm flex flex-col justify-between">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-label-caps font-label-caps text-outline text-[11px]">3 days ago</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Sartorial Precision &amp; Genuine Heritage</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              “The leather break-in process took approximately four days using Wonder Balsam. The Surat dispatch arrived double-boxed with cryptographic provenance documentation. Outstanding structure with tailored wool trousers.”
+            </p>
+</div>
+<div class="pt-4 flex items-center justify-between">
+<div>
+<p class="font-price-focal text-body-sm text-on-surface">Arjun K.</p>
+<p class="text-label-caps font-label-caps text-primary uppercase text-[10px]">Verified Courier Buyer · Size UK 9</p>
+</div>
+<span class="material-symbols-outlined text-[20px] text-primary">verified</span>
+</div>
+</article>
+<!-- Review 2 -->
+<article class="bg-surface-container-lowest p-6 space-y-4 shadow-sm flex flex-col justify-between">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-label-caps font-label-caps text-outline text-[11px]">1 week ago</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Flawless Goodyear Welt Density</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              “I was skeptical of ordering high-end footwear online with COD, but Bazaar provided authentic verification and seamless payment upon inspection. The Goodyear welt stitches are razor sharp and the leather is stiff, pure quality.”
+            </p>
+</div>
+<div class="pt-4 flex items-center justify-between">
+<div>
+<p class="font-price-focal text-body-sm text-on-surface">Matteo V.</p>
+<p class="text-label-caps font-label-caps text-primary uppercase text-[10px]">Verified International Buyer · Size UK 10</p>
+</div>
+<span class="material-symbols-outlined text-[20px] text-primary">verified</span>
+</div>
+</article>
+<!-- Review 3 -->
+<article class="bg-surface-container-lowest p-6 space-y-4 shadow-sm flex flex-col justify-between">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-label-caps font-label-caps text-outline text-[11px]">2 weeks ago</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Timeless Architectural Pillar</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              “The pricing at $190 was server-verified against global MSRP. The pair is an anchor for my wardrobe. The air-cushioned sole provides hours of fatigue-free posture when walking through cobblestone galleries.”
+            </p>
+</div>
+<div class="pt-4 flex items-center justify-between">
+<div>
+<p class="font-price-focal text-body-sm text-on-surface">Elena R.</p>
+<p class="text-label-caps font-label-caps text-primary uppercase text-[10px]">Verified Courier Buyer · Size UK 7</p>
+</div>
+<span class="material-symbols-outlined text-[20px] text-primary">verified</span>
+</div>
+</article>
+</div>
+</div>
+</section>
+<!-- Interactive Slide-In Bag Drawer / Feedback Notification (Hidden by Default) -->
+<aside class="fixed bottom-6 right-6 z-50 max-w-md w-full bg-surface-container-lowest shadow-2xl p-5 translate-y-32 opacity-0 transition-all duration-300 pointer-events-none" id="bag-feedback-toast">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 bg-surface-container shrink-0 overflow-hidden">
+<img alt="Cart Item Preview" class="w-full h-full object-cover" data-alt="Thumbnail snapshot of Dr Martens boots." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr7AtV4jqm92FqCyNDtDJUoVVmXkE1Vriooa1-kE1hmPBvbvfM1mjkgrFgfnQUX0Gtqwn3O_k7kNyFOHteFgMcC6MSK9E2ht6vfVKt_U4ZUNu53ZccQukos9HMSLalXvnUyX900-Dpd65a7ZA2S6O_0R4UBDfRq_J6L_dYnLmsB97gQoUnNduqHlvlFAEaKftALn9bcDuoDtfXPu4IFvBtloYJhP5QFAO2Y57HXq2m"/>
+</div>
+<div class="flex-1 space-y-1">
+<div class="flex items-center justify-between">
+<p class="font-label-caps text-label-caps text-primary uppercase font-bold">Added to Editorial Bag</p>
+<button class="text-outline hover:text-on-surface pointer-events-auto" id="close-toast-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<p class="font-price-focal text-body-sm text-on-surface">1460 8-Eye Smooth Leather Boot</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant"><span id="toast-size">UK 9</span> · $190.00 · Qty: <span id="toast-qty">1</span></p>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center gap-3">
+<a class="flex-1 py-2.5 text-center bg-primary text-on-primary font-label-md text-label-md hover:bg-primary/95 transition-colors pointer-events-auto" href="#">
+        Review Bag &amp; Checkout
+      </a>
+</div>
+</aside>
+<!-- Modal: Millimeter Fit & Size Compendium Dialog -->
+<dialog class="fixed inset-0 z-50 bg-transparent p-4 w-full h-full max-w-2xl m-auto backdrop:bg-on-surface/50 backdrop:backdrop-blur-sm" id="size-compendium-modal">
+<div class="bg-surface-container-lowest p-6 lg:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+<div class="flex items-center justify-between pb-3">
+<div>
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-outline">Atelier Measurement Matrix</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Millimeter Fit Compendium</h3>
+</div>
+<button class="p-1.5 text-on-surface hover:text-primary transition-colors" id="close-size-modal" type="button">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        All Dr. Martens archival 1460 boots follow standard United Kingdom anatomical lasts. For high-precision fitting, measure from heel to longest toe in standing posture with medium-weight cotton hosiery.
+      </p>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low text-label-caps font-label-caps text-outline uppercase tracking-wider">
+<tr>
+<th class="p-3">UK</th>
+<th class="p-3">US Men</th>
+<th class="p-3">US Women</th>
+<th class="p-3">EU</th>
+<th class="p-3">Foot Length (mm)</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface">
+<tr class="hover:bg-surface-container-low/50">
+<td class="p-3 font-semibold">UK 7</td>
+<td class="p-3">US 8</td>
+<td class="p-3">US 9</td>
+<td class="p-3">EU 41</td>
+<td class="p-3 font-price-focal">254 mm</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50">
+<td class="p-3 font-semibold">UK 8</td>
+<td class="p-3">US 9</td>
+<td class="p-3">US 10</td>
+<td class="p-3">EU 42</td>
+<td class="p-3 font-price-focal">262 mm</td>
+</tr>
+<tr class="bg-primary/5 font-semibold text-primary">
+<td class="p-3">UK 9 (Standard)</td>
+<td class="p-3">US 10</td>
+<td class="p-3">US 11</td>
+<td class="p-3">EU 43</td>
+<td class="p-3 font-price-focal">271 mm</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50">
+<td class="p-3 font-semibold">UK 10</td>
+<td class="p-3">US 11</td>
+<td class="p-3">US 12</td>
+<td class="p-3">EU 45</td>
+<td class="p-3 font-price-focal">279 mm</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50">
+<td class="p-3 font-semibold">UK 11</td>
+<td class="p-3">US 12</td>
+<td class="p-3">US 13</td>
+<td class="p-3">EU 46</td>
+<td class="p-3 font-price-focal">288 mm</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-surface-container-low p-4 flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Uncertain about millimeters? Reach our Surat concierge.</span>
+<a class="text-primary font-semibold text-label-md font-label-md hover:underline" href="tel:9327115687">+91 93271 15687</a>
+</div>
+</div>
+</dialog>
+<!-- Vanilla Micro-Interactions Script -->
+<script>
+    (function () {
+      let currentSelectedSize = "UK 9";
+      let quantity = 1;
+      let isWishlisted = false;
+
+      // Size Buttons Handling
+      const sizeBtns = document.querySelectorAll('.size-btn:not([disabled])');
+      sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          sizeBtns.forEach(b => {
+            b.classList.remove('bg-on-surface', 'text-surface', 'ring-2', 'ring-on-surface');
+            b.classList.add('bg-surface-container-low', 'text-on-surface');
+          });
+          btn.classList.remove('bg-surface-container-low');
+          btn.classList.add('bg-on-surface', 'text-surface', 'ring-2', 'ring-on-surface');
+          currentSelectedSize = btn.getAttribute('data-size');
+        });
+      });
+
+      // Color Swatches
+      const swatches = document.querySelectorAll('.color-swatch-btn');
+      const colorLabel = document.getElementById('selected-color-label');
+      swatches.forEach(sw => {
+        sw.addEventListener('click', () => {
+          swatches.forEach(s => s.classList.remove('ring-2', 'ring-primary', 'ring-offset-2', 'ring-offset-surface-container-lowest'));
+          sw.classList.add('ring-2', 'ring-primary', 'ring-offset-2', 'ring-offset-surface-container-lowest');
+          if (colorLabel) colorLabel.textContent = sw.getAttribute('data-color');
+        });
+      });
+
+      // Quantity Stepper
+      const qtyVal = document.getElementById('qty-value');
+      const minusBtn = document.getElementById('qty-minus');
+      const plusBtn = document.getElementById('qty-plus');
+      const ctaLabel = document.getElementById('cta-label');
+
+      if (minusBtn && plusBtn && qtyVal) {
+        minusBtn.addEventListener('click', () => {
+          if (quantity > 1) {
+            quantity--;
+            qtyVal.textContent = quantity;
+            updateCtaPrice();
+          }
+        });
+        plusBtn.addEventListener('click', () => {
+          if (quantity < 4) { // Vault max 4
+            quantity++;
+            qtyVal.textContent = quantity;
+            updateCtaPrice();
+          }
+        });
+      }
+
+      function updateCtaPrice() {
+        if (ctaLabel) {
+          const total = 190 * quantity;
+          ctaLabel.textContent = `Add to Bag — $${total}.00`;
+        }
+      }
+
+      // Add To Bag Drawer Feedback
+      const addToBagBtn = document.getElementById('add-to-bag-btn');
+      const toast = document.getElementById('bag-feedback-toast');
+      const closeToast = document.getElementById('close-toast-btn');
+      const toastSize = document.getElementById('toast-size');
+      const toastQty = document.getElementById('toast-qty');
+
+      if (addToBagBtn && toast) {
+        addToBagBtn.addEventListener('click', () => {
+          if (toastSize) toastSize.textContent = currentSelectedSize;
+          if (toastQty) toastQty.textContent = quantity;
+          
+          toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+          toast.classList.add('translate-y-0', 'opacity-100');
+
+          setTimeout(() => {
+            hideToast();
+          }, 4500);
+        });
+      }
+
+      function hideToast() {
+        if (toast) {
+          toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+          toast.classList.remove('translate-y-0', 'opacity-100');
+        }
+      }
+
+      if (closeToast) {
+        closeToast.addEventListener('click', hideToast);
+      }
+
+      // Wishlist Toggle
+      const wishlistBtn = document.getElementById('wishlist-toggle-btn');
+      const wishlistIcon = document.getElementById('wishlist-icon');
+      const wishlistText = document.getElementById('wishlist-text');
+
+      if (wishlistBtn && wishlistIcon && wishlistText) {
+        wishlistBtn.addEventListener('click', () => {
+          isWishlisted = !isWishlisted;
+          if (isWishlisted) {
+            wishlistIcon.textContent = 'favorite';
+            wishlistIcon.classList.add('text-tertiary-container');
+            wishlistIcon.style.fontVariationSettings = "'FILL' 1";
+            wishlistText.textContent = 'Archived to Wishlist';
+          } else {
+            wishlistIcon.textContent = 'favorite_border';
+            wishlistIcon.classList.remove('text-tertiary-container');
+            wishlistIcon.style.fontVariationSettings = "'FILL' 0";
+            wishlistText.textContent = 'Save to Wishlist';
+          }
+        });
+      }
+
+      // Sizing Modal Dialog
+      const sizeModalTrigger = document.getElementById('size-guide-modal-trigger');
+      const sizeModal = document.getElementById('size-compendium-modal');
+      const closeSizeModal = document.getElementById('close-size-modal');
+
+      if (sizeModalTrigger && sizeModal && closeSizeModal) {
+        sizeModalTrigger.addEventListener('click', () => {
+          sizeModal.showModal();
+        });
+        closeSizeModal.addEventListener('click', () => {
+          sizeModal.close();
+        });
+        sizeModal.addEventListener('click', (e) => {
+          const rect = sizeModal.getBoundingClientRect();
+          const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height && rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+          if (!isInDialog) sizeModal.close();
+        });
+      }
+
+      // Thumbnail Switcher Interaction
+      const thumbs = document.querySelectorAll('.thumb-btn');
+      thumbs.forEach((th) => {
+        th.addEventListener('click', () => {
+          thumbs.forEach(t => {
+            t.classList.remove('ring-2', 'ring-primary', 'opacity-100');
+            t.classList.add('opacity-70');
+          });
+          th.classList.add('ring-2', 'ring-primary', 'opacity-100');
+          th.classList.remove('opacity-70');
+        });
+      });
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low text-on-surface-variant mt-space-3xl"><div class="max-w-[1320px] mx-auto px-6 lg:px-12 pt-space-2xl pb-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-gutter-desktop"><div class="lg:col-span-4 flex flex-col justify-between pr-4"><div class="space-y-4"><div class="flex flex-col"><span class="font-headline-md text-headline-md tracking-tight bg-gradient-to-r from-[#ff6b6b] to-[#caca2b] bg-clip-text text-transparent font-medium">Bazaar</span><span class="font-label-caps text-label-caps tracking-[0.2em] text-outline-variant">HAUTE COMMERCE DIGITAL FLAGSHIP</span></div><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-sm">Curated European sartorial design and technical footwear, authenticated and dispatched under high-precision editorial integrity from our Surat studio atelier.</p></div><div class="mt-8 space-y-2 pt-4"><p class="font-label-caps text-label-caps uppercase text-outline tracking-widest">Atelier Headquarters</p><p class="font-body-sm text-body-sm text-on-surface">Gujarat, Surat - India</p><div class="flex flex-col gap-1 text-body-sm font-body-sm pt-1"><a class="hover:text-primary transition-colors" href="tel:9327115687">+91 93271 15687</a><a class="hover:text-primary transition-colors" href="mailto:saurabh12166@gmail.com">saurabh12166@gmail.com</a></div></div></div><div class="lg:col-span-3 space-y-4"><h4 class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-on-surface font-semibold">Client Concierge</h4><ul class="space-y-3 font-body-sm text-body-sm"><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="help-faq" href="#">Help &amp; FAQ Directory</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="contact-support" href="#">Contact Atelier Support</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="cod-status" href="#">COD Verification &amp; Status</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="shipping-policy" href="#">Global Shipping Policy</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="server-terms" href="#">Cryptographic Checkout Protocol</a></li></ul></div><div class="lg:col-span-3 space-y-4"><h4 class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-on-surface font-semibold">Curated Authenticity</h4><p class="font-body-sm text-body-sm text-on-surface-variant/80 pb-2">Authorized distribution partnership archive:</p><div class="flex flex-wrap gap-2"><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">ASICS</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Brooks</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Hoka One One</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Dr. Martens</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Allbirds</span></div><div class="pt-4"><span class="inline-flex items-center gap-1.5 text-label-caps font-label-caps text-primary uppercase"><span class="material-symbols-outlined text-[14px]">verified</span>100% Guaranteed Provenance</span></div></div><div class="lg:col-span-2 space-y-4"><h4 class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-on-surface font-semibold">Editions &amp; Social</h4><ul class="space-y-3 font-body-sm text-body-sm"><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>GitHub</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>LinkedIn</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>X (Twitter)</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>Instagram</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li></ul></div></div><div class="mt-space-2xl pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-label-sm font-label-sm text-outline"><div class="flex items-center gap-4 text-center md:text-left"><span class="flex items-center gap-1.5 text-on-surface"><span class="material-symbols-outlined text-[16px] text-primary">lock</span>Server-Verified Checkout Guarantee</span><span class="text-outline-variant">•</span><span class="flex items-center gap-1.5 text-on-surface"><span class="material-symbols-outlined text-[16px] text-primary">local_shipping</span>Cash on Delivery</span></div><p class="text-center md:text-right">© 2024 Saurabh Sharma. All Rights Reserved. Crafted for Bazaar Flagship.</p></div></div></footer></body></html>

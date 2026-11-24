@@ -1,3 +1,5 @@
+/* Design tokens first — everything downstream reads from them */
+@import './tokens.css';
 
     /* width */
     ::-webkit-scrollbar {
@@ -19,11 +21,13 @@
       background: #718079;
     }
 
-    /* Additional custom CSS rules */
+/* Body/typography defaults live in tokens.css (Manrope on #faf9f6).
+   The old rule forced Merriweather on * every element and pinned the app
+   to the pre-redesign serif; the margin/padding reset it also carried is
+   kept below so untouched pages don't shift. */
 * {
-  padding: 0;
   margin: 0;
-  font-family: Merriweather, serif;
+  padding: 0;
 }
 
 #root {

@@ -1,29 +1,30 @@
-import { Link } from 'react-router-dom';  
-import CartIMG from '../../../assets/img/Cart.png';
-import './Cart.css';  
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import './Cart.css';
 
-import { useSelector } from 'react-redux';  
+/** Bag icon in the header: line count + live cart total from redux. */
 const Cart = () => {
-    // total quantity across cart lines (single source of truth: Shirt slice)
-    const itemValue = useSelector(state =>
-        state.Shirt.products.reduce((sum, item) => sum + (item.qty || 1), 0)
-    );
-    const cartEmpty = itemValue === 0;  
+  const { count, total } = useSelector(state =>
+    state.Shirt.products.reduce(
+      (acc, item) => ({
+        count: acc.count + (item.qty || 1),
+        total: acc.total + (item.qty || 1) * Number(item.price || 0),
+      }),
+      { count: 0, total: 0 }
+    )
+  );
 
-    return (
-        <Link to="/cart" className="cart-link"> {/* Wrap cart content with Link */}
-            <div className="cart">
-                <div className="cart-image-container">
-                    <img src={CartIMG} alt="Cart" className="cart-image" width="40" height="40" />
-                    {!cartEmpty && <span className="badge">{itemValue}</span>}
-                    {cartEmpty && <span className="empty-badge">0</span>}
-                </div>
-                <div className="cart-info">
-                    <p className="cart-text">Your Cart</p>
-                </div>
-            </div>
-        </Link>
-    );
-}
+  return (
+    <Link to="/cart" className="bz-bag" aria-label={`Bag, ${count} items`}>
+      <span className="material-symbols-outlined bz-bag__icon" aria-hidden="true">
+        shopping_bag
+      </span>
+      <span className="bz-bag__meta">
+        <span className="bz-caps bz-bag__label">Bag ({count})</span>
+        <span className="bz-bag__total">${total.toFixed(2)}</span>
+      </span>
+    </Link>
+  );
+};
 
 export default Cart;

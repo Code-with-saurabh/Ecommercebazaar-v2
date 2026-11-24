@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"secondary-container":"#e2dfde","on-tertiary-fixed-variant":"#92001c","surface-container-low":"#f4f3f0","error":"#ba1a1a","inverse-primary":"#77d7cc","inverse-on-surface":"#f2f1ee","primary-container":"#088178","secondary-fixed":"#e5e2e1","on-error":"#ffffff","on-secondary-fixed-variant":"#474746","secondary-fixed-dim":"#c8c6c5","on-secondary":"#ffffff","on-primary-fixed-variant":"#00504a","on-primary":"#ffffff","surface-bright":"#faf9f6","on-primary-container":"#e7fffb","surface-container-highest":"#e3e2df","on-secondary-container":"#636262","on-tertiary-container":"#fff9f8","tertiary-container":"#e31635","primary-fixed-dim":"#77d7cc","on-tertiary":"#ffffff","on-tertiary-fixed":"#410007","surface":"#faf9f6","surface-container":"#efeeeb","tertiary-fixed":"#ffdad8","on-error-container":"#93000a","tertiary-fixed-dim":"#ffb3b1","on-primary-fixed":"#00201d","primary-fixed":"#94f3e8","error-container":"#ffdad6","surface-variant":"#e3e2df","surface-container-lowest":"#ffffff","surface-container-high":"#e9e8e5","background":"#faf9f6","on-background":"#1a1c1a","outline-variant":"#bdc9c6","tertiary":"#b80025","secondary":"#5f5e5e","surface-tint":"#006a63","on-secondary-fixed":"#1b1b1c","on-surface":"#1a1c1a","primary":"#00665f","outline":"#6e7977","surface-dim":"#dbdad7","on-surface-variant":"#3e4947","inverse-surface":"#2f312f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xl":"2.5rem","space-sm":"0.5rem","space-2xl":"4rem","space-md":"1rem","space-xs":"0.25rem","margin":"1.25rem","space-lg":"1.5rem","gutter-desktop":"2rem","margin-desktop":"3rem","gutter":"1.5rem","space-3xl":"6rem"},"fontFamily":{"body-lg":["Manrope"],"display-xl-mobile":["Playfair Display"],"price-focal":["Manrope"],"body-md":["Manrope"],"display-lg":["Playfair Display"],"display-xl":["Playfair Display"],"headline-md":["Playfair Display"],"display-lg-mobile":["Playfair Display"],"label-sm":["Manrope"],"label-caps":["Manrope"],"body-sm":["Manrope"],"label-md":["Manrope"],"headline-sm":["Playfair Display"],"title-editorial":["Playfair Display"],"headline-lg":["Playfair Display"]},"fontSize":{"body-lg":["17px",{"lineHeight":"28px","letterSpacing":"-0.005em","fontWeight":"400"}],"display-xl-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.015em","fontWeight":"400"}],"price-focal":["16px",{"lineHeight":"22px","letterSpacing":"0.02em","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"400"}],"display-lg":["44px",{"lineHeight":"52px","letterSpacing":"-0.015em","fontWeight":"400"}],"display-xl":["56px",{"lineHeight":"64px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"0em","fontWeight":"500"}],"display-lg-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.01em","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"label-caps":["11px",{"lineHeight":"14px","letterSpacing":"0.12em","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"400"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"0em","fontWeight":"500"}],"title-editorial":["18px",{"lineHeight":"26px","letterSpacing":"0.02em","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"500"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="bg-on-surface text-surface py-1.5 px-4 text-center"><div class="max-w-[1320px] mx-auto flex items-center justify-between gap-4 text-center"><div class="hidden md:flex items-center gap-2 font-label-caps text-label-caps uppercase text-surface/70"><span class="w-1.5 h-1.5 rounded-full bg-primary-fixed"></span><span>Patron: Saurabh Sharma</span></div><p class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-surface/90 flex-1"><span class="text-primary-fixed font-bold">Complimentary</span> Delivery Over $100 <span class="text-surface/40 mx-2">|</span> Cash on Delivery Available <span class="text-surface/40 mx-2">|</span> Server-Verified Architectural Pricing</p><div class="hidden md:flex items-center gap-3 font-label-caps text-label-caps uppercase text-surface/70"><a class="hover:text-primary-fixed transition-colors" data-path="concierge" href="#">Concierge</a><span class="text-surface/30">/</span><a class="hover:text-primary-fixed transition-colors" data-path="admin" href="#">Admin</a></div></div></div><div class="h-20 max-w-[1320px] mx-auto px-6 lg:px-12 flex items-center justify-between gap-6"><div class="flex items-center gap-6 shrink-0"><a class="flex flex-col group" data-path="home" href="#"><span class="font-headline-md text-headline-md tracking-tight bg-gradient-to-r from-[#ff6b6b] to-[#caca2b] bg-clip-text text-transparent font-medium">Bazaar</span><span class="font-label-caps text-label-caps tracking-[0.25em] text-outline-variant -mt-1 group-hover:text-primary transition-colors">EST. SURAT</span></a></div><nav class="hidden xl:flex items-center gap-6" data-active-classes="text-on-surface font-semibold underline underline-offset-8 decoration-primary decoration-2"><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="shop" href="#">Shop</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="all-products" href="#">All Products</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="footwear" href="#">Footwear</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="shirts" href="#">Shirts</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="pants" href="#">Pants</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="wishlist" href="#">Wishlist</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="concierge" href="#">Concierge</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2" data-path="admin" href="#">Admin</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-2 flex items-center gap-1.5" data-path="archive-sale" href="#"><span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>Archive Sale</a></nav><div class="flex items-center gap-5 shrink-0"><div class="hidden md:flex items-center text-on-surface-variant text-label-sm font-label-sm gap-1 bg-surface-container-low px-2.5 py-1 rounded-sm cursor-pointer hover:bg-surface-container transition-colors"><span class="font-price-focal text-price-focal text-on-surface">USD</span><span class="material-symbols-outlined text-[16px]">expand_more</span></div><div class="relative hidden lg:flex items-center"><span class="material-symbols-outlined absolute left-3 text-outline text-[18px]">search</span><input class="w-44 xl:w-56 h-9 pl-9 pr-3 text-body-sm font-body-sm bg-surface-container-lowest rounded-sm placeholder:text-outline/70 focus:outline-none focus:w-60 transition-all duration-300 shadow-[0_1px_3px_rgba(0,0,0,0.02)]" placeholder="Search catalog..." type="text"/></div><a aria-label="Curatorial Wishlist" class="relative p-1.5 text-on-surface-variant hover:text-on-surface transition-colors block" data-path="wishlist" href="#"><span class="material-symbols-outlined text-[22px]">favorite</span><span class="absolute top-0.5 right-0.5 w-4 h-4 bg-primary text-on-primary font-label-caps text-[9px] flex items-center justify-center rounded-full">2</span></a><a aria-label="Account &amp; Custody" class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors block" data-path="account" href="#"><span class="material-symbols-outlined text-[22px]">person</span></a><button aria-label="Cart" class="flex items-center gap-2.5 py-1.5 px-3 bg-surface-container-lowest rounded-sm hover:bg-surface-container transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.03)]" type="button"><span class="material-symbols-outlined text-[20px] text-primary">shopping_bag</span><div class="flex flex-col text-left"><span class="font-label-caps text-[10px] uppercase text-outline tracking-wider">Bag (3)</span><span class="font-price-focal text-body-sm text-on-surface">$340.00</span></div></button><a class="pl-2 flex items-center group" data-path="account" href="#" title="Saurabh Sharma — Verified Patron"><img alt="Saurabh Sharma Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant group-hover:ring-primary transition-all" src="https://lh3.googleusercontent.com/aida/ALJJyrBV6RI_QMMaRXwqhPkyYc6DfqJ_tMtk--vQuvi4yun_0AE4npCOm52an2TVOohDDOI09ib21gMYZsTVvrdwQwnzYl2aUFXnyPrMhvo6ScP9Bmrq1TplEgXs7ZA3QBK7M_9U9DhbmYVbLZOszOZ2mp4jfQmcXZCCSFoQ17mqK2uHjOzHnZrLDAa15jc1ZLvCUElbRbh6V7L9ogO1kj6THH7cOjw6bvO33UT0a0MaEkNOdw"/></a></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-80px)]"><div class="flex flex-col w-full">
+<!-- Top Curatorial Status Strip -->
+<section class="w-full bg-surface-container-low text-on-surface-variant py-2.5 px-6 lg:px-12">
+<div class="max-w-[1320px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-label-sm font-label-sm">
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-surface text-on-surface font-label-caps text-label-caps rounded-sm">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim animate-pulse"></span>
+          SURAT ATELIER DISPATCH DECK: ACTIVE
+        </span>
+<span class="text-outline">Terminal ID: SR-L2-93271</span>
+</div>
+<div class="flex items-center gap-6 font-label-caps text-label-caps tracking-wider text-outline">
+<span class="flex items-center gap-1 text-on-surface"><span class="material-symbols-outlined text-[14px] text-primary">verified</span> PGP KEY: 0x9327·1156·87B7</span>
+<span>LAT 21.1702° N / LON 72.8311° E</span>
+<span class="text-primary-container font-semibold">AVERAGE RESPONSE TIME: 18 MIN</span>
+</div>
+</div>
+</section>
+<!-- Editorial Hero Section -->
+<section class="w-full bg-surface text-on-surface py-space-xl lg:py-space-2xl px-6 lg:px-12">
+<div class="max-w-[1320px] mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-end">
+<!-- Hero Text & Search -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 bg-primary-container rounded-sm"></span>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-[0.2em]">CLIENT CONCIERGE &amp; PROVENANCE DIRECTORY · SURAT ATELIER</span>
+</div>
+<h1 class="font-display-xl text-display-xl tracking-tight text-on-surface max-w-3xl leading-[1.08]">
+            Uncompromising Sartorial Guidance &amp; Custodial Protocol.
+          </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+            Direct line to our Surat studio floor masters, cryptographic ledger verification, and door-to-door white-glove unboxing standards. Every archive piece is inspected, numbered, and documented under physical light boxes before final dispatch.
+          </p>
+<!-- Search Dossier Bar -->
+<div class="mt-4 max-w-2xl bg-surface-container-lowest p-2 rounded-sm shadow-sm flex items-center gap-3">
+<span class="material-symbols-outlined text-outline pl-3 text-[22px]">search</span>
+<input class="w-full bg-transparent text-body-md font-body-md text-on-surface placeholder:text-outline/70 focus:outline-none py-2" id="faqSearchInput" placeholder="Search provenance topics, delivery hubs, COD unboxing rights, or sizing dossiers..." type="text"/>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2.5 rounded-sm hover:bg-primary-container transition-colors shrink-0">
+              Query
+            </button>
+</div>
+</div>
+<!-- Architectural Visual Badge & Image Plate -->
+<div class="lg:col-span-4 flex flex-col gap-4">
+<div class="relative w-full aspect-[4/3] bg-surface-container-high rounded-sm overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Editorial lookbook photograph showing architectural concrete pillars with two models walking calmly in bespoke camel wool overcoat and relaxed tailored trousers in warm directional light, modernist haute fashion atmosphere matching European minimalism and Surat studio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3hIJ4Mm3y6W5yoflFMfUbSH7idU4rmNU37QnE8cM1cbRWIDxLx7lKXoGzIwajSK4vDAHcIfUTgFogyBJrTq5dCWHUiyezfJH-Hux7J9lpafxG4whMA-uqLERSAHqixefIabB4DdM0268YtwgKigBqS6aDEGxEmKOFp8QCOMoxOnbFgLACcfryPMGQd3Cplllr0us-nf4YcGYUad_JQ7KoKuOLdHL-1Svb9Un_UWLE"/>
+<div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent p-5 text-inverse-on-surface">
+<span class="font-label-caps text-label-caps uppercase text-primary-fixed tracking-widest block mb-1">PROVENANCE LOG: #9327-V2</span>
+<p class="font-headline-sm text-headline-sm italic">Surat Atelier Master Cutting Floor</p>
+<span class="font-body-sm text-body-sm text-inverse-on-surface/80">Ring Road Central Dispatch Deck</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline px-1">
+<span>Verified Custody: Level 01</span>
+<span class="text-primary font-medium">Bazaar Physical Archive</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Direct Atelier Communication Channels -->
+<section class="w-full bg-surface-container-low py-space-2xl px-6 lg:px-12">
+<div class="max-w-[1320px] mx-auto flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-[0.18em]">AUTHENTICATED COMMUNICATION</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mt-1">Direct Atelier Communication Channels</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">
+          Encrypted, logged, and audited client sessions. You speak directly with our senior garments custodians and warehouse leads in Surat, never automated chatbots.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Channel 1: Phone -->
+<div class="bg-surface-container-lowest p-8 flex flex-col justify-between rounded-sm shadow-sm transition-all duration-300 hover:-translate-y-1">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-sm bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">phone_in_talk</span>
+</div>
+<span class="inline-flex items-center gap-1.5 font-label-caps text-label-caps text-primary px-2.5 py-1 bg-primary/5 rounded-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+                LIVE LINE AVAILABLE
+              </span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">CHANNEL 01 · VOICE CUSTODY</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1">Surat Studio Direct Dispatch Desk</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Direct connection to our floor supervisor for immediate dispatch checks, doorstep COD approvals, and route authorizations.
+            </p>
+<div class="bg-surface-container p-3.5 rounded-sm flex flex-col gap-1">
+<span class="font-price-focal text-price-focal text-on-surface">+91 93271 15687</span>
+<span class="font-body-sm text-[12px] text-outline">Mon–Sat: 09:00 - 21:00 IST · Surat Atelier Ring Road</span>
+</div>
+</div>
+<div class="mt-8 pt-6">
+<a class="w-full py-3.5 px-6 bg-primary text-on-primary font-label-md text-label-md rounded-sm hover:bg-primary-container transition-colors text-center block shadow-sm" href="tel:9327115687">
+              Initiate Secure Atelier Call
+            </a>
+</div>
+</div>
+<!-- Channel 2: Cryptographic Email -->
+<div class="bg-surface-container-lowest p-8 flex flex-col justify-between rounded-sm shadow-sm transition-all duration-300 hover:-translate-y-1">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-sm bg-surface-container-high text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">mark_email_read</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-label-caps text-outline px-2.5 py-1 bg-surface-container rounded-sm">
+                SLA: &lt; 45 MINUTES
+              </span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">CHANNEL 02 · LEDGER INQUIRY</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1">Cryptographic Inquiry &amp; Custody</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Order certificate reissuance, VAT invoicing, immutable price proofs, and tier upgrade evaluations.
+            </p>
+<div class="bg-surface-container p-3.5 rounded-sm flex flex-col gap-1">
+<span class="font-price-focal text-[14px] text-on-surface truncate">saurabh12166@gmail.com</span>
+<span class="font-body-sm text-[12px] text-outline">Concierge Relay: concierge@bazaar-atelier.com</span>
+</div>
+</div>
+<div class="mt-8 pt-6">
+<a class="w-full py-3.5 px-6 bg-inverse-surface text-inverse-on-surface font-label-md text-label-md rounded-sm hover:bg-on-surface transition-colors text-center block shadow-sm" href="mailto:saurabh12166@gmail.com?subject=Authenticated%20Atelier%20Inquiry%20%7C%20Bazaar%20Surat">
+              Transmit Authenticated Dispatch
+            </a>
+</div>
+</div>
+<!-- Channel 3: Private WhatsApp -->
+<div class="bg-surface-container-lowest p-8 flex flex-col justify-between rounded-sm shadow-sm transition-all duration-300 hover:-translate-y-1">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-sm bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">chat</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-caps text-label-caps text-tertiary px-2.5 py-1 bg-tertiary-fixed rounded-sm">
+                VIP TIER 01 PATRONS
+              </span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">CHANNEL 03 · DIRECT TAILORING</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-1">Private WhatsApp Sizing &amp; Alteration</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Bespoke fit verification with real-time macro photos of shoulder drapes, waist measurements, and hem allowances before wax sealing.
+            </p>
+<div class="bg-surface-container p-3.5 rounded-sm flex flex-col gap-1">
+<span class="font-price-focal text-price-focal text-on-surface">+91 93271 15687</span>
+<span class="font-body-sm text-[12px] text-outline">High-Resolution Macro Inspection Available</span>
+</div>
+</div>
+<div class="mt-8 pt-6">
+<a class="w-full py-3.5 px-6 bg-surface-container-highest text-on-surface hover:bg-surface-container-high font-label-md text-label-md rounded-sm transition-colors text-center block shadow-sm" href="https://wa.me/919327115687?text=Patron%20Saurabh%20Sharma%20inquiring%20about%20Surat%20Atelier%20Sizing%20Custody" target="_blank">
+              Open WhatsApp Concierge
+            </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Curated Technical Specifications & Live Accordion Directory -->
+<section class="w-full bg-surface py-space-3xl px-6 lg:px-12">
+<div class="max-w-[1320px] mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop">
+<!-- Sidebar Navigation & Ledger Certificate Info -->
+<div class="lg:col-span-4 flex flex-col gap-8">
+<div>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-[0.2em]">KNOWLEDGE ARCHIVE</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mt-1">Provenance Directory &amp; Client Protocols</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-3 leading-relaxed">
+              Standard operating procedures safeguarding patrons across payment custody, physical delivery seals, and tamper-evident unboxing rights.
+            </p>
+</div>
+<!-- Category Selectors -->
+<div class="flex flex-col gap-2 bg-surface-container-low p-2 rounded-sm" id="categoryNav">
+<button class="faq-tab text-left px-4 py-3 rounded-sm font-label-md text-label-md text-on-surface bg-surface-container-lowest shadow-sm flex items-center justify-between transition-all" onclick="filterFaq('all')">
+<span>All Protocols &amp; FAQs</span>
+<span class="material-symbols-outlined text-[16px] text-primary">arrow_forward</span>
+</button>
+<button class="faq-tab text-left px-4 py-3 rounded-sm font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-between" onclick="filterFaq('cod')">
+<span>A. Doorstep COD &amp; Inspection</span>
+<span class="font-label-caps text-label-caps text-outline">2 ENTRIES</span>
+</button>
+<button class="faq-tab text-left px-4 py-3 rounded-sm font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-between" onclick="filterFaq('ledger')">
+<span>B. Server-Verified Pricing</span>
+<span class="font-label-caps text-label-caps text-outline">2 ENTRIES</span>
+</button>
+<button class="faq-tab text-left px-4 py-3 rounded-sm font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all flex items-center justify-between" onclick="filterFaq('logistics')">
+<span>C. Armored Logistics Hubs</span>
+<span class="font-label-caps text-label-caps text-outline">2 ENTRIES</span>
+</button>
+</div>
+<!-- Archival Verification Box -->
+<div class="bg-surface-container p-6 rounded-sm flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[24px]">shield</span>
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-on-surface font-semibold">Zero-Counterfeit Seal</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Every item dispatched from our Surat facility is stamped with an archival micro-serial number and accompanied by an authenticated physical Certificate of Custody.
+            </p>
+<div class="pt-2">
+<span class="font-label-caps text-label-caps uppercase text-outline">PATRON VERIFICATION CODE:</span>
+<p class="font-price-focal text-price-focal text-primary mt-0.5">BZR-SURAT-2024-C9A8</p>
+</div>
+</div>
+</div>
+<!-- Accordions Container -->
+<div class="lg:col-span-8 flex flex-col gap-8">
+<!-- Category A: Doorstep Inspection & Cash on Delivery -->
+<div class="faq-group flex flex-col gap-4" data-cat="cod">
+<div class="flex items-center gap-3 pb-2">
+<span class="font-label-caps text-label-caps uppercase text-primary font-bold tracking-widest">SECTION 01</span>
+<div class="h-[1px] flex-1 bg-surface-container-highest"></div>
+<span class="font-label-caps text-label-caps text-outline uppercase">DOORSTEP COD &amp; UNBOXING</span>
+</div>
+<!-- Item 1 -->
+<div class="accordion-item bg-surface-container-lowest rounded-sm shadow-sm overflow-hidden transition-colors">
+<button class="accordion-header w-full p-6 text-left flex items-start justify-between gap-4 cursor-pointer focus:outline-none" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-4">
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-1 rounded-sm">01</span>
+<span class="font-title-editorial text-title-editorial text-on-surface font-medium">How does Doorstep Unboxing &amp; Inspection work before payment?</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-300 transform rotate-180">expand_more</span>
+</button>
+<div class="accordion-content px-6 pb-6 pt-0 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+<p>
+                  Our dedicated courier agents are strictly instructed to grant physical unboxing custody before any tender exchange. You are authorized to open the exterior weather-sealed carton, inspect the unbleached linen garment housing, examine stitching integrity, check leather grading, and confirm sizing against your physique.
+                </p>
+<div class="mt-4 p-4 bg-surface-container-low rounded-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-body-sm font-body-sm">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]">payments</span>
+<span>Tender Accepted: Physical Currency or Instant UPI (Google Pay, PhonePe, Paytm, BHIM)</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary font-semibold">ZERO SURCHARGE</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="accordion-item bg-surface-container-lowest rounded-sm shadow-sm overflow-hidden transition-colors">
+<button class="accordion-header w-full p-6 text-left flex items-start justify-between gap-4 cursor-pointer focus:outline-none" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-4">
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-1 rounded-sm">02</span>
+<span class="font-title-editorial text-title-editorial text-on-surface font-medium">What if the garment drape or footwear size is incorrect at my doorstep?</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-300">expand_more</span>
+</button>
+<div class="accordion-content hidden px-6 pb-6 pt-0 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+<p>
+                  Should the silhouette fail to drape to your exact sartorial expectations, you may decline custody on the spot. The courier representative immediately reseals the piece with zero friction, zero paperwork, and zero penalty fees. If you have prepaid via card or wire, our Surat treasury ledger initiates an automated 100% instant reversal back to your original source account within 120 minutes.
+                </p>
+</div>
+</div>
+</div>
+<!-- Category B: Cryptographic Provenance & Zero-Price-Slippage -->
+<div class="faq-group flex flex-col gap-4 mt-4" data-cat="ledger">
+<div class="flex items-center gap-3 pb-2">
+<span class="font-label-caps text-label-caps uppercase text-primary font-bold tracking-widest">SECTION 02</span>
+<div class="h-[1px] flex-1 bg-surface-container-highest"></div>
+<span class="font-label-caps text-label-caps text-outline uppercase">PROVENANCE &amp; PRICING LEDGER</span>
+</div>
+<!-- Item 3 -->
+<div class="accordion-item bg-surface-container-lowest rounded-sm shadow-sm overflow-hidden transition-colors">
+<button class="accordion-header w-full p-6 text-left flex items-start justify-between gap-4 cursor-pointer focus:outline-none" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-4">
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-1 rounded-sm">03</span>
+<span class="font-title-editorial text-title-editorial text-on-surface font-medium">What does Server-Verified Pricing guarantee for the patron?</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-300">expand_more</span>
+</button>
+<div class="accordion-content hidden px-6 pb-6 pt-0 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+<p>
+                  Server-Verified Pricing prevents artificial price surges, deceptive markdowns, and algorithmic cart gouging. Our catalog pricing is cryptographically anchored directly to master agreements signed with certified European workshops (including ASICS, Brooks, Dr. Martens, Hoka One One, and Allbirds). The exact integer displayed is authenticated via hash at checkout to ensure mathematical certainty and absolute transparency.
+                </p>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="accordion-item bg-surface-container-lowest rounded-sm shadow-sm overflow-hidden transition-colors">
+<button class="accordion-header w-full p-6 text-left flex items-start justify-between gap-4 cursor-pointer focus:outline-none" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-4">
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-1 rounded-sm">04</span>
+<span class="font-title-editorial text-title-editorial text-on-surface font-medium">How are individual garment serial numbers tracked and verified?</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-300">expand_more</span>
+</button>
+<div class="accordion-content hidden px-6 pb-6 pt-0 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+<p>
+                  Every edition receives a 256-bit hash token pressed into archival woven cotton tags sewn inside the garment or debossed into leather footbeds. Patrons can submit this token via our digital concierge to view the exact production run batch, master tailor initials, Surat studio inspection date, and humidity storage history.
+                </p>
+</div>
+</div>
+</div>
+<!-- Category C: Surat & Pan-India Armored Logistics -->
+<div class="faq-group flex flex-col gap-4 mt-4" data-cat="logistics">
+<div class="flex items-center gap-3 pb-2">
+<span class="font-label-caps text-label-caps uppercase text-primary font-bold tracking-widest">SECTION 03</span>
+<div class="h-[1px] flex-1 bg-surface-container-highest"></div>
+<span class="font-label-caps text-label-caps text-outline uppercase">PAN-INDIA ARMORED LOGISTICS</span>
+</div>
+<!-- Item 5 -->
+<div class="accordion-item bg-surface-container-lowest rounded-sm shadow-sm overflow-hidden transition-colors">
+<button class="accordion-header w-full p-6 text-left flex items-start justify-between gap-4 cursor-pointer focus:outline-none" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-4">
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-1 rounded-sm">05</span>
+<span class="font-title-editorial text-title-editorial text-on-surface font-medium">What are the courier delivery timelines for Tier-1 and Tier-2 hubs?</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-300">expand_more</span>
+</button>
+<div class="accordion-content hidden px-6 pb-6 pt-0 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+<p>
+                  Surat &amp; Mumbai metropolitan zones operate on a guaranteed 24-hour delivery schedule via priority Apex BlueDart Air charter. Tier-1 metros (Delhi NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Ahmedabad) receive shipments within 48 hours. Tier-2 arterial cities arrive in 72 hours. All orders above $100 (₹8,200) include zero shipping overhead and signature-verified delivery.
+                </p>
+</div>
+</div>
+<!-- Item 6 -->
+<div class="accordion-item bg-surface-container-lowest rounded-sm shadow-sm overflow-hidden transition-colors">
+<button class="accordion-header w-full p-6 text-left flex items-start justify-between gap-4 cursor-pointer focus:outline-none" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-4">
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-1 rounded-sm">06</span>
+<span class="font-title-editorial text-title-editorial text-on-surface font-medium">Can I redirect my delivery coordinates while in-flight?</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] transition-transform duration-300">expand_more</span>
+</button>
+<div class="accordion-content hidden px-6 pb-6 pt-0 text-on-surface-variant font-body-md text-body-md leading-relaxed">
+<p>
+                  Yes. Patrons holding verified accounts can update final destination coordinates prior to Phase 3 Terminal Transit lock (typically 4 hours prior to local vehicle dispatch). Simply contact the live dispatch desk at +91 93271 15687 or select "Reroute Active Consignment" inside your account dashboard.
+                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Editorial Lookbook Narrative Breakplate -->
+<section class="w-full bg-surface-container-highest py-space-2xl px-6 lg:px-12 overflow-hidden">
+<div class="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-center">
+<div class="lg:col-span-6 relative aspect-[16/10] bg-surface-container rounded-sm overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Editorial photograph of an elegant model in high-end minimal trench coat standing in a brutalist industrial studio flooded with geometric window shadows, warm concrete textures, muted earth tones, European luxury fashion campaign." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdwGBqRmjJ9dEI5_Gvwhiz2qGYLXS28PTgALRyNghS9H-2bLjDya176xGOZaxhZGTrLTy7cJvv_4wzhhCEUv701es__G07pnqJHTY3LnR95122oUSSj5Z1eXU4bYi0GaYNVZEc_h8U6O_KGqyH9ku2p0uNP4krMPd2Gy-9VBUj2uoFzDjEYDebYPLHOwkUBdnxNU4S0fvjTIEdPxPaQ8pLXfBQC5Mn1x9sjLaYpiTv"/>
+<div class="absolute top-4 left-4 bg-surface/90 backdrop-blur-md px-3 py-1.5 rounded-sm">
+<span class="font-label-caps text-label-caps uppercase text-on-surface tracking-widest">ARCHIVAL DOSSIER · PLATE 04</span>
+</div>
+</div>
+<div class="lg:col-span-6 flex flex-col gap-6 lg:pl-6">
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-[0.2em]">PHYSICAL PROTOCOL</span>
+<h2 class="font-display-lg text-display-lg text-on-surface leading-tight">
+          Crafted in Continental Silence. Dispatched from Surat.
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          The Bazaar atelier serves as a bridge between independent Northern European ateliers and India’s most discerning collectors. Every garment is placed in breathable unbleached organic linen wraps with natural cedarwood sachet bars to preserve wool lanolin and natural calfskin temper during transit.
+        </p>
+<div class="grid grid-cols-2 gap-4 pt-2">
+<div class="bg-surface-container-lowest p-4 rounded-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface block font-medium">100%</span>
+<span class="font-body-sm text-body-sm text-outline">Provenance Authenticated</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface block font-medium">24h</span>
+<span class="font-body-sm text-body-sm text-outline">Express BlueDart Air Dispatch</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Physical Atelier Coordinates & Authenticated Dispatch Submission Form -->
+<section class="w-full bg-surface py-space-3xl px-6 lg:px-12">
+<div class="max-w-[1320px] mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop">
+<!-- Physical Studio Coordinates & Map View -->
+<div class="lg:col-span-5 flex flex-col justify-between gap-8">
+<div class="flex flex-col gap-4">
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-[0.2em]">PHYSICAL PRESENCE</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Surat Atelier Coordinates &amp; Inspection Deck</h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Patrons wishing to conduct private lookbook reviews, archival shoe sizing, or custom alterations are invited to schedule an appointment with our atelier master tailor.
+            </p>
+<!-- Physical Address Card -->
+<div class="bg-surface-container-low p-6 rounded-sm space-y-4 mt-2">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">location_on</span>
+<div>
+<span class="font-label-caps text-label-caps uppercase text-outline">STUDIO RECEPTION &amp; VAULT</span>
+<p class="font-title-editorial text-title-editorial text-on-surface font-medium mt-1">Ground Floor Level Atelier, Near Central Fabric Exchange</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Ring Road, Surat, Gujarat — 395002, India</p>
+</div>
+</div>
+<div class="flex items-start gap-3 pt-2">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">schedule</span>
+<div>
+<span class="font-label-caps text-label-caps uppercase text-outline">VISITING HOURS</span>
+<p class="font-body-sm text-body-sm text-on-surface mt-0.5">Mon to Sat: 10:00 - 20:00 IST (By Authenticated Appointment Only)</p>
+</div>
+</div>
+<div class="flex items-start gap-3 pt-2">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">call</span>
+<div>
+<span class="font-label-caps text-label-caps uppercase text-outline">HOTLINE RELAY</span>
+<p class="font-price-focal text-price-focal text-on-surface mt-0.5">+91 93271 15687</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Studio Location Static Mockup Map -->
+<div class="w-full h-56 bg-surface-container-high rounded-sm bg-cover bg-center relative overflow-hidden flex items-end p-4 shadow-sm" data-location="Surat, Gujarat, India" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_W4kaympabZ4RUKY8J8WmjcJT6PxLj_dxWrHSGkGdPuCX4l9FrYZnShSG2QE6VqrGMNMiGc5mWIpRzSqfSpAF2jw5FiPOuCjAE-arz0-CMHL-7soxLV83Nfd1L4oaQuG5fNNlTrDddX-smmD7oM6LyEnl5ViZiW0ci2o6MN73GkjnA0dt9buJglQ-d347XuEOa7pepVrip9BLHEzAdW53Fz2z1YfY2eg4QBeVplEg')">
+<div class="bg-surface/95 backdrop-blur-md px-4 py-2.5 rounded-sm flex items-center justify-between w-full">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Surat Master Hub: LIVE</span>
+</div>
+<span class="font-label-caps text-label-caps text-outline">GPS: 21.1702, 72.8311</span>
+</div>
+</div>
+</div>
+<!-- Authenticated Contact Form -->
+<div class="lg:col-span-7 bg-surface-container-lowest p-8 lg:p-12 rounded-sm shadow-sm flex flex-col justify-between">
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between pb-4">
+<div>
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-wider">CLIENT TRANSMISSION FORM</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">Submit Authenticated Atelier Inquiry</h3>
+</div>
+<span class="font-label-caps text-label-caps text-primary px-3 py-1 bg-primary/10 rounded-sm">
+                ENCRYPTED RELAY
+              </span>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-5" id="conciergeForm" onsubmit="event.preventDefault(); showSubmissionAlert();">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<!-- Patron Name -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-outline">Verified Patron Name</label>
+<input class="h-12 px-4 bg-surface-container-low text-body-md font-body-md text-on-surface rounded-sm focus:bg-surface focus:outline-none transition-colors" required="" type="text" value="Saurabh Sharma"/>
+</div>
+<!-- Patron ID -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-outline">Archival Custody / Patron ID</label>
+<input class="h-12 px-4 bg-surface-container-high text-body-md font-body-md text-on-surface-variant rounded-sm cursor-not-allowed font-price-focal" readonly="" type="text" value="BZR-PATRON-93271"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<!-- Patron Contact -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-outline">Electronic Mail Address</label>
+<input class="h-12 px-4 bg-surface-container-low text-body-md font-body-md text-on-surface rounded-sm focus:bg-surface focus:outline-none transition-colors" required="" type="email" value="saurabh12166@gmail.com"/>
+</div>
+<!-- Priority Subject Dropdown -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-outline">Priority Subject Category</label>
+<select class="h-12 px-4 bg-surface-container-low text-body-md font-body-md text-on-surface rounded-sm focus:bg-surface focus:outline-none transition-colors appearance-none">
+<option value="sizing">Bespoke Sizing &amp; Fitting Consultation</option>
+<option value="cod">Cash on Delivery (COD) Doorstep Unboxing Request</option>
+<option value="reroute">Urgent In-Flight Delivery Redirection</option>
+<option value="archive">Exclusive Archival Drop &amp; Tier 01 Allocation</option>
+<option value="customs">Tax Invoice &amp; Cryptographic Provenance Proof</option>
+</select>
+</div>
+</div>
+<!-- Message Directives -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-outline">Detailed Directives &amp; Inquiries</label>
+<textarea class="p-4 bg-surface-container-low text-body-md font-body-md text-on-surface rounded-sm focus:bg-surface focus:outline-none transition-colors resize-none" placeholder="Specify item codes, alteration requirements, or specific unboxing delivery schedule preferences..." rows="4">Requesting atelier measurements check for the ASICS Archive edition before final dispatch seal to Surat residential zone.</textarea>
+</div>
+<!-- Verification Notice -->
+<div class="p-3.5 bg-surface-container-low rounded-sm flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">lock</span>
+<span>Handled exclusively by the Surat Dispatch Officer</span>
+</div>
+<span class="text-outline text-label-caps font-label-caps uppercase">Response &lt; 45m</span>
+</div>
+<!-- Submit Button -->
+<button class="w-full py-4 bg-primary text-on-primary font-label-md text-label-md rounded-sm hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer mt-2" type="submit">
+<span>Submit Authenticated Atelier Inquiry</span>
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</form>
+<div class="hidden mt-4 p-4 bg-primary/10 text-primary rounded-sm flex items-center gap-3" id="formSuccessMessage">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-body-sm font-body-sm">Directive transmitted successfully. Ticket #SR-93271 logged into our Surat floor terminal.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick FAQ Micro-Script -->
+<script>
+    function toggleAccordion(button) {
+      const item = button.closest('.accordion-item');
+      const content = item.querySelector('.accordion-content');
+      const icon = button.querySelector('.material-symbols-outlined');
+      
+      const isHidden = content.classList.contains('hidden');
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        content.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    function filterFaq(category) {
+      const groups = document.querySelectorAll('.faq-group');
+      const tabs = document.querySelectorAll('.faq-tab');
+
+      tabs.forEach(tab => {
+        tab.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+        tab.classList.add('text-on-surface-variant');
+      });
+      event.currentTarget.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-sm');
+      event.currentTarget.classList.remove('text-on-surface-variant');
+
+      groups.forEach(group => {
+        if (category === 'all' || group.getAttribute('data-cat') === category) {
+          group.style.display = 'flex';
+        } else {
+          group.style.display = 'none';
+        }
+      });
+    }
+
+    // Live Instant Search Filter across FAQ items
+    const searchInput = document.getElementById('faqSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', function(e) {
+        const val = e.target.value.toLowerCase().trim();
+        const items = document.querySelectorAll('.accordion-item');
+        
+        items.forEach(item => {
+          const text = item.textContent.toLowerCase();
+          if (text.includes(val)) {
+            item.style.display = 'block';
+            if (val.length > 2) {
+              const content = item.querySelector('.accordion-content');
+              const icon = item.querySelector('.material-symbols-outlined');
+              content.classList.remove('hidden');
+              icon.classList.add('rotate-180');
+            }
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    function showSubmissionAlert() {
+      const msg = document.getElementById('formSuccessMessage');
+      if (msg) {
+        msg.classList.remove('hidden');
+        setTimeout(() => {
+          msg.classList.add('hidden');
+        }, 6000);
+      }
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-low text-on-surface-variant mt-space-3xl"><div class="max-w-[1320px] mx-auto px-6 lg:px-12 pt-space-2xl pb-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-gutter-desktop"><div class="lg:col-span-4 flex flex-col justify-between pr-4"><div class="space-y-4"><div class="flex flex-col"><span class="font-headline-md text-headline-md tracking-tight bg-gradient-to-r from-[#ff6b6b] to-[#caca2b] bg-clip-text text-transparent font-medium">Bazaar</span><span class="font-label-caps text-label-caps tracking-[0.2em] text-outline-variant">HAUTE COMMERCE DIGITAL FLAGSHIP</span></div><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed max-w-sm">Curated European sartorial design and technical footwear, authenticated and dispatched under high-precision editorial integrity from our Surat studio atelier.</p></div><div class="mt-8 space-y-2 pt-4"><p class="font-label-caps text-label-caps uppercase text-outline tracking-widest">Atelier Headquarters</p><p class="font-body-sm text-body-sm text-on-surface">Gujarat, Surat - India</p><div class="flex flex-col gap-1 text-body-sm font-body-sm pt-1"><a class="hover:text-primary transition-colors" href="tel:9327115687">+91 93271 15687</a><a class="hover:text-primary transition-colors" href="mailto:saurabh12166@gmail.com">saurabh12166@gmail.com</a></div></div></div><div class="lg:col-span-3 space-y-4"><h4 class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-on-surface font-semibold">Client Concierge &amp; Provenance</h4><ul class="space-y-3 font-body-sm text-body-sm"><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="concierge" href="#">Concierge, FAQ &amp; Provenance Directory</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="wishlist" href="#">Curatorial Wishlist Vault</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="account" href="#">Patron Account &amp; Order Custody</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="addresses" href="#">Vaulted Shipping Addresses</a></li><li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-outline-variant"></span><a class="hover:text-primary transition-colors" data-path="admin" href="#">Enterprise Custody &amp; Dispatch Terminal</a></li></ul></div><div class="lg:col-span-3 space-y-4"><h4 class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-on-surface font-semibold">Curated Authenticity</h4><p class="font-body-sm text-body-sm text-on-surface-variant/80 pb-2">Authorized distribution partnership archive:</p><div class="flex flex-wrap gap-2"><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">ASICS</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Brooks</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Hoka One One</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Dr. Martens</span><span class="px-2.5 py-1 bg-surface-container-lowest text-on-surface text-label-sm font-label-sm rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.02)]">Allbirds</span></div><div class="pt-4"><span class="inline-flex items-center gap-1.5 text-label-caps font-label-caps text-primary uppercase"><span class="material-symbols-outlined text-[14px]">verified</span>100% Guaranteed Provenance</span></div></div><div class="lg:col-span-2 space-y-4"><h4 class="font-label-caps text-label-caps uppercase tracking-[0.16em] text-on-surface font-semibold">Editions &amp; Social</h4><ul class="space-y-3 font-body-sm text-body-sm"><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>GitHub</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>LinkedIn</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>X (Twitter)</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li><li><a class="hover:text-on-surface transition-colors flex items-center justify-between group" href="#"><span>Instagram</span><span class="material-symbols-outlined text-[16px] text-outline group-hover:text-primary transition-colors">arrow_outward</span></a></li></ul></div></div><div class="mt-space-2xl pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-label-sm font-label-sm text-outline"><div class="flex items-center gap-4 text-center md:text-left"><span class="flex items-center gap-1.5 text-on-surface"><span class="material-symbols-outlined text-[16px] text-primary">lock</span>Server-Verified Checkout Guarantee</span><span class="text-outline-variant">•</span><span class="flex items-center gap-1.5 text-on-surface"><span class="material-symbols-outlined text-[16px] text-primary">local_shipping</span>Cash on Delivery</span></div><p class="text-center md:text-right">© 2024 Saurabh Sharma. All Rights Reserved. Crafted for Bazaar Flagship.</p></div></div></footer></body></html>

@@ -1,59 +1,62 @@
-.nav-links ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    /* lets the row wrap between ~769px and 1200px instead of overflowing
-       the navbar when logo + 6 links + search cannot share one line */
-    flex-wrap: wrap;
+.bz-navlinks ul {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-links ul li {
-    margin-right: 20px;
+.bz-navlinks__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--bz-ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease;
 }
 
-.nav-links ul li a {
-	font-family:robotl;
-    color: white; /* Link text color */
-    text-decoration: none;
-    padding: 8px 12px; /* Adjust padding as needed */
-    border-radius: 4px; /* Rounded corners */
-    background-color: #333; /* Background color */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
+.bz-navlinks__link:hover {
+  color: var(--bz-ink);
 }
 
-.nav-links ul li a:hover,
-.nav-links ul li a:focus {
-    background-color: #555; /* Background color on hover and focus */
+/* active = ink text + teal underline (design's data-active-classes) */
+.bz-navlinks__link.is-active {
+  color: var(--bz-ink);
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--bz-teal);
 }
 
-.nav-links ul li a.active {
-    font-weight: bold; /* Example: Highlight active link */
+.bz-navlinks__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bz-crimson);
 }
 
-/* Phones: links become a centered full-width row of their own (the navbar
-   stacks logo+cart+user / nav / search - see Navbar.css order rules) */
-@media (max-width: 768px) {
-    .nav-links {
-        flex: 1 1 100%;
-        order: 3;
-    }
+/* tablets/phones: one scrollable row, no hamburger JS */
+@media (max-width: 1023px) {
+  .bz-navlinks {
+    order: 3;
+    flex: 1 1 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-top: 1px solid var(--bz-hairline);
+    padding-top: 4px;
+  }
 
-    .nav-links ul {
-        justify-content: center;
-        gap: 4px 0;
-    }
+  .bz-navlinks::-webkit-scrollbar {
+    display: none;
+  }
 
-    .nav-links ul li {
-        margin-right: 8px;
-    }
-
-    .nav-links ul li:last-child {
-        margin-right: 0;
-    }
-
-    .nav-links ul li a {
-        padding: 6px 10px;
-        font-size: 15px;
-    }
+  .bz-navlinks ul {
+    gap: 1.25rem;
+    padding: 0 2px;
+  }
 }

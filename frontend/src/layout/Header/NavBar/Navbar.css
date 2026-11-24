@@ -1,58 +1,98 @@
-/* Navbar styles */
-.navbar {
-    display: flex;
-    flex-wrap: wrap;  
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-    font-size: 17px;
-    box-sizing: border-box;  
-}
- 
-.search {
-    flex: 1;
-    min-width: 200px;  
-}
- 
-.cart, .user {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;  
+/* Site header: announcement bar + nav row --------------------------------- */
+
+.bz-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250, 249, 246, 0.92);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--bz-shadow-lift);
 }
 
- 
+/* announcement bar */
+.bz-announce {
+  background: var(--bz-ink);
+  color: var(--bz-bg);
+  padding: 7px 0;
+}
+
+.bz-announce__inner {
+  text-align: center;
+}
+
+.bz-announce p {
+  margin: 0;
+  color: rgba(250, 249, 246, 0.9);
+}
+
+.bz-announce strong {
+  color: #94f3e8;
+}
+
+.bz-announce__sep {
+  margin: 0 10px;
+  color: rgba(250, 249, 246, 0.35);
+}
+
+/* nav row */
+.bz-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 80px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.bz-nav__tools {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* search + tools hug the right edge; nav links fill the middle */
+.bz-nav > .bz-search {
+  margin-left: auto;
+}
+
+.bz-nav__currency {
+  padding: 5px 10px;
+  background: var(--bz-surface-low);
+  border-radius: var(--bz-r);
+  color: var(--bz-ink);
+}
+
+/* ---- mobile: nav links scroll horizontally instead of a hamburger ------- */
+@media (max-width: 1023px) {
+  .bz-nav {
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    min-height: 0;
+  }
+
+  .bz-nav__tools {
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .bz-nav > .bz-search {
+    margin-left: 0;
+    order: 4;
+    flex: 1 1 100%;
+  }
+
+  .bz-nav__tools {
+    order: 2;
+  }
+}
+
 @media (max-width: 768px) {
-    .navbar {
-        padding: 10px;
-        font-size: 16px;
-        row-gap: 8px;
-    }
+  .bz-announce p {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
 
-    /* visual order on phones: logo / cart / user, then nav links, then
-       the search box on its own full-width row */
-    .cart {
-        order: 1;
-    }
-
-    .user {
-        order: 2;
-    }
-
-    .nav-links {
-        order: 3;
-        flex: 1 1 100%;
-    }
-
-    .search {
-        order: 4;
-        flex: 1 1 100%;
-        min-width: 0;
-    }
-
-    .cart, .user {
-        margin-left: 0;
-    }
+  .bz-nav__currency {
+    display: none;
+  }
 }
-

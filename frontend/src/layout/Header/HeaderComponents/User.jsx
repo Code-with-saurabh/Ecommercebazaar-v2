@@ -1,41 +1,50 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './User.css';
-import UserIcon from '../../../assets/img/User.png';
 import { isLoggedIn, clearSession, subscribeAuth } from '../../../utils/session';
 import { post } from '../../../api';
 import { useToast } from '../../../components/Toast/Toast.jsx';
 
+/**
+ * Account control: person icon → /login when signed out, /account when
+ * signed in; a compact "Sign out" text button appears next to it for
+ * signed-in sessions (logout stays one click, as before the redesign).
+ */
 const User = () => {
-    const history = useHistory();
-    const toast = useToast();
-    const [loggedIn, setLoggedInState] = useState(isLoggedIn);
+  const history = useHistory();
+  const toast = useToast();
+  const [loggedIn, setLoggedInState] = useState(isLoggedIn);
 
-    useEffect(() => {
-        // the auth event only ever fires here (same tab) - see utils/session
-        const unsubscribe = subscribeAuth(() => setLoggedInState(isLoggedIn()));
-        return unsubscribe;
-    }, []);
+  useEffect(() => subscribeAuth(() => setLoggedInState(isLoggedIn())), []);
 
-    const handleLoginClick = () => {
-        if (loggedIn) {
-            // instant UI reset, then revoke the refresh cookie server-side
-            clearSession();
-            post('/auth/logout').catch(() => {}); // fire & forget: cookie may already be gone
-            toast.info('Logged out');
-            return;
-        }
-        history.push('/login');
-    };
+  const go = () => history.push(loggedIn ? '/account' : '/login');
 
-    return (
-        <div className="user">
-            <button type="button" onClick={handleLoginClick}>
-                <img src={UserIcon} alt="" aria-hidden="true" width="20" height="20" className="user-icon" />
-                {loggedIn ? 'Logout' : 'Login'}
-            </button>
-        </div>
-    );
+  const signOut = () => {
+    clearSession();
+    post('/auth/logout').catch(() => {}); // fire & forget: cookie may be gone
+    toast.info('Logged out');
+  };
+
+  return (
+    <div className="bz-user">
+      <button
+        type="button"
+        className="bz-icon-btn"
+        onClick={go}
+        aria-label={loggedIn ? 'Account' : 'Sign in'}
+        title={loggedIn ? 'Account' : 'Sign in'}
+      >
+        <span className="material-symbols-outlined" aria-hidden="true">
+          person
+        </span>
+      </button>
+      {loggedIn && (
+        <button type="button" className="bz-user__out" onClick={signOut}>
+          Sign out
+        </button>
+      )}
+    </div>
+  );
 };
 
 export default User;

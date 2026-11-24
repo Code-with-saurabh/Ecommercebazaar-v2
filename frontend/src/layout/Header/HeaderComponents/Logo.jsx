@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom';
-import './Logo.css'; // file name is Logo.css - lowercase breaks case-sensitive builds
+import './Logo.css';
 
-const Logo = () => {
-    return (
-        <div className="logo">
-            {/* Link instead of <a href>: no full page reload on click */}
-            <Link to="/">
-{/*} <img src={logoImg} alt="Logo" className="logo-img" />*/}
-			<h1 className="logo-img">Bazaar</h1>
-            </Link>
-        </div>
-    );
-}
+const Logo = () => (
+  <Link to="/" className="bz-logo" aria-label="Bazaar — home">
+    <span className="bz-wordmark bz-logo__word">Bazaar</span>
+    <span className="bz-caps bz-logo__tag">Est. Surat</span>
+  </Link>
+);
 
 export default Logo;
