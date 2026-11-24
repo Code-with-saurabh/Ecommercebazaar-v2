@@ -12,8 +12,8 @@ const LINKS = [
   { to: '/products', label: 'Shop' },
   { to: '/products', label: 'All Products', end: true },
   { to: '/products/tshirt', label: 'T-Shirts' },
-  { to: '/products?category=Shirts', label: 'Shirts' },
-  { to: '/products?category=Pants', label: 'Pants' },
+  { to: '/products?category=shirts', label: 'Shirts' },
+  { to: '/products?category=pants', label: 'Pants' },
   { to: '/products/shoes', label: 'Footwear' },
   { to: '/products?sale=true', label: 'Archive Sale', sale: true },
 ];

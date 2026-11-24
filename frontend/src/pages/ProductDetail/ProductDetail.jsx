@@ -287,7 +287,7 @@ function Detail({ id }) {
         <section className="pd-related">
           <h2>You may also like</h2>
           <VirtualGrid
-            className="GridStyle"
+            className="pd-related__grid"
             layout="grid"
             minColumnWidth={230}
             gap={20}

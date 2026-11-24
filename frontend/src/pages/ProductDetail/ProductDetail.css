@@ -340,6 +340,14 @@
   margin: 0 0 14px;
 }
 
+/* related products columns (VirtualGrid positions via this class; it used
+   to borrow .GridStyle from the legacy Products.css) */
+.pd-related__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
 @media (max-width: 768px) {
   .pd-main {
     grid-template-columns: 1fr;
