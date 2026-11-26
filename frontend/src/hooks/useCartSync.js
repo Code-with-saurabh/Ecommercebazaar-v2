@@ -55,7 +55,9 @@ export default function useCartSync() {
                   Bname: '',
                   name: line.name || '',
                   price: Number(line.price) || 0,
-                  image: line.image || '',
+                   image: line.image || '',
+                   size: line.size || null,
+                   color: line.color || null,
                   qty: Number(line.qty) || 1,
                 }))
               )
@@ -82,7 +84,9 @@ export default function useCartSync() {
       serverKnownRef.current = true;
       put('/cart/items', {
         items: items.map(item => ({
-          productId: item.id,
+           productId: item.id,
+           size: item.size || null,
+           color: item.color || null,
           qty: Math.min(99, Math.max(1, Number(item.qty) || 1)),
         })),
       }).catch(() => {

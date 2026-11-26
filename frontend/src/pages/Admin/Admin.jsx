@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { get, patch, raw } from '../../api';
 import { isLoggedIn, isAdmin } from '../../utils/session';
@@ -73,12 +73,12 @@ function Admin() {
   }, [debouncedQuery, page, role, status]);
 
   useEffect(() => {
-    loadUsers();
-  }, [loadUsers]);
+    if (allowed) loadUsers();
+  }, [allowed, loadUsers]);
 
   useEffect(() => {
-    loadStats();
-  }, [loadStats]);
+    if (allowed) loadStats();
+  }, [allowed, loadStats]);
 
   // new filter -> back to page 1 (avoids an empty page 2)
   useEffect(() => {
@@ -127,12 +127,12 @@ function Admin() {
     : [];
 
   return (
-    <div className="admin-page">
-      <header className="admin-header">
-        <h1>Admin Panel</h1>
+    <div className="bz-shell bz-page admin-page">
+      <header className="bz-lead admin-header">
+        <div><p className="bz-caps">Store administration</p><h1>Account directory</h1></div>
         <button
           type="button"
-          className="admin-refresh"
+          className="bz-btn bz-btn--outline"
           onClick={() => {
             loadUsers();
             loadStats();
@@ -186,12 +186,12 @@ function Admin() {
 
       {loading ? (
         <ListSkeleton rows={6} />
-      ) : users.length === 0 ? (
-        <div className="NFT_CC">
-          <h2 className="NTF">No users found.</h2>
+      ) : error ? null : users.length === 0 ? (
+        <div className="bz-empty">
+          <h2>No users found.</h2>
         </div>
       ) : (
-        <div className="admin-table-wrap">
+        <div className="admin-table-wrap" tabIndex={0} role="region" aria-label="User directory">
           <table className="admin-table">
             <thead>
               <tr>

@@ -1,28 +1,6 @@
-.search-page{
-	/* was margin-left:10% - off-center on every viewport and wasted a
-	   tenth of a phone screen; a gutter + max-width centers properly */
-	margin: 0 auto;
-	padding: 0 20px 24px;
-	max-width: 1400px;
-}
-
-@media (max-width: 480px) {
-	.search-page {
-		padding: 0 12px 20px;
-	}
-}
-
- 
-.product-grid{
-	display:flex;
-	flex-wrap:wrap;
-}
-
-/* .NFT_CC / .NTF moved to assets/styles/App.css - pages/Products uses them too */
-
-/* result count above the grid */
-.search-count {
-  margin: 12px 0 8px;
-  color: #555555;
-  font-size: 14px;
+/* Match VirtualGrid's column measurement so long result sets scroll correctly. */
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  gap: 20px;
 }

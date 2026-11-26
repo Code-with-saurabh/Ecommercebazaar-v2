@@ -313,7 +313,20 @@ async function main() {
       cInvalid.status === 200 && cInvalid.json && cInvalid.json.data.valid === false && cInvalid.json.data.reason === 'INVALID',
       JSON.stringify(cInvalid.json && cInvalid.json.data));
 
-    await req('/api/cart/items', { method: 'PUT', body: { items: [{ productId: first._id, qty: 2 }] }, headers: authH });
+    const variants = [
+      { productId: first._id, qty: 1, size: first.sizes[0], color: first.colors[0] },
+      { productId: first._id, qty: 1, size: first.sizes[1], color: first.colors[1] || first.colors[0] },
+    ];
+    if (first.stock > 0 && first.stock <= 99) {
+      await req('/api/cart/items', { method: 'PUT', body: { items: [{ ...variants[0], qty: first.stock }, variants[1]] }, headers: authH });
+      const tooMany = await req('/api/orders/preview', { method: 'POST', body: {}, headers: authH });
+      check('variants share stock in checkout preview', tooMany.status === 409);
+    }
+    await req('/api/cart/items', { method: 'PUT', body: { items: variants }, headers: authH });
+    const variantPreview = await req('/api/orders/preview', { method: 'POST', body: {}, headers: authH });
+    const matchesVariants = lines => Array.isArray(lines) && lines.length === variants.length && variants.every(v =>
+      lines.some(line => line.size === v.size && line.color === v.color && line.qty === v.qty));
+    check('checkout preview distinguishes two variants of the same product', matchesVariants(variantPreview.json?.data?.items));
     const noAddr = await req('/api/orders', { method: 'POST', headers: authH, body: { paymentMethod: 'cod' } });
     check('order without address -> 400', noAddr.status === 400, `got ${noAddr.status}`);
     const anonOrder = await req('/api/orders', { method: 'POST', body: { paymentMethod: 'cod' } });
@@ -331,7 +344,8 @@ async function main() {
       check('order status placed', order.status === 'placed', order.status);
       const parts = Math.round((order.subtotal - order.discount + order.shipping + order.tax) * 100) / 100;
       check('total = subtotal - discount + shipping + tax', Math.abs(parts - order.total) < 0.01, `parts=${parts} total=${order.total}`);
-      check('order has live-priced items', order.items.length === 1 && typeof order.items[0].price === 'number', JSON.stringify(order.items && order.items[0]));
+      check('order has live-priced items', order.items.every(line => line.price === first.price), JSON.stringify(order.items && order.items[0]));
+      check('receipt retains both purchased variants', matchesVariants(order.items));
       check('order has shipping snapshot', !!(order.shippingAddress && order.shippingAddress.city === 'Mumbai'), JSON.stringify(order.shippingAddress));
       check('payment method recorded cod', !!(order.payment && order.payment.method === 'cod'), JSON.stringify(order.payment));
 

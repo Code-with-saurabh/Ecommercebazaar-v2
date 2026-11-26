@@ -124,7 +124,7 @@ const Card = ({ product }) => {
           </div>
 
           <p className={`bz-card__stock bz-caps${inStock ? '' : ' is-out'}`}>
-            {inStock ? 'In Stock — 2-Day Courier' : 'Out of Stock'}
+            {inStock ? 'In stock' : 'Out of stock'}
           </p>
         </div>
       </div>

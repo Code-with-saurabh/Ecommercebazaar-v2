@@ -1,6 +1,16 @@
 # Features
 
-Everything the app does today, documented feature by feature.
+Feature guides, including historical implementation notes.
+
+## Updated guides
+
+- [Customer reviews](product-reviews.md) — ratings, paginated public reviews,
+  owner editing/deletion, moderation-aware forms, and reliable helpful votes.
+- [Recently viewed products](recently-viewed.md) — browser-local history,
+  fresh product cards, clear-history controls, and cross-tab updates.
+- [Progress journal](../../progress/README.md) — later catalog, authentication,
+  cart, and checkout milestones. The original matrix and page/data tables below
+  describe an earlier snapshot and should not be used as the current backlog.
 
 ## Feature status matrix
 

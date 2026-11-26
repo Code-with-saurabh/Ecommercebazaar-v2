@@ -20,6 +20,8 @@ function loadCart() {
         name: item.name || '',
         price: Number(item.price) || 0,
         image: item.image || '',
+        size: typeof item.size === 'string' ? item.size : null,
+        color: typeof item.color === 'string' ? item.color : null,
         qty: Math.min(99, Math.max(1, Number(item.qty) || 1)),
       }));
     return { products };

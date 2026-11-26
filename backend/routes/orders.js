@@ -125,10 +125,14 @@ async function buildOrderLines(cart) {
   const byId = new Map(products.map(product => [String(product._id), product]));
 
   const lines = [];
+  const requested = new Map(); // inventory is shared by all variants of a product
   for (const item of cart.items) {
-    const product = byId.get(String(item.product));
+    const id = String(item.product);
+    const product = byId.get(id);
     if (!product) throw ApiError.conflict(`"${item.name}" is no longer available`);
-    if ((Number(product.stock) || 0) < item.qty) {
+    const qtyAcrossVariants = (requested.get(id) || 0) + item.qty;
+    requested.set(id, qtyAcrossVariants);
+    if ((Number(product.stock) || 0) < qtyAcrossVariants) {
       throw ApiError.conflict(
         product.stock <= 0
           ? `"${product.name}" is out of stock`
@@ -246,7 +250,7 @@ router.post(
         ? { code: couponDoc.code, type: couponDoc.type, value: couponDoc.value, discount: totals.discount }
         : null,
       shippingAddress,
-      items: lines.map(line => ({ name: line.name, qty: line.qty, price: line.price, image: line.image })),
+      items: lines.map(({ name, qty, price, image, size, color }) => ({ name, qty, price, image, size, color })),
     });
   })
 );

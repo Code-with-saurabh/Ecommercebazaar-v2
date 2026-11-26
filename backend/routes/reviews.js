@@ -8,7 +8,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
 const { validateBody, validateParams, validateQuery } = require('../middleware/validate');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, optionalAuth } = require('../middleware/auth');
 
 const ID_RE = /^[0-9a-fA-F]{24}$/;
 
@@ -17,6 +17,7 @@ const ID_RE = /^[0-9a-fA-F]{24}$/;
  * path reads naturally: /api/products/:productId/reviews.
  *
  *   GET    /:productId/reviews              published reviews (paginated)
+ *   GET    /:productId/reviews/mine         my review, including moderation status
  *   POST   /:productId/reviews              write mine (one per product)
  *   PUT    /:productId/reviews/mine         edit mine
  *   DELETE /:productId/reviews/mine         delete mine
@@ -55,13 +56,13 @@ const writeSchema = z.object({
 
 const SORTS = {
   newest: { createdAt: -1, _id: -1 },
-  helpful: { helpfulCount: -1, createdAt: -1 },
-  rating: { rating: -1, createdAt: -1 },
+  helpful: { helpfulCount: -1, createdAt: -1, _id: -1 },
+  rating: { rating: -1, createdAt: -1, _id: -1 },
 };
 
-/** 404 unless the product exists (drafts count here: authors get an answer). */
+/** Public listing and new reviews must not expose inactive catalog products. */
 async function requireProduct(productId) {
-  const product = await Product.findById(productId).select('_id name');
+  const product = await Product.findOne({ _id: productId, isActive: true }).select('_id name');
   if (!product) throw ApiError.notFound('Product not found');
   return product;
 }
@@ -69,6 +70,7 @@ async function requireProduct(productId) {
 // GET /api/products/:productId/reviews
 router.get(
   '/:productId/reviews',
+  optionalAuth,
   validateParams(productParams),
   validateQuery(listQuery),
   asyncHandler(async (req, res) => {
@@ -80,6 +82,7 @@ router.get(
     const matchId = mongoose.Types.ObjectId.createFromHexString(productId);
     const [items, total, stats] = await Promise.all([
       Review.find(filter)
+        .select('+helpfulVoters')
         .sort(SORTS[sort])
         .skip((page - 1) * limit)
         .limit(limit)
@@ -93,7 +96,11 @@ router.get(
     ]);
 
     const aggregate = stats[0] || { avg: 0, count: 0 };
-    return ApiResponse.success(res, 200, 'OK', items, {
+    const visibleItems = items.map(review => ({
+      ...review.toJSON(),
+      helpfulVoted: Boolean(req.user && (review.helpfulVoters || []).some(id => String(id) === String(req.user._id))),
+    }));
+    return ApiResponse.success(res, 200, 'OK', visibleItems, {
       total,
       page,
       limit,
@@ -101,6 +108,18 @@ router.get(
       hasNext: page * limit < total,
       rating: { avg: Math.round((aggregate.avg || 0) * 10) / 10, count: aggregate.count },
     });
+  })
+);
+
+// Ownership comes from the session, never a supplied user id or public page.
+router.get(
+  '/:productId/reviews/mine',
+  requireAuth,
+  validateParams(productParams),
+  asyncHandler(async (req, res) => {
+    const review = await Review.findOne({ product: req.params.productId, user: req.user._id })
+      .populate('user', 'username name avatar');
+    return ApiResponse.ok(res, 'OK', { review });
   })
 );
 
@@ -161,7 +180,7 @@ router.delete(
   asyncHandler(async (req, res) => {
     const review = await Review.findOneAndDelete({ product: req.params.productId, user: req.user._id });
     if (!review) throw ApiError.notFound('You have not reviewed this product yet');
-    // deleteOne hook recomputes Product.rating
+    // findOneAndDelete hook recomputes Product.rating
     return ApiResponse.ok(res, 'Review deleted', { id: review._id });
   })
 );
@@ -172,13 +191,32 @@ router.post(
   requireAuth,
   validateParams(reviewParams),
   asyncHandler(async (req, res) => {
+    await requireProduct(req.params.productId);
     const review = await Review.findOneAndUpdate(
-      { _id: req.params.reviewId, product: req.params.productId, status: 'published' },
-      { $inc: { helpfulCount: 1 } },
-      { new: true }
-    );
-    if (!review) throw ApiError.notFound('Review not found');
-    return ApiResponse.ok(res, 'Marked helpful', { helpfulCount: review.helpfulCount });
+      {
+        _id: req.params.reviewId,
+        product: req.params.productId,
+        status: 'published',
+        user: { $ne: req.user._id },
+        helpfulVoters: { $ne: req.user._id },
+      },
+      { $addToSet: { helpfulVoters: req.user._id }, $inc: { helpfulCount: 1 } },
+      { returnDocument: 'after' }
+    ).select('helpfulCount user');
+    if (review) {
+      return ApiResponse.ok(res, 'Marked helpful', { helpfulCount: review.helpfulCount, helpfulVoted: true });
+    }
+
+    const existing = await Review.findOne({
+      _id: req.params.reviewId, product: req.params.productId, status: 'published',
+    }).select('helpfulCount user');
+    if (!existing) throw ApiError.notFound('Review not found');
+    if (String(existing.user) === String(req.user._id)) {
+      throw ApiError.forbidden('You cannot mark your own review as helpful');
+    }
+    return ApiResponse.ok(res, 'Already marked helpful', {
+      helpfulCount: existing.helpfulCount, helpfulVoted: true,
+    });
   })
 );
 

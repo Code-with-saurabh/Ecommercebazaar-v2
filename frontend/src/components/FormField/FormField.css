@@ -1,0 +1,6 @@
+.form-field { min-width: 0; }
+.form-field__control { position: relative; }
+.form-field__password { padding-right: 4rem; }
+.form-field__reveal { position: absolute; right: .25rem; top: .25rem; height: 40px; padding: 0 .65rem; border: 0; background: transparent; color: var(--bz-teal-deep); cursor: pointer; }
+.form-field__error { font-size: .8rem; color: var(--bz-crimson-deep); }
+.form-field [aria-invalid='true'] { border-color: var(--bz-crimson-deep); }

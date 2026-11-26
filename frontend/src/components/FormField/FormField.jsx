@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import './FormField.css';
 
 /**
- * FormField - one labelled input with floating label, error slot and an
+ * FormField - one labelled input with an error slot and an
  * optional Show/Hide toggle for password fields.
  *
  * Used by pages/Login and pages/SignUp so the markup (and the a11y wiring)
  * can never drift between the two forms:
- *   - error is rendered outside `.input-wrapper`, otherwise the absolutely
- *     positioned floating label would centre itself on wrapper+error;
  *   - `aria-invalid` + `aria-describedby` point screen readers at the message;
- *   - the reveal button lives after the label so `.floating-input + label`
- *     (the float trigger) still matches.
+ *   - the field and its error occupy one cell in multi-column forms.
  *
  *   <FormField id="username" label="Username" value={v}
  *              onChange={e => ...} error={errors.username} autoFocus />
@@ -32,26 +30,25 @@ function FormField({
   const inputType = isPassword && revealed ? 'text' : type;
 
   return (
-    <>
-      <div className="input-wrapper">
+    <div className="bz-field form-field">
+      <label htmlFor={id}>{label}</label>
+      <div className="form-field__control">
         <input
           id={id}
           name={id}
           type={inputType}
-          className={`floating-input${isPassword ? ' floating-input--reveal' : ''}`}
-          placeholder=" "
+          className={`bz-input${isPassword ? ' form-field__password' : ''}`}
           value={value}
           onChange={onChange}
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={error ? errorId : undefined}
           {...inputProps}
         />
-        <label htmlFor={id}>{label}</label>
 
         {isPassword && (
           <button
             type="button"
-            className="password-reveal"
+            className="form-field__reveal"
             onClick={() => setRevealed(prev => !prev)}
             aria-label={revealed ? `Hide ${label.toLowerCase()}` : `Show ${label.toLowerCase()}`}
             aria-pressed={revealed}
@@ -62,11 +59,11 @@ function FormField({
       </div>
 
       {error && (
-        <p className="field-error" id={errorId} role="alert">
+        <p className="form-field__error" id={errorId} role="alert">
           {error}
         </p>
       )}
-    </>
+    </div>
   );
 }
 

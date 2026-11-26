@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
-import { get, post, patch, del, raw } from '../../api';
+import { get, post, patch, put, del, raw } from '../../api';
 import { getUser, isLoggedIn, clearSession, updateUser } from '../../utils/session';
 import { formatMoney } from '../../utils/money';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import FormField from '../../components/FormField/FormField';
 import Spinner from '../../components/Spinner/Spinner';
-import { ORDER_STATUS } from '../OrderConfirmation/OrderConfirmation';
+import { ORDER_STATUS } from '../../utils/orderStatus';
 import './Account.css';
 
 /**
@@ -47,7 +47,7 @@ function formatDate(value) {
 function validateAddress(values) {
   const errors = {};
   if (values.fullName.trim().length < 2) errors.fullName = 'Full name must be at least 2 characters';
-  if (!/^\d{7,15}$/.test(values.phone.trim())) errors.phone = 'Phone must be 7-15 digits';
+  if (!/^\+?\d{7,15}$/.test(values.phone.trim())) errors.phone = 'Enter 7–15 digits, optionally starting with +';
   if (!values.line1.trim()) errors.line1 = 'Address line 1 is required';
   if (!values.city.trim()) errors.city = 'City is required';
   if (!values.state.trim()) errors.state = 'State is required';
@@ -248,8 +248,8 @@ function OrdersTab() {
     setError('');
     try {
       const res = await raw.get('/orders/me', { params: { page: targetPage, limit: 10 } });
-      setOrders((res.data && res.data.data) || []);
-      setMeta((res.data && res.data.meta) || null);
+      setOrders(res.data || []);
+      setMeta(res.meta || null);
     } catch (err) {
       setError(err.message || 'Could not load orders');
     } finally {
@@ -286,9 +286,9 @@ function OrdersTab() {
 
   if (error) {
     return (
-      <p className="acc-error" role="alert">
-        {error}
-      </p>
+      <div className="acc-empty"><p className="acc-error" role="alert">{error}</p>
+        <button className="bz-btn bz-btn--outline" onClick={() => load(page)}>Retry</button>
+      </div>
     );
   }
 
@@ -357,7 +357,7 @@ function OrdersTab() {
       {meta && meta.totalPages > 1 && (
         <nav className="acc-pagination" aria-label="Order pages">
           <button type="button" className="acc-btn acc-btn--small" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
-            ? Previous
+            Previous
           </button>
           <span>
             Page {page} of {meta.totalPages}
@@ -368,7 +368,7 @@ function OrdersTab() {
             disabled={page >= meta.totalPages}
             onClick={() => setPage(p => p + 1)}
           >
-            Next ?
+            Next
           </button>
         </nav>
       )}
@@ -383,6 +383,7 @@ function AddressesTab() {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(ADDRESS_FIELDS);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -411,6 +412,13 @@ function AddressesTab() {
     setErrors(prev => (prev[id] ? { ...prev, [id]: '' } : prev));
   };
 
+  const openForm = (address = null) => {
+    setEditing(address);
+    setForm(address ? Object.fromEntries(Object.keys(ADDRESS_FIELDS).map(k => [k, address[k] || ''])) : ADDRESS_FIELDS);
+    setErrors({});
+    setShowForm(true);
+  };
+
   const save = async e => {
     e.preventDefault();
     const found = validateAddress(form);
@@ -418,8 +426,15 @@ function AddressesTab() {
     if (Object.keys(found).length) return;
     setSaving(true);
     try {
-      const created = await post('/addresses', form);
-      setAddresses(prev => [...prev, created]);
+      if (editing) {
+        const { type, landmark, country } = editing;
+        const isDefault = addresses.some(a => a._id === editing._id && a.isDefault);
+        const updated = await put(`/addresses/${editing._id}`, { ...form, type, landmark, country, isDefault });
+        setAddresses(prev => prev.map(a => a._id === updated._id ? updated : a));
+      } else {
+        const created = await post('/addresses', form);
+        setAddresses(prev => [...prev, created]);
+      }
       setForm(ADDRESS_FIELDS);
       setShowForm(false);
       toast.success('Address saved');
@@ -449,7 +464,7 @@ function AddressesTab() {
     setBusyId(address._id);
     try {
       await del(`/addresses/${address._id}`);
-      setAddresses(prev => prev.filter(a => a._id !== address._id));
+      await load(); // the server promotes a replacement if the default was deleted
       toast.info('Address removed');
     } catch (err) {
       toast.error(err.message || 'Could not remove address');
@@ -468,7 +483,7 @@ function AddressesTab() {
 
   return (
     <div>
-      {addresses.length > 0 && (
+      {!showForm && addresses.length > 0 && (
         <ul className="acc-addresses">
           {addresses.map(address => (
             <li key={address._id} className={`acc-address${address.isDefault ? ' is-default' : ''}`}>
@@ -484,6 +499,7 @@ function AddressesTab() {
                 <span>{address.phone}</span>
               </div>
               <div className="acc-address-actions">
+                <button type="button" className="acc-btn acc-btn--small" disabled={!!busyId} onClick={() => openForm(address)}>Edit</button>
                 {!address.isDefault && (
                   <button
                     type="button"
@@ -515,12 +531,13 @@ function AddressesTab() {
         </div>
       )}
 
-      <button type="button" className="acc-btn acc-btn--primary acc-add" onClick={() => setShowForm(v => !v)}>
+      <button type="button" className="acc-btn acc-btn--primary acc-add" disabled={saving} onClick={() => showForm ? setShowForm(false) : openForm()}>
         {showForm ? 'Cancel' : '+ Add address'}
       </button>
 
       {showForm && (
         <form className="acc-form acc-address-form" onSubmit={save} noValidate>
+          <h2>{editing ? 'Edit address' : 'New address'}</h2>
           <div className="acc-row">
             <FormField
               id="fullName"
@@ -614,36 +631,33 @@ function Account() {
 
   const allowed = isLoggedIn();
   useEffect(() => {
-    if (!allowed) history.replace('/login', { from: '/account' });
-  }, [allowed, history]);
+    if (!allowed) history.replace('/login', { from: `/account${location.search}` });
+  }, [allowed, history, location.search]);
 
   const queryTab = new URLSearchParams(location.search).get('tab');
   const tab = TABS.some(t => t.id === queryTab) ? queryTab : 'profile';
 
-  const setTab = id => {
-    history.replace(`/account?tab=${id}`);
-  };
-
   if (!allowed) return null;
 
   return (
-    <div className="account-page">
-      <header className="acc-head">
+    <div className="bz-shell bz-page account-page">
+      <header className="bz-lead">
+        <p className="bz-caps">Customer account</p>
         <h1>My Account</h1>
+        <p>Your profile, order receipts and delivery addresses.</p>
       </header>
 
       <div className="acc-layout">
         <nav className="acc-tabs" aria-label="Account sections">
           {TABS.map(item => (
-            <button
+            <Link
               key={item.id}
-              type="button"
+              to={`/account?tab=${item.id}`}
               className={`acc-tab${tab === item.id ? ' is-active' : ''}`}
               aria-current={tab === item.id ? 'page' : undefined}
-              onClick={() => setTab(item.id)}
             >
               {item.label}
-            </button>
+            </Link>
           ))}
         </nav>
 

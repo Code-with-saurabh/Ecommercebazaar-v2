@@ -70,20 +70,13 @@ SkeletonText.propTypes = {
 export function ProductCardSkeleton() {
   return (
     <div className="skeleton-card" aria-hidden="true">
-      <Skeleton className="skeleton-card__image" height={null} radius={15} />
+      <Skeleton className="skeleton-card__image" height={null} radius={0} />
       <div className="skeleton-card__body">
         <Skeleton width="45%" height={11} radius={6} />
         <Skeleton width="95%" height={13} radius={6} />
         <Skeleton width="70%" height={13} radius={6} />
-        <div className="skeleton-card__stars">
-          <Skeleton width={18} height={18} radius="50%" />
-          <Skeleton width={18} height={18} radius="50%" />
-          <Skeleton width={18} height={18} radius="50%" />
-          <Skeleton width={18} height={18} radius="50%" />
-          <Skeleton width={18} height={18} radius="50%" />
-        </div>
         <Skeleton width="35%" height={15} radius={6} />
-        <Skeleton width="100%" height={38} radius={12} />
+        <Skeleton width="100%" height={38} radius={2} />
       </div>
     </div>
   );
@@ -135,10 +128,10 @@ export function HomeSkeleton() {
 /** Cart rows: image square + text lines + button, mirroring `.IMGS-CC`. */
 export function CartSkeleton({ rows = 3 }) {
   return (
-    <div role="status" aria-label="Loading cart">
+    <div className="bz-shell bz-page" role="status" aria-label="Loading cart">
       {Array.from({ length: rows }).map((_, index) => (
         <div className="skeleton-cart-row" key={index} aria-hidden="true">
-          <Skeleton className="skeleton-cart-row__image" height={null} radius={22} />
+          <Skeleton className="skeleton-cart-row__image" height={null} radius={2} />
           <div className="skeleton-cart-row__body">
             <Skeleton width="70%" height={16} radius={6} />
             <Skeleton width="30%" height={14} radius={6} />

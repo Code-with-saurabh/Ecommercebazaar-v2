@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Card from '../../components/ProductCard/ProductCard';
 import VirtualGrid from '../../components/VirtualGrid/VirtualGrid';
 import { ProductGridSkeleton } from '../../components/Skeleton/Skeleton';
@@ -19,36 +19,39 @@ const SearchPage = () => {
   );
 
   const results = items || [];
+  let summary = `${results.length} product${results.length === 1 ? '' : 's'} shown`;
+  if (!searchQuery) summary = 'Type something to search products.';
+  else if (loading) summary = 'Searching…';
+  else if (error) summary = 'Could not load search results.';
 
   return (
-    <div className="search-page">
-      <p className="search-count" role="status">
-        {!searchQuery
-          ? 'Type something to search products.'
-          : loading
-            ? 'Searching\u2026'
-            : `${results.length} result(s) for \u201c${searchQuery}\u201d`}
-      </p>
+    <div className="bz-shell bz-page">
+      <header className="bz-lead">
+        <p className="bz-caps">Catalog search</p>
+        <h1>{searchQuery ? `Results for “${searchQuery}”` : 'Search the collection'}</h1>
+        <p role="status">{summary}</p>
+      </header>
 
       {loading ? (
         <ProductGridSkeleton count={6} />
       ) : error ? (
-        <div className="NFT_CC">
-          <h1 className="NTF">Search failed.</h1>
-          <button type="button" onClick={refetch}>
+        <div className="bz-empty">
+          <button type="button" className="bz-btn bz-btn--outline" onClick={refetch}>
             Retry
           </button>
         </div>
       ) : (
         <VirtualGrid
-          className="product-grid"
-          layout="flex"
+          className="search-grid"
+          minColumnWidth={230}
+          gap={20}
           items={results}
           itemKey={product => product._id}
           renderItem={product => <Card product={product} />}
           empty={
-            <div className="NFT_CC">
-              <h1 className="NTF">No products found.</h1>
+            <div className="bz-empty">
+              {searchQuery && <h2>No products found.</h2>}
+              <Link to="/products" className="bz-link">Browse all products</Link>
             </div>
           }
         />

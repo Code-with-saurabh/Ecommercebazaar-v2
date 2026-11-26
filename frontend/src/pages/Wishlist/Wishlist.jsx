@@ -6,7 +6,7 @@ import { isLoggedIn } from '../../utils/session';
 import { additems } from '../../store/slices/ForShirt.jsx';
 import { formatMoney } from '../../utils/money';
 import { useToast } from '../../components/Toast/Toast.jsx';
-import Spinner from '../../components/Spinner/Spinner';
+import { ProductGridSkeleton } from '../../components/Skeleton/Skeleton';
 import LazyImage from '../../components/LazyImage/LazyImage.jsx';
 import './Wishlist.css';
 
@@ -82,19 +82,19 @@ function Wishlist() {
 
   if (loading) {
     return (
-      <div className="wishlist-page wishlist-loading" aria-busy="true">
-        <Spinner label="Loading wishlist…" />
+      <div className="bz-shell bz-page" aria-busy="true">
+        <ProductGridSkeleton count={4} />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="wishlist-page">
+      <div className="bz-shell bz-page">
         <p className="wishlist-error" role="alert">
           {error}
         </p>
-        <button type="button" className="wl-btn" onClick={load}>
+        <button type="button" className="bz-btn bz-btn--outline" onClick={load}>
           Try again
         </button>
       </div>
@@ -103,11 +103,12 @@ function Wishlist() {
 
   if (items.length === 0) {
     return (
-      <div className="wishlist-page">
-        <div className="wishlist-empty">
+      <div className="bz-shell bz-page">
+        <div className="bz-lead">
+          <p className="bz-caps">Saved pieces</p>
           <h1>Your wishlist is empty</h1>
           <p>Tap the save button on any product to keep it here for later.</p>
-          <Link to="/products" className="wl-btn wl-btn--primary">
+          <Link to="/products" className="bz-btn bz-btn--primary wl-browse">
             Browse products
           </Link>
         </div>
@@ -116,12 +117,14 @@ function Wishlist() {
   }
 
   return (
-    <div className="wishlist-page">
-      <header className="wishlist-head">
-        <h1>My Wishlist</h1>
-        <p>
-          {items.length} saved item{items.length === 1 ? '' : 's'}
-        </p>
+    <div className="bz-shell bz-page">
+      <header className="bz-lead wishlist-head">
+        <div>
+          <p className="bz-caps">Saved pieces</p>
+          <h1>My Wishlist</h1>
+          <p>{items.length} saved item{items.length === 1 ? '' : 's'}</p>
+        </div>
+        <Link to="/cart" className="bz-link">View shopping bag</Link>
       </header>
 
       <ul className="wishlist-grid">
@@ -136,14 +139,14 @@ function Wishlist() {
                   src={image}
                   alt={product.name || ''}
                   className="wl-img"
-                  wrapperClassName="lazy-image--square"
+                  wrapperClassName="lazy-image--3x4"
                   width={600}
                   height={600}
                 />
                 {oos && <span className="wl-oos">Out of stock</span>}
               </Link>
               <div className="wl-body">
-                <span className="wl-brand">{product.brand}</span>
+                <span className="bz-caps wl-brand">{product.brand}</span>
                 <h2>
                   <Link to={`/products/${product.slug || product._id}`} className="wl-title">
                     {product.name}
@@ -159,15 +162,15 @@ function Wishlist() {
               <div className="wl-actions">
                 <button
                   type="button"
-                  className="wl-btn wl-btn--primary"
+                  className="bz-btn bz-btn--quiet"
                   onClick={() => moveToCart(product)}
                   disabled={oos}
                 >
-                  {oos ? 'Out of stock' : 'Move to cart'}
+                  {oos ? 'Out of stock' : 'Add to bag'}
                 </button>
                 <button
                   type="button"
-                  className="wl-btn wl-btn--danger"
+                  className="wl-remove"
                   onClick={() => remove(product)}
                   disabled={busyId === product._id}
                 >

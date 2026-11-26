@@ -37,7 +37,7 @@ const ADDRESS_FIELDS = {
 function validateAddress(values) {
   const errors = {};
   if (values.fullName.trim().length < 2) errors.fullName = 'Full name must be at least 2 characters';
-  if (!/^\d{7,15}$/.test(values.phone.trim())) errors.phone = 'Phone must be 7-15 digits';
+  if (!/^\+?\d{7,15}$/.test(values.phone.trim())) errors.phone = 'Enter 7–15 digits, optionally starting with +';
   if (!values.line1.trim()) errors.line1 = 'Address line 1 is required';
   if (!values.city.trim()) errors.city = 'City is required';
   if (!values.state.trim()) errors.state = 'State is required';
@@ -63,6 +63,8 @@ function Checkout() {
   const [note, setNote] = useState('');
   const [preview, setPreview] = useState({ pricing: EMPTY_PRICING, itemCount: 0, items: [] });
   const [previewError, setPreviewError] = useState('');
+  const [pricingPending, setPricingPending] = useState(true);
+  const [checkingCoupon, setCheckingCoupon] = useState(false);
   const [placing, setPlacing] = useState(false);
   const previewSeq = useRef(0);
 
@@ -112,6 +114,7 @@ function Checkout() {
   const runPreview = useCallback(
     async ({ couponCode, targetAddressId } = {}) => {
       const seq = (previewSeq.current += 1);
+      setPricingPending(true);
       try {
         const body = {};
         const code = couponCode !== undefined ? couponCode : coupon ? coupon.code : '';
@@ -129,9 +132,10 @@ function Checkout() {
         if (err.status === 400 && /coupon/i.test(err.message || '')) {
           setCouponError(err.message);
           setCoupon(null);
-          return;
         }
         setPreviewError(err.message || 'Could not calculate totals');
+      } finally {
+        if (seq === previewSeq.current) setPricingPending(false);
       }
     },
     [addressId, coupon]
@@ -147,43 +151,44 @@ function Checkout() {
   const applyCoupon = async e => {
     e.preventDefault();
     const code = couponInput.trim();
-    if (!code) return;
+    if (!code || checkingCoupon) return;
+    setCheckingCoupon(true);
     setCouponError('');
     try {
       // validate against the live cart first: the server answers valid/false
       // with a sentence we can show as-is
       const verdict = await post('/coupons/validate', { code });
       if (!verdict.valid) {
-        setCoupon(verdict && verdict.reason === 'INVALID' ? null : verdict);
+        setCoupon(null);
         setCouponError(verdict.message || 'This coupon cannot be applied');
-        if (verdict.reason !== 'INVALID') runPreview({ couponCode: undefined });
         return;
       }
       setCoupon({ code: code.toUpperCase(), discount: verdict.discount });
       setCouponInput('');
       toast.success(verdict.message || 'Coupon applied');
-      runPreview({ couponCode: code });
+      await runPreview({ couponCode: code });
     } catch (err) {
       setCouponError(err.message || 'Could not apply coupon');
+    } finally {
+      setCheckingCoupon(false);
     }
   };
 
   const removeCoupon = () => {
     setCoupon(null);
     setCouponError('');
-    runPreview({ couponCode: undefined });
+    runPreview({ couponCode: '' });
   };
 
   const onAddressField = e => {
     const { id, value } = e.target;
     setNewAddress(prev => ({ ...prev, [id]: value }));
-    setAddressErrors(prev => (prev[id] ? { ...prev, id: '' } : prev));
+    setAddressErrors(prev => (prev[id] ? { ...prev, [id]: '' } : prev));
   };
 
   const selectAddress = id => {
     setAddressId(id);
     setShowNewAddress(false);
-    runPreview({ targetAddressId: id });
   };
 
   const saveNewAddress = async e => {
@@ -211,7 +216,6 @@ function Checkout() {
       setShowNewAddress(false);
       setNewAddress(ADDRESS_FIELDS);
       toast.success('Address saved');
-      runPreview({ targetAddressId: created._id });
     } catch (err) {
       if (err.fieldErrors) {
         setAddressErrors(err.fieldErrors);
@@ -236,12 +240,16 @@ function Checkout() {
         return;
       }
       // save then immediately place with the fresh id
+      setPlacing(true);
       try {
         const created = await post('/addresses', newAddress);
         setAddresses(prev => [...prev, created]);
+        setAddressId(created._id);
+        setShowNewAddress(false);
         await finishOrder(created._id);
       } catch (err) {
         toast.error(err.message || 'Could not save address');
+        setPlacing(false);
       }
       return;
     }
@@ -304,17 +312,31 @@ function Checkout() {
   return (
     <div className="checkout-page">
       <header className="checkout-head">
-        <h1>Checkout</h1>
-        <p>
-          {preview.itemCount} item{preview.itemCount === 1 ? '' : 's'} · secure server-side pricing
-        </p>
+        <p className="bz-caps checkout-eyebrow">Secure checkout</p>
+        <div className="checkout-head__row">
+          <div>
+            <h1>Checkout</h1>
+            <p>
+              {preview.itemCount} item{preview.itemCount === 1 ? '' : 's'} · every total below is
+              priced by the server, live
+            </p>
+          </div>
+          <span className="checkout-head__badge">
+            <span className="material-symbols-outlined" aria-hidden="true">
+              payments
+            </span>
+            Cash on delivery
+          </span>
+        </div>
       </header>
 
       <div className="checkout-grid">
         {/* ---------------- left: address / coupon / payment ---------------- */}
         <div className="checkout-main">
           <section className="co-card" aria-labelledby="co-address">
-            <h2 id="co-address">1. Shipping address</h2>
+            <h2 id="co-address">
+              <span className="co-step">01</span> Shipping address
+            </h2>
 
             {addresses.length > 0 && !showNewAddress && (
               <ul className="co-address-list">
@@ -342,16 +364,14 @@ function Checkout() {
               </ul>
             )}
 
-            <button
-              type="button"
-              className="co-toggle"
-              onClick={() => {
-                setShowNewAddress(prev => !prev);
-                if (!showNewAddress) setAddressId('');
-              }}
-            >
-              {showNewAddress ? '? Choose a saved address' : '+ Ship to a new address'}
-            </button>
+            {addresses.length > 0 && (
+              <button type="button" className="co-toggle" onClick={() => {
+                setShowNewAddress(!showNewAddress);
+                setAddressId(showNewAddress ? (addresses.find(a => a.isDefault) || addresses[0])._id : '');
+              }}>
+                {showNewAddress ? 'Choose a saved address' : '+ Ship to a new address'}
+              </button>
+            )}
 
             {showNewAddress && (
               <form className="co-address-form" onSubmit={saveNewAddress} noValidate>
@@ -438,7 +458,9 @@ function Checkout() {
           </section>
 
           <section className="co-card" aria-labelledby="co-coupon">
-            <h2 id="co-coupon">2. Coupon</h2>
+            <h2 id="co-coupon">
+              <span className="co-step">02</span> Coupon
+            </h2>
             {coupon ? (
               <div className="co-coupon-applied">
                 <span>
@@ -462,19 +484,26 @@ function Checkout() {
                   maxLength={40}
                   autoComplete="off"
                 />
-                <button type="submit" className="btn-secondary" disabled={!couponInput.trim()}>
-                  Apply
+                <button type="submit" className="btn-secondary" disabled={checkingCoupon || placing || !couponInput.trim()}>
+                  {checkingCoupon ? 'Checking…' : 'Apply'}
                 </button>
               </form>
             )}
           </section>
 
           <section className="co-card" aria-labelledby="co-payment">
-            <h2 id="co-payment">3. Payment</h2>
+            <h2 id="co-payment">
+              <span className="co-step">03</span> Payment
+            </h2>
             <label className="co-pay is-selected">
               <input type="radio" name="payment" checked readOnly />
               <span>
-                <strong>Cash on Delivery</strong>
+                <strong>
+                  <span className="material-symbols-outlined" aria-hidden="true">
+                    local_atm
+                  </span>
+                  Cash on Delivery
+                </strong>
                 <span>Pay when your order arrives</span>
               </span>
             </label>
@@ -488,7 +517,9 @@ function Checkout() {
           </section>
 
           <section className="co-card" aria-labelledby="co-note">
-            <h2 id="co-note">Order note (optional)</h2>
+            <h2 id="co-note">
+              <span className="co-step">04</span> Order note (optional)
+            </h2>
             <textarea
               className="co-note"
               value={note}
@@ -518,7 +549,7 @@ function Checkout() {
                 />
                 <span className="co-item-name">
                   {item.name}
-                  <em>× {item.qty}</em>
+                  <em>{[item.size && `Size ${item.size}`, item.color, `Qty ${item.qty}`].filter(Boolean).join(' · ')}</em>
                 </span>
                 <span className="co-item-price">{formatMoney(item.price * item.qty)}</span>
               </li>
@@ -552,17 +583,29 @@ function Checkout() {
 
           {previewError && (
             <p className="co-error" role="alert">
-              {previewError}
+              {previewError} <button type="button" className="co-toggle" onClick={() => runPreview()}>Retry pricing</button>
             </p>
           )}
+
+          <p className="co-verify">
+            <span className="material-symbols-outlined" aria-hidden="true">
+              lock
+            </span>
+            Priced and verified by the server — coupons are re-checked before you pay.
+          </p>
 
           <button
             type="button"
             className="btn-primary co-place"
             onClick={placeOrder}
-            disabled={placing || !addressId && !showNewAddress}
+            disabled={placing || checkingCoupon || pricingPending || !!previewError || !preview.itemCount || (!addressId && !showNewAddress)}
           >
-            {placing ? 'Placing order…' : `Place order · ${formatMoney(p.total)}`}
+            {placing ? 'Placing order…' : pricingPending ? 'Calculating total…' : `Place order · ${formatMoney(p.total)}`}
+            {!placing && (
+              <span className="material-symbols-outlined" aria-hidden="true">
+                lock
+              </span>
+            )}
           </button>
 
           <p className="co-fineprint">

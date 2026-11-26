@@ -1,0 +1,25 @@
+.service-layout { display: grid; grid-template-columns: minmax(12rem, 2fr) minmax(0, 5fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+.service-index nav, .service-index address { display: grid; }
+.service-index nav a { padding: .7rem 0; border-bottom: 1px solid var(--bz-hairline); text-decoration: none; }
+.service-index nav a.active { font-weight: 700; color: var(--bz-teal-deep); }
+.service-index address { margin-top: 1.5rem; gap: .3rem; font-style: normal; font-size: .875rem; overflow-wrap: anywhere; }
+.service-index address a { text-underline-offset: 3px; }
+.service-content { min-width: 0; }
+.service-content h2 { font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.25; }
+.about-photo { width: 100%; aspect-ratio: 2.6 / 1; object-fit: cover; }
+.about-story { display: grid; grid-template-columns: minmax(8rem, 1fr) 2fr; gap: 1rem; padding-block: 1.5rem; border-bottom: 1px solid var(--bz-hairline); }
+.about-story p { max-width: 60ch; }
+.about-story a { margin-top: .75rem; }
+.service-content details { border-bottom: 1px solid var(--bz-hairline); }
+.service-content summary { cursor: pointer; padding: 1rem 0; font: 500 1.125rem/1.5 var(--bz-serif); }
+.service-content details[open] summary { color: var(--bz-teal-deep); }
+.service-content details p { max-width: 64ch; padding: 0 0 1rem 1rem; color: var(--bz-ink-2); }
+.service-content details a { text-underline-offset: 4px; }
+.contact-form { display: grid; gap: 1rem; max-width: 40rem; padding: clamp(1rem, 3vw, 2rem); background: var(--bz-surface); border: 1px solid var(--bz-hairline); }
+.contact-form button { justify-self: start; }
+.contact-form p { color: var(--bz-ink-2); font-size: .875rem; }
+@media (max-width: 768px) {
+  .service-layout, .about-story { grid-template-columns: 1fr; }
+  .service-content { grid-row: 1; }
+  .service-index nav { display: flex; flex-wrap: wrap; gap: 1rem; }
+}

@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-import BGV2 from '../../assets/video/background2.mp4';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import { post } from '../../api';
 import { setSession } from '../../utils/session';
 import { validateRegister, trimmedCredentials } from '../../utils/validation';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import FormField from '../../components/FormField/FormField';
-import LazyVideo from '../../components/LazyVideo/LazyVideo';
-import '../../assets/styles/Auth.css';
+import AuthLayout from '../../layout/AuthLayout';
 
 function Signup() {
   const history = useHistory();
+  const location = useLocation();
   const toast = useToast();
 
   const [formData, setFormData] = useState({
@@ -62,7 +61,8 @@ function Signup() {
       toast.success('Account created. Welcome to Bazaar!');
       // Navigate only AFTER the API confirmed success (the old code redirected
       // immediately, so failures landed on /login anyway)
-      history.push('/');
+      const from = location.state?.from;
+      history.push(typeof from === 'string' ? from : '/');
     } catch (error) {
       const mapped = error.fieldErrors; // 400 -> { field: message }
       if (mapped) {
@@ -80,9 +80,7 @@ function Signup() {
   }
 
   return (
-    <div className="form-container">
-      <LazyVideo src={BGV2} className="background-video" />
-      <div className="form-content">
+    <AuthLayout title="Create an account" description="Keep your wishlist in one place and save a delivery address for checkout.">
         <form className="auth-form" onSubmit={handleSubmit}>
           <FormField
             id="username"
@@ -141,13 +139,13 @@ function Signup() {
             required
           />
 
-          <button type="submit" className="submit-btn" disabled={submitting}>
-            {submitting ? 'Creating account…' : 'Submit'}
+          <button type="submit" className="bz-btn bz-btn--primary" disabled={submitting}>
+            {submitting ? 'Creating account…' : 'Create account'}
           </button>
 
           <div className="account-prompt">
             <p>
-              Already have an account? <Link to="/login">Login</Link>.
+              Already have an account? <Link className="bz-link" to={{ pathname: '/login', state: location.state }}>Sign in</Link>.
             </p>
           </div>
         </form>
@@ -157,8 +155,7 @@ function Signup() {
             <p>{errorMessage}</p>
           </div>
         )}
-      </div>
-    </div>
+    </AuthLayout>
   );
 }
 

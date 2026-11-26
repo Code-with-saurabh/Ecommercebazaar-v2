@@ -1,21 +1,13 @@
-﻿ import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { get, post } from '../../api';
 import { isLoggedIn } from '../../utils/session';
 import { formatMoney } from '../../utils/money';
+import { ORDER_STATUS } from '../../utils/orderStatus';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import Spinner from '../../components/Spinner/Spinner';
 import LazyImage from '../../components/LazyImage/LazyImage.jsx';
 import './OrderConfirmation.css';
-
-/** Status -> display copy (single source for both this page and Account). */
-export const ORDER_STATUS = {
-  placed: { label: 'Order placed', hint: 'We have received your order' },
-  packed: { label: 'Packed', hint: 'Your items are being packed' },
-  shipped: { label: 'Shipped', hint: 'On its way to you' },
-  delivered: { label: 'Delivered', hint: 'Handed over - enjoy!' },
-  cancelled: { label: 'Cancelled', hint: 'This order was cancelled' },
-};
 
 function formatDate(value) {
   if (!value) return '-';
@@ -27,12 +19,12 @@ function formatDate(value) {
  * /order/:id/confirmed - the receipt after POST /api/orders.
  * Own orders only (the API 404s other people's ids); a 401 bounces to login.
  */
-function OrderConfirmation() {
-  const { id } = useParams();
+function Receipt({ id }) {
   const history = useHistory();
   const toast = useToast();
   const [order, setOrder] = useState(null);
   const [error, setError] = useState('');
+  const [attempt, setAttempt] = useState(0);
   const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
@@ -53,7 +45,7 @@ function OrderConfirmation() {
     return () => {
       cancelled = true;
     };
-  }, [id, history]);
+  }, [id, history, attempt]);
 
   const cancelOrder = async () => {
     if (cancelling || !order) return;
@@ -74,10 +66,11 @@ function OrderConfirmation() {
 
   if (error) {
     return (
-      <div className="order-page">
+      <div className="bz-shell bz-page">
         <div className="order-state">
           <h1>{error}</h1>
-          <Link to="/account?tab=orders" className="btn-primary">
+          <button type="button" className="bz-btn bz-btn--outline" onClick={() => { setError(''); setAttempt(n => n + 1); }}>Try again</button>
+          <Link to="/account?tab=orders" className="bz-link">
             View my orders
           </Link>
         </div>
@@ -97,23 +90,29 @@ function OrderConfirmation() {
   const canCancel = order.status === 'placed' && !(order.payment && order.payment.status === 'paid');
 
   return (
-    <div className="order-page">
-      <section className="order-hero" aria-labelledby="order-title">
-        <div className={`order-badge order-badge--${order.status}`} aria-hidden="true">
-          {order.status === 'cancelled' ? '✕' : '✓'}
-        </div>
+    <div className="bz-shell bz-page">
+      <header className="bz-lead order-hero">
+        <p className="bz-caps">Order receipt · {order.orderNumber}</p>
         <h1 id="order-title">
-          {order.status === 'cancelled' ? 'Order cancelled' : 'Thank you! Your order is in'}
+          {order.status === 'cancelled' ? 'Order cancelled' : 'Your order receipt'}
         </h1>
-        <p className="order-number">
-          Order <strong>{order.orderNumber}</strong>
-        </p>
         <p className="order-status-line">
           <span className={`status-pill status-pill--${order.status}`}>{status.label}</span>
           <span className="order-hint">{status.hint}</span>
         </p>
         <p className="order-date">Placed {formatDate(order.createdAt)}</p>
-      </section>
+      </header>
+
+      {order.statusHistory?.length > 0 && (
+        <section className="order-track" aria-label="Order history">
+          <ol>{order.statusHistory.map((event, index) => (
+            <li key={`${event.status}-${index}`} aria-current={index === order.statusHistory.length - 1 ? 'step' : undefined}>
+              <strong>{ORDER_STATUS[event.status]?.label || event.status}</strong>
+              <time dateTime={event.at}>{formatDate(event.at)}</time>
+            </li>
+          ))}</ol>
+        </section>
+      )}
 
       <div className="order-cols">
         <section className="order-card" aria-labelledby="order-items">
@@ -134,6 +133,7 @@ function OrderConfirmation() {
                   <span>
                     {item.brand} · Qty {item.qty}
                     {item.size ? ` · Size ${item.size}` : ''}
+                    {item.color ? ` · ${item.color}` : ''}
                   </span>
                 </div>
                 <span className="order-item-price">{formatMoney(item.price * item.qty)}</span>
@@ -185,7 +185,7 @@ function OrderConfirmation() {
           <p className="order-payment">
             {order.payment && order.payment.method === 'cod' ? 'Cash on Delivery' : order.payment?.method}
             <span className={`status-pill status-pill--${order.payment?.status === 'paid' ? 'delivered' : 'placed'}`}>
-              {order.payment?.status === 'paid' ? 'Paid' : 'Due on delivery'}
+              {order.payment?.status === 'paid' ? 'Paid' : order.status === 'cancelled' ? 'Nothing due' : 'Due on delivery'}
             </span>
           </p>
 
@@ -205,10 +205,10 @@ function OrderConfirmation() {
       </div>
 
       <div className="order-actions">
-        <Link to="/account?tab=orders" className="btn-secondary">
+        <Link to="/account?tab=orders" className="bz-btn bz-btn--outline">
           View my orders
         </Link>
-        <Link to="/products" className="btn-primary">
+        <Link to="/products" className="bz-btn bz-btn--primary">
           Continue shopping
         </Link>
       </div>
@@ -216,4 +216,7 @@ function OrderConfirmation() {
   );
 }
 
-export default OrderConfirmation;
+export default function OrderConfirmation() {
+  const { id } = useParams();
+  return <Receipt key={id} id={id} />;
+}

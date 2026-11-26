@@ -74,10 +74,23 @@ const reviewSchema = new mongoose.Schema(
       default: 0,
       min: [0, 'helpful count cannot be negative'],
     },
+
+    // Selected only when computing the viewer's own vote state, never public.
+    helpfulVoters: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+      default: [],
+      select: false,
+    },
   },
   {
     timestamps: true, // createdAt / updatedAt
-    toJSON: { virtuals: true },
+    toJSON: {
+      virtuals: true,
+      transform(_doc, value) {
+        delete value.helpfulVoters;
+        return value;
+      },
+    },
     toObject: { virtuals: true },
   }
 );
@@ -128,6 +141,11 @@ reviewSchema.post('save', async function refreshRating() {
 
 reviewSchema.post('deleteOne', { document: true, query: false }, async function refreshRatingOnDelete() {
   await safeRecompute(this.constructor, this.product);
+});
+
+// The own-review route uses findOneAndDelete, which does not run deleteOne hooks.
+reviewSchema.post('findOneAndDelete', async function refreshRatingAfterFindAndDelete(review) {
+  if (review) await safeRecompute(this.model, review.product);
 });
 
 /**

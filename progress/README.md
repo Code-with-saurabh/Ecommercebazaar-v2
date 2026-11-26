@@ -17,17 +17,26 @@ replayed with `git show <hash>`.
 | [Bazaar-008](Bazaar-008.md) | Checkout core backend: orders, coupons, addresses, wishlist, reviews, admin CRUD | 2026-11-21 | `3efd97b` |
 | [Bazaar-009](Bazaar-009.md) | Checkout frontend: checkout flow, receipt, account tabs, wishlist, nav | 2026-11-23 | `2cb9a25` |
 | [Bazaar-010](Bazaar-010.md) | Responsive layout pass, UTF-8 recovery, dead-code cleanup | 2026-11-23 | `5cddc56`, `29cb88c` |
+| [Bazaar-011](Bazaar-011.md) | Editorial shopping journey, variant-aware checkout, receipt and account directory | 2026-11-26 | `c3687b9`…`3260d9e` + working tree |
 
-## Current state (end of Bazaar-010)
+## Current state (end of Bazaar-011)
 
 - **Backend** — Express + Mongoose on `:5000`. Auth (JWT + refresh rotation),
   products catalog, server cart, checkout (orders/preview, coupons, addresses,
   wishlist, reviews), admin CRUD with order state machine, zod validation on
-  every write, envelope responses. `npm test` → **123/123 passing**.
+  every write, envelope responses. API suite → **132/132 passing**.
 - **Frontend** — React 18 + Vite 8 + Redux Toolkit on `:3000`. All routes
-  lazy-loaded with skeleton fallbacks; catalog and search render through
-  `VirtualGrid`; images through `LazyImage`. Checkout, account, wishlist and
-  order receipt pages are fully built. Lint → **0 errors** (11 pre-existing
-  warnings); `npm run build` clean.
+  lazy-loaded with skeleton fallbacks. Catalog views have shareable filters
+  and pagination. Search, product detail, bag, checkout, receipt, account,
+  wishlist, auth, support and admin use the editorial design system.
+  Lint → **0 errors** (10 existing warnings); `npm run build` clean.
 - **Docs** — `docs/` (api, features, setup, roadmap) and this `progress/` tree.
-- **Open items** — see the "Left for later" section of Bazaar-010.
+- **Verification** — see [Bazaar-011](Bazaar-011.md) for the live purchase-flow checks.
+
+## Parallel-session feature notes
+
+- [Customer reviews](WORK-product-reviews.md) — 2026-11-26: review UI, owner
+  management, idempotent helpful votes, and deletion rating consistency.
+- [Recently viewed products](WORK-recently-viewed.md) — 2026-11-26: browser-local
+  product history, live-data shelf, cross-tab clearing, tests, and the precise
+  ProductDetail integration to retain during the ongoing redesign.

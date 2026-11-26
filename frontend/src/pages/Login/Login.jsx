@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
-import BGV2 from '../../assets/video/background2.mp4';
 import { post } from '../../api';
 import { setSession } from '../../utils/session';
 import { validateLogin, trimmedCredentials } from '../../utils/validation';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import FormField from '../../components/FormField/FormField';
-import LazyVideo from '../../components/LazyVideo/LazyVideo';
-import '../../assets/styles/Auth.css';
+import AuthLayout from '../../layout/AuthLayout';
 
 /** "Too many attempts. Try again in 15 min." from the limiter envelope. */
 function rateLimitMessage(error) {
@@ -85,9 +83,7 @@ function Login() {
   }
 
   return (
-    <div className="form-container">
-      <LazyVideo src={BGV2} className="background-video" />
-      <div className="form-content">
+    <AuthLayout title="Sign in" description="Return to your saved pieces, addresses and order receipts.">
         <form className="auth-form" onSubmit={handleSubmit}>
           <FormField
             id="username"
@@ -114,13 +110,13 @@ function Login() {
             required
           />
 
-          <button type="submit" className="submit-btn" disabled={submitting}>
-            {submitting ? 'Logging in…' : 'Login'}
+          <button type="submit" className="bz-btn bz-btn--primary" disabled={submitting}>
+            {submitting ? 'Signing in…' : 'Sign in'}
           </button>
 
           <div className="account-prompt">
             <p>
-              Don&apos;t have an account? <Link to="/signup">Sign Up</Link>.
+              New to Bazaar? <Link className="bz-link" to={{ pathname: '/signup', state: location.state }}>Create an account</Link>.
             </p>
           </div>
         </form>
@@ -130,8 +126,7 @@ function Login() {
             <p>{errorMessage}</p>
           </div>
         )}
-      </div>
-    </div>
+    </AuthLayout>
   );
 }
 

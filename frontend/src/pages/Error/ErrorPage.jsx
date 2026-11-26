@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import "./ErrorPage.css"; // Import the custom CSS file
 
 /**
  * Serves two routes:
@@ -16,24 +15,14 @@ const ErrorPage = () => {
       : "An unexpected error occurred.");
 
   return (
-    <div className="error-container">
-      <div className="error-content">
-        <h2 className="error-heading">
-          {isNotFound ? "Page not found (404)" : "Something went wrong"}
-        </h2>
-        <p className="error-message">
-          <strong>{isNotFound ? "404:" : "Error:"}</strong> {message}
-        </p>
-        <div className="button-container">
-          {/* Link keeps the SPA alive - <a href> forced a full reload */}
-          <Link to="/" className="go-back-button">
-            Go Back Home
-          </Link>
-        </div>
-        <div className="support-text">
-          <p>If you continue to experience issues, please contact support.</p>
-        </div>
-      </div>
+    <div className="bz-shell bz-page">
+      <header className="bz-lead">
+        <p className="bz-caps">{isNotFound ? '404 / Bazaar directory' : 'Bazaar support'}</p>
+        <h1>{isNotFound ? 'Page not found' : 'Something went wrong'}</h1>
+        <p>{message}</p>
+      </header>
+      <Link to="/" className="bz-btn bz-btn--primary">Back to home</Link>{' '}
+      <Link to="/help" className="bz-btn bz-btn--outline">Get help</Link>
     </div>
   );
 };

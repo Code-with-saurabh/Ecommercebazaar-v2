@@ -25,6 +25,11 @@ function keyOf(params) {
 
 const listCache = new Map();
 
+/** Review mutations change catalog rating summaries even when prices stay the same. */
+export function invalidateProductsCache() {
+  listCache.clear();
+}
+
 export function useProducts(params = {}, { enabled = true } = {}) {
   const key = enabled ? keyOf(params) : '';
   const [state, setState] = useState(() => {
