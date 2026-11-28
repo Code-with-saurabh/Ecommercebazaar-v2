@@ -57,8 +57,15 @@ function applyHead(meta) {
 }
 
 function Seo() {
-  const { pathname } = useLocation();
-  const meta = useMemo(() => resolvePageMeta(pathname), [pathname]);
+  const { pathname, search } = useLocation();
+  const meta = useMemo(() => {
+    const resolved = resolvePageMeta(pathname);
+    const category = new URLSearchParams(search).get('category');
+    if (pathname === '/products' && ['shirts', 'pants'].includes(category)) {
+      return { ...resolved, path: `${pathname}?category=${category}`, title: `${category === 'shirts' ? 'Shirts' : 'Pants'} | Bazaar` };
+    }
+    return resolved;
+  }, [pathname, search]);
 
   useEffect(() => {
     applyHead(meta);

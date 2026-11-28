@@ -286,7 +286,7 @@ router.post(
 router.patch(
   '/products/:id',
   validateParams(idParams),
-  validateBody(productPatchSchema),
+  validateBody(productPatchSchema, { suppliedOnly: true }),
   asyncHandler(async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) throw ApiError.notFound('Product not found');
 
@@ -425,13 +425,16 @@ router.post(
 router.patch(
   '/coupons/:id',
   validateParams(idParams),
-  validateBody(couponPatchSchema),
+  validateBody(couponPatchSchema, { suppliedOnly: true }),
   asyncHandler(async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) throw ApiError.notFound('Coupon not found');
     const coupon = await Coupon.findById(req.params.id);
     if (!coupon) throw ApiError.notFound('Coupon not found');
 
     Object.assign(coupon, req.body);
+    if (coupon.type === 'percent' && (coupon.value <= 0 || coupon.value > 100)) {
+      throw ApiError.badRequest('Percent coupons must have a value between 1 and 100');
+    }
     try {
       await coupon.save();
     } catch (err) {

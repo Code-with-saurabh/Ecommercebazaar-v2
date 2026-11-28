@@ -4,6 +4,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 
 const { env } = require('./config/env');
+const ApiResponse = require('./utils/ApiResponse');
 const { createCors } = require('./config/cors');
 const requestId = require('./middleware/requestId');
 const { notFound, errorHandler } = require('./middleware/error');
@@ -68,6 +69,10 @@ app.use(`${env.apiPrefix}/health`, healthRouter);
 
 // --- API --------------------------------------------------------------------
 app.use(env.apiPrefix, apiCache, apiLimiter);
+app.get(`${env.apiPrefix}/shipping-policy`, (_req, res) => {
+  const { freeShippingOver, shippingFlat, currency } = env.pricing;
+  return ApiResponse.ok(res, 'OK', { freeShippingOver, shippingFlat, currency });
+});
 app.use(`${env.apiPrefix}/users`, authLimiter, usersRouter);
 // session endpoints (me/refresh/logout) get their own auth rate-limit bucket
 app.use(`${env.apiPrefix}/auth`, authLimiter, authRouter);

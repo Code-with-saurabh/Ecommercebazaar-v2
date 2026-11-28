@@ -16,6 +16,7 @@ start with what the project is, then features, then the future roadmap.
 
 ## Quick links
 
+- **Continue the commercial redesign** → [`reviews/handoff.md`](reviews/handoff.md) · [audit](roadmap/storefront-review.md) · [photo library](../photos/README.md)
 - **What is this project?** → [`overview/about.md`](overview/about.md)
 - **How do I run it?** → [`setup/installation.md`](setup/installation.md)
 - **What works today?** → [`features/README.md`](features/README.md)
@@ -28,9 +29,7 @@ start with what the project is, then features, then the future roadmap.
 - **Type:** Full-stack e-commerce storefront (React + Express + MongoDB)
 - **Frontend:** React 18 + Vite 8, React Router v5, Redux Toolkit — `frontend/`
 - **Backend:** Express + Mongoose, MongoDB — `backend/`
-- **Status:** Phase 1 done — browsing, cart, search, signup/login all work.
-  Checkout/payment, product database and orders are **not** built yet
-  (see [`roadmap/`](roadmap/)).
+- **Shopping:** Mongo-backed catalog and bag, authenticated cash-on-delivery checkout, receipts, tracking, account, reviews and admin operations. See the current [verification and launch gaps](reviews/handoff.md).
 
 ## Branches
 

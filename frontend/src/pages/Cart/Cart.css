@@ -517,7 +517,7 @@
 .bz-cart__empty-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   margin-top: 1.75rem;
 }

@@ -7,6 +7,7 @@ import { useToast } from '../../components/Toast/Toast.jsx';
 import FormField from '../../components/FormField/FormField';
 import Spinner from '../../components/Spinner/Spinner';
 import { ORDER_STATUS } from '../../utils/orderStatus';
+import { ADDRESS_FIELDS, validateAddress } from '../../utils/address';
 import './Account.css';
 
 /**
@@ -24,16 +25,6 @@ const TABS = [
   { id: 'addresses', label: 'Addresses' },
 ];
 
-const ADDRESS_FIELDS = {
-  fullName: '',
-  phone: '',
-  line1: '',
-  line2: '',
-  city: '',
-  state: '',
-  pincode: '',
-};
-
 function formatDate(value) {
   if (!value) return '-';
   const date = new Date(value);
@@ -42,17 +33,6 @@ function formatDate(value) {
     month: 'short',
     day: 'numeric',
   });
-}
-
-function validateAddress(values) {
-  const errors = {};
-  if (values.fullName.trim().length < 2) errors.fullName = 'Full name must be at least 2 characters';
-  if (!/^\+?\d{7,15}$/.test(values.phone.trim())) errors.phone = 'Enter 7–15 digits, optionally starting with +';
-  if (!values.line1.trim()) errors.line1 = 'Address line 1 is required';
-  if (!values.city.trim()) errors.city = 'City is required';
-  if (!values.state.trim()) errors.state = 'State is required';
-  if (!/^\d{4,10}$/.test(values.pincode.trim())) errors.pincode = 'Pincode must be 4-10 digits';
-  return errors;
 }
 
 /* ------------------------------------------------------------------ profile */

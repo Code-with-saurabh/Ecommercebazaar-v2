@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import Card from '../../components/ProductCard/ProductCard.jsx';
 import { ProductGridSkeleton } from '../../components/Skeleton/Skeleton';
 import { useProducts } from '../../hooks/useProducts';
+import { CATEGORIES } from '../../utils/catalog';
+import { get } from '../../api';
 import './Products.css';
 
 // Route prop -> API category value (the literal routes /products/tshirt and
@@ -19,13 +21,6 @@ const CATEGORY_ALIASES = {
   shoes: 'shoes',
   shoe: 'shoes',
 };
-
-const CATEGORIES = [
-  { key: 'tshirts', label: 'T-Shirts' },
-  { key: 'shirts', label: 'Shirts' },
-  { key: 'pants', label: 'Pants' },
-  { key: 'shoes', label: 'Footwear' },
-];
 
 const SORTS = [
   ['newest', 'Newest'],
@@ -46,29 +41,14 @@ const categoryLabel = key => (CATEGORIES.find(c => c.key === key) || {}).label;
  * no extra endpoint). Null until both pages arrive.
  */
 function useCatalogFacets() {
-  const page1 = useProducts({ limit: 50, page: 1, sort: 'name' });
-  const page2 = useProducts({ limit: 50, page: 2, sort: 'name' });
-
-  return useMemo(() => {
-    if (!page1.items || !page2.items) return null;
-    const brands = new Map();
-    const categories = new Map();
-    let min = Infinity;
-    let max = 0;
-    for (const product of [...page1.items, ...page2.items]) {
-      brands.set(product.brand, (brands.get(product.brand) || 0) + 1);
-      categories.set(product.category, (categories.get(product.category) || 0) + 1);
-      const price = Number(product.price) || 0;
-      if (price < min) min = price;
-      if (price > max) max = price;
-    }
-    return {
-      brands: [...brands].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])),
-      categories,
-      minPrice: Number.isFinite(min) ? min : 0,
-      maxPrice: max,
-    };
-  }, [page1.items, page2.items]);
+  const [facets, setFacets] = useState(null);
+  useEffect(() => {
+    let active = true;
+    get('/products/facets').then(data => { if (active) setFacets(data); })
+      .catch(() => { if (active) setFacets(false); });
+    return () => { active = false; };
+  }, []);
+  return facets;
 }
 
 /** Facet checkbox row: control + label + optional count. */
@@ -97,7 +77,6 @@ function Products({ category }) {
   const location = useLocation();
   const history = useHistory();
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [priceDraft, setPriceDraft] = useState({ min: '', max: '' });
 
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const routeKey = category ? CATEGORY_ALIASES[category.toLowerCase()] : undefined;
@@ -155,16 +134,14 @@ function Products({ category }) {
   const applyPrice = event => {
     event.preventDefault();
     pushQuery([
-      ['minPrice', priceDraft.min],
-      ['maxPrice', priceDraft.max],
+      ['minPrice', event.currentTarget.elements.min.value],
+      ['maxPrice', event.currentTarget.elements.max.value],
     ]);
   };
   const clearPrice = () => {
-    setPriceDraft({ min: '', max: '' });
     pushQuery([['minPrice', null], ['maxPrice', null]]);
   };
   const resetAll = () => {
-    setPriceDraft({ min: '', max: '' });
     history.push('/products');
   };
 
@@ -196,8 +173,8 @@ function Products({ category }) {
             <h1 className="bz-title bz-catalog__title">{title}</h1>
             <p className="bz-catalog__sub">
               {facets
-                ? `${facets.brands.length} makers, ${facets.minPrice}–${facets.maxPrice} USD, every price verified at checkout.`
-                : 'Every price verified at checkout.'}
+                 ? `Explore ${facets.brands.length} brands across the collection.`
+                 : 'Find your next piece by brand, price or availability.'}
             </p>
           </div>
           <button
@@ -237,25 +214,25 @@ function Products({ category }) {
         {/* faceted sidebar */}
         <aside className={`bz-filters${filtersOpen ? ' is-open' : ''}`}>
           <div className="bz-filters__head">
-            <h2 className="bz-filters__title">Curatorial Filter</h2>
+            <h2 className="bz-filters__title">Filters</h2>
             <span className="bz-caps bz-filters__rules">{pills.length} active</span>
           </div>
 
           <fieldset className="bz-facet">
-            <legend className="bz-caps bz-facet__legend">Garment Category</legend>
+            <legend className="bz-caps bz-facet__legend">Category</legend>
             {CATEGORIES.map(cat => (
               <Check
                 key={cat.key}
                 checked={activeCategory === cat.key}
                 onChange={() => pickCategory(cat.key)}
                 label={cat.label}
-                count={facets ? facets.categories.get(cat.key) : undefined}
+                count={facets ? facets.categories[cat.key] || 0 : undefined}
               />
             ))}
           </fieldset>
 
           <fieldset className="bz-facet">
-            <legend className="bz-caps bz-facet__legend">House &amp; Maker</legend>
+            <legend className="bz-caps bz-facet__legend">Brand</legend>
             <div className="bz-facet__scroll">
               {facets ? (
                 facets.brands.map(([name, count]) => (
@@ -268,20 +245,19 @@ function Products({ category }) {
                   />
                 ))
               ) : (
-                <p className="bz-facet__hint">Loading makers…</p>
+                <p className="bz-facet__hint">{facets === false ? 'Brand filters are unavailable.' : 'Loading brands…'}</p>
               )}
             </div>
           </fieldset>
 
           <fieldset className="bz-facet">
             <legend className="bz-caps bz-facet__legend">Price Range</legend>
-            <form className="bz-price" onSubmit={applyPrice}>
+            <form className="bz-price" key={`${minPrice}:${maxPrice}`} onSubmit={applyPrice}>
               <input
                 type="number"
                 min="0"
                 placeholder={facets ? `${facets.minPrice}` : 'Min'}
-                value={priceDraft.min}
-                onChange={event => setPriceDraft(d => ({ ...d, min: event.target.value }))}
+                name="min" defaultValue={minPrice} step="0.01"
                 aria-label="Minimum price"
               />
               <span aria-hidden="true">–</span>
@@ -289,8 +265,7 @@ function Products({ category }) {
                 type="number"
                 min="0"
                 placeholder={facets ? `${facets.maxPrice}` : 'Max'}
-                value={priceDraft.max}
-                onChange={event => setPriceDraft(d => ({ ...d, max: event.target.value }))}
+                name="max" defaultValue={maxPrice} step="0.01"
                 aria-label="Maximum price"
               />
               <button type="submit" className="bz-btn bz-btn--quiet bz-price__apply">

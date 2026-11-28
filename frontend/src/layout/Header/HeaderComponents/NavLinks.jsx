@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { isAdmin, subscribeAuth } from '../../../utils/session';
+import { CATEGORIES } from '../../../utils/catalog';
 import './NavLinks.css';
 
 /**
@@ -9,14 +10,18 @@ import './NavLinks.css';
  * shareable filter — not a dead anchor.
  */
 const LINKS = [
-  { to: '/products', label: 'Shop' },
-  { to: '/products', label: 'All Products', end: true },
-  { to: '/products/tshirt', label: 'T-Shirts' },
-  { to: '/products?category=shirts', label: 'Shirts' },
-  { to: '/products?category=pants', label: 'Pants' },
-  { to: '/products/shoes', label: 'Footwear' },
-  { to: '/products?sale=true', label: 'Archive Sale', sale: true },
+  { to: '/products', label: 'Shop all' },
+  ...CATEGORIES,
+  { to: '/products?sale=true', label: 'Sale', sale: true },
 ];
+
+function current(link, { pathname, search }) {
+  if (!['/products', '/products/shoes', '/products/tshirt'].includes(pathname)) return false;
+  const query = new URLSearchParams(search);
+  if (query.get('sale') === 'true') return Boolean(link.sale);
+  const category = query.get('category') || ({ '/products/shoes': 'shoes', '/products/tshirt': 'tshirts' })[pathname];
+  return category ? link.key === category : link.to === '/products';
+}
 
 const NavLinks = () => {
   const [admin, setAdmin] = useState(isAdmin);
@@ -30,7 +35,7 @@ const NavLinks = () => {
           <li key={link.label}>
             <NavLink
               to={link.to}
-              end={link.end}
+              isActive={(_match, location) => current(link, location)}
               className="bz-navlinks__link"
               activeClassName="is-active"
             >

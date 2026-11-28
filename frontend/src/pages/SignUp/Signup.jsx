@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import { post } from '../../api';
+import { flushCart } from '../../store/cartSync';
 import { setSession } from '../../utils/session';
 import { validateRegister, trimmedCredentials } from '../../utils/validation';
 import { useToast } from '../../components/Toast/Toast.jsx';
@@ -52,6 +53,7 @@ function Signup() {
     setFieldErrors({});
     setSubmitting(true);
     try {
+      await flushCart();
       const created = await post('/users/register', values);
       setFormData({ username: '', email: '', phone: '', password: '' });
 

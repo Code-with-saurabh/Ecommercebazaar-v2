@@ -5,6 +5,11 @@
    variables; nothing here is page-specific.
    ========================================================================== */
 
+@font-face { font-family: Manrope; src: url('/fonts/manrope.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: 'Playfair Display'; src: url('/fonts/playfair.woff2') format('woff2'); font-weight: 400 600; font-display: swap; }
+@font-face { font-family: 'Playfair Display'; src: url('/fonts/playfair-italic.woff2') format('woff2'); font-weight: 400 600; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Material Symbols Outlined'; src: url('/fonts/symbols.woff2') format('woff2'); font-weight: 400; font-display: block; }
+
 :root {
   /* surfaces */
   --bz-bg: #faf9f6;
@@ -17,12 +22,12 @@
   /* ink */
   --bz-ink: #1e1e1e;
   --bz-ink-2: #4a4a48;
-  --bz-ink-3: #767571;
+  --bz-ink-3: #66665f;
 
   /* accents (brand) */
-  --bz-teal: #088178;
-  --bz-teal-deep: #00665f;
-  --bz-teal-hover: #066760;
+  --bz-teal: #285f51;
+  --bz-teal-deep: #204b40;
+  --bz-teal-hover: #193e35;
   --bz-crimson: #ef233c;
   --bz-crimson-deep: #b80025;
   --bz-grad-from: #ff6b6b;
@@ -132,10 +137,17 @@ img {
 .bz-wordmark {
   font-family: var(--bz-serif);
   font-weight: 500;
-  background: linear-gradient(90deg, var(--bz-grad-from), var(--bz-grad-to));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  letter-spacing: -.055em;
+  color: var(--bz-ink);
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--bz-teal-deep);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
 
 /* editorial section heading (serif) */

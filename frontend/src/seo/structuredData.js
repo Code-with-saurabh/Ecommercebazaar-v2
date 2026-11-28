@@ -51,21 +51,21 @@ export function breadcrumbJsonLd(pathname, name) {
   };
 }
 
-function productJsonLd(product) {
-  const price = Number(product.Price);
+export function productJsonLd(product) {
+  const price = Number(product.price);
   const node = {
-    '@type': 'Product',
-    name: product.ProductName,
-    sku: String(product.id),
-    brand: product.BrandName ? { '@type': 'Brand', name: product.BrandName } : undefined,
-    image: absAsset(product.Imgs),
+    '@context': CONTEXT, '@type': 'Product',
+    name: product.name, sku: product.sku,
+    brand: { '@type': 'Brand', name: product.brand },
+    image: product.images.map(image => absAsset(image.url)),
   };
-  if (Number.isFinite(price) && price > 0) {
+  if (Number.isFinite(price) && price >= 0) {
     node.offers = {
       '@type': 'Offer',
       price,
-      priceCurrency: SITE.currency,
-      url: absUrl('/products'),
+      priceCurrency: product.currency || SITE.currency,
+      availability: `https://schema.org/${product.inStock ? 'InStock' : 'OutOfStock'}`,
+      url: absUrl(`/products/${product.slug}`),
     };
   }
   return node;

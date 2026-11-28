@@ -7,6 +7,7 @@ import './Search.css';
 /** Header search: debounced live suggestions, Enter submits to /search. */
 const Search = () => {
   const [input, setInput] = useState('');
+  const [open, setOpen] = useState(false);
   const history = useHistory();
 
   const debouncedQuery = useDebouncedValue(input.trim(), 250);
@@ -18,6 +19,7 @@ const Search = () => {
 
   const goToSearch = text => {
     const value = (text || '').trim();
+    setOpen(false);
     if (value) history.push(`/search?query=${encodeURIComponent(value)}`);
   };
 
@@ -27,6 +29,7 @@ const Search = () => {
   };
 
   const handleSuggestion = product => {
+    setOpen(false);
     if (product.slug) {
       setInput(product.name || '');
       history.push(`/products/${product.slug}`);
@@ -37,23 +40,26 @@ const Search = () => {
   };
 
   return (
-    <form className="bz-search" role="search" onSubmit={handleSubmit}>
+    <form className="bz-search" role="search" onSubmit={handleSubmit}
+      onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) setOpen(false); }}
+      onKeyDown={e => { if (e.key === 'Escape') { e.preventDefault(); e.currentTarget.querySelector('input').focus(); setOpen(false); } }}>
       <span className="material-symbols-outlined bz-search__icon" aria-hidden="true">
         search
       </span>
       <input
         type="search"
         value={input}
-        onChange={event => setInput(event.target.value)}
-        placeholder="Search editorial archive..."
+        onFocus={() => setOpen(true)}
+        onChange={event => { setInput(event.target.value); setOpen(true); }}
+        placeholder="Search the collection"
         aria-label="Search products"
         autoComplete="off"
       />
 
-      {suggestions.length > 0 && (
-        <ul className="bz-search__suggestions" role="listbox" aria-label="Search suggestions">
+      {open && input.trim().length >= 2 && debouncedQuery === input.trim() && suggestions.length > 0 && (
+        <ul className="bz-search__suggestions" aria-label="Search suggestions">
           {suggestions.map(product => (
-            <li key={product._id} role="option">
+            <li key={product._id}>
               <button
                 type="button"
                 // keep focus on the input so blur can't hide the list

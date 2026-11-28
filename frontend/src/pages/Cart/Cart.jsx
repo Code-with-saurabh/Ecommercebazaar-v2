@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { cartLineKey, removeitems, updateQty } from '../../store/slices/ForShirt.jsx';
 import { formatMoney } from '../../utils/money';
-import LazyVideo from '../../components/LazyVideo/LazyVideo';
-import backgroundVideo from '../../assets/video/background.mp4';
+import { useShippingPolicy, shippingDescription } from '../../hooks/useShippingPolicy';
 import './Cart.css';
 
 const MIN_QTY = 1;
@@ -12,10 +11,8 @@ const MAX_QTY = 99;
 // Same knobs the server prices with (backend/config/env.js: FREE_SHIPPING_OVER,
 // SHIPPING_FLAT) - the summary preview mirrors them, the API still has the
 // final word at checkout.
-const FREE_SHIPPING_OVER = 100;
-const SHIPPING_FLAT = 10;
-
 function Cart() {
+  const policy = useShippingPolicy();
   const products = useSelector(state => state.Shirt.products);
   const dispatch = useDispatch();
 
@@ -32,9 +29,9 @@ function Cart() {
     0
   );
 
-  const shipping = totalPrice > 0 && totalPrice < FREE_SHIPPING_OVER ? SHIPPING_FLAT : 0;
-  const shipFree = totalPrice >= FREE_SHIPPING_OVER;
-  const progress = Math.min(100, Math.round((totalPrice / FREE_SHIPPING_OVER) * 100));
+  const shipping = policy && (totalPrice > 0 && totalPrice < policy.freeShippingOver ? policy.shippingFlat : 0);
+  const shipFree = shipping === 0;
+  const progress = shipFree ? 100 : policy && Math.min(100, Math.round(totalPrice / policy.freeShippingOver * 100));
 
   function setQuantity({ id, size, color }, quantity) {
     if (Number.isNaN(quantity)) return; // input cleared -> ignore, keep old
@@ -55,20 +52,14 @@ function Cart() {
 
   if (products.length === 0) {
     return (
-      <div className="bz-cart__empty">
-        {/* 1.3MB background video instead of the 22.5MB BGVideo, and it only
-            loads when visible (LazyVideo) */}
-        <LazyVideo src={backgroundVideo} className="bz-cart__video" />
-        <div className="bz-cart__empty-content">
+      <div className="bz-shell bz-page">
+        <div className="bz-lead">
           <p className="bz-caps">Shopping bag</p>
-          <h1>Your Cart is Empty</h1>
-          <p>Looks like you haven't added any items to your cart yet.</p>
+          <h1>Your bag is empty</h1>
+          <p>Explore the collection and choose a piece to start your order.</p>
           <div className="bz-cart__empty-actions">
             <Link to="/products" className="bz-btn bz-btn--primary">
               Browse the catalog
-            </Link>
-            <Link to="/" className="bz-btn bz-btn--outline">
-              Back to home
             </Link>
           </div>
         </div>
@@ -84,8 +75,7 @@ function Cart() {
           <div>
             <h1 className="bz-cart__title">Your Shopping Bag</h1>
             <p className="bz-cart__sub">
-              {totalItems} item{totalItems === 1 ? '' : 's'} selected · totals are re-priced
-              server-side before you pay
+               {totalItems} item{totalItems === 1 ? '' : 's'} in your bag
             </p>
           </div>
           <Link to="/products" className="bz-link">
@@ -98,7 +88,7 @@ function Cart() {
       </header>
 
       <div className="bz-shell">
-        <div className="bz-cart__ship">
+        {policy && <div className="bz-cart__ship">
           <span className="material-symbols-outlined bz-cart__ship-icon" aria-hidden="true">
             local_shipping
           </span>
@@ -106,9 +96,9 @@ function Cart() {
             <strong>
               {shipFree
                 ? 'Free shipping unlocked'
-                : `${formatMoney(FREE_SHIPPING_OVER - totalPrice)} away from free shipping`}
+                 : `${formatMoney(policy.freeShippingOver - totalPrice)} away from free shipping`}
             </strong>
-            <p>Free shipping on orders over $100 · $10 flat rate below that.</p>
+             <p>{shippingDescription(policy)}</p>
             <div
               className="bz-cart__bar"
               role="progressbar"
@@ -121,7 +111,7 @@ function Cart() {
             </div>
           </div>
           <span className="bz-cart__ship-pct">{progress}%</span>
-        </div>
+        </div>}
 
         <div className="bz-cart__layout">
           <section className="bz-cart__list" aria-label="Cart items">
@@ -189,9 +179,6 @@ function Cart() {
                       <div className="bz-line__actions">
                         {/* Styled link instead of <Link><button></button></Link>
                             (nested interactive elements are invalid HTML) */}
-                        <Link to="/checkout" className="bz-line__checkout">
-                          Go to checkout
-                        </Link>
                         <button
                           type="button"
                           onClick={() => remove(product)}
@@ -225,14 +212,14 @@ function Cart() {
               <div>
                 <dt>Shipping (est.)</dt>
                 <dd className={shipping === 0 ? 'is-free' : ''}>
-                  {shipping === 0 ? 'Free' : formatMoney(shipping)}
+                  {!policy ? 'At checkout' : shipFree ? 'Free' : formatMoney(shipping)}
                 </dd>
               </div>
             </dl>
 
             <div className="bz-cart__est">
               <div>
-                <strong>Estimated total</strong>
+                <strong>{policy ? 'Estimated total' : 'Merchandise subtotal'}</strong>
                 <span className="bz-caps">Tax & coupons at checkout</span>
               </div>
               <span className="bz-cart__est-value">{formatMoney(totalPrice + shipping)}</span>
@@ -254,7 +241,7 @@ function Cart() {
                 <span className="material-symbols-outlined" aria-hidden="true">
                   local_shipping
                 </span>
-                Free shipping over $100 · $10 flat below
+                {shippingDescription(policy)}
               </li>
               <li>
                 <span className="material-symbols-outlined" aria-hidden="true">
@@ -266,7 +253,7 @@ function Cart() {
                 <span className="material-symbols-outlined" aria-hidden="true">
                   verified
                 </span>
-                Coupons validated server-side
+                Apply a coupon at checkout
               </li>
             </ul>
 

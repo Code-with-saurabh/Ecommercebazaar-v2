@@ -3,17 +3,13 @@
 .bz-card {
   display: flex;
   flex-direction: column;
-  background: var(--bz-surface-lowest, #fff);
-  border: 1px solid var(--bz-hairline);
+  background: transparent;
+  min-width: 0;
   border-radius: var(--bz-r);
   overflow: hidden;
   transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.bz-card:hover {
-  box-shadow: var(--bz-shadow-float);
-  border-color: var(--bz-ink-3);
-}
 
 /* media + overlays */
 .bz-card__media {
@@ -38,8 +34,8 @@
   top: 10px;
   left: 10px;
   padding: 3px 8px;
-  background: var(--bz-teal);
-  color: #fff;
+  background: var(--bz-bg);
+  color: var(--bz-teal-deep);
   border-radius: var(--bz-r);
 }
 
@@ -75,7 +71,7 @@
 
 /* body */
 .bz-card__body {
-  padding: 16px;
+  padding: 12px 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -112,6 +108,10 @@
 }
 
 .bz-card__title a {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   color: var(--bz-ink);
   text-decoration: none;
 }
@@ -149,11 +149,13 @@
 
 /* quick add */
 .bz-card__actions {
-  padding: 0 16px 16px;
+  padding: 0;
   margin-top: auto;
 }
 
 .bz-card__add {
+  text-decoration: none;
+  min-height: 42px;
   width: 100%;
   padding: 10px 0;
   display: flex;

@@ -38,7 +38,7 @@ async function populatedWishlist(userId) {
   const user = await User.findById(userId).populate({
     path: 'wishlist',
     match: { isActive: true },
-    select: 'name slug brand price mrp category images thumbnail stock rating tags sku',
+    select: 'name slug brand price mrp category images sizes colors stock rating tags sku',
   });
   // keep save-order (newest first) while dropping filtered-out nulls
   return (user.wishlist || []).filter(Boolean);

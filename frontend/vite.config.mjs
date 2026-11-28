@@ -1,10 +1,31 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
+import { URL } from 'node:url';
 import react from '@vitejs/plugin-react';
+
+let sitemapOrigin;
 
 // Project ke saare component files .jsx hain (JSX .js me nahi),
 // isliye Vite ke default parser se hi sab chal jata hai.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), {
+    name: 'bazaar-public-sitemap', apply: 'build',
+    configResolved(config) {
+      const site = loadEnv(config.mode, config.envDir, 'VITE_SITE_URL').VITE_SITE_URL;
+      if (site) {
+        const url = new URL(site);
+        if (!['http:', 'https:'].includes(url.protocol) || url.hostname.endsWith('.example')) throw new Error('VITE_SITE_URL must be the storefront origin');
+        sitemapOrigin = url.origin;
+      }
+    },
+    generateBundle() {
+      // Without a deployment domain there is no valid absolute sitemap URL.
+      const origin = sitemapOrigin;
+      if (!origin) return;
+      const pages = ['/', '/products', '/products/tshirt', '/products/shoes', '/products?category=shirts', '/products?category=pants', '/about', '/help', '/contact'];
+      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(path => `<url><loc>${origin}${path}</loc></url>`).join('')}</urlset>` });
+      this.emitFile({ type: 'asset', fileName: 'robots.txt', source: `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n` });
+    },
+  }],
   server: {
     port: 3000,
     open: false,

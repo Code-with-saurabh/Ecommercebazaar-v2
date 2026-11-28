@@ -2,6 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import Shirt_P from './slices/ForShirt.jsx';
 import { loadState, saveState, KEYS } from './persist.js';
+import { getUser, getToken } from '../utils/session';
+
+const cartOwner = () => getToken() ? getUser()?.id || getUser()?._id || 'account' : 'guest';
 
 /**
  * Cart hydration: the items slice (`Shirt`) is restored from localStorage so a
@@ -11,7 +14,7 @@ import { loadState, saveState, KEYS } from './persist.js';
  */
 function loadCart() {
   const saved = loadState(KEYS.cart);
-  if (saved && Array.isArray(saved.products)) {
+  if (saved && (!saved.owner || saved.owner === cartOwner()) && Array.isArray(saved.products)) {
     const products = saved.products
       .filter(item => item && item.id)
       .map(item => ({
@@ -47,6 +50,6 @@ Store.subscribe(() => {
   const next = Store.getState().Shirt;
   if (next !== lastShirt) {
     lastShirt = next;
-    saveState(KEYS.cart, next);
+    saveState(KEYS.cart, { ...next, owner: cartOwner() });
   }
 });

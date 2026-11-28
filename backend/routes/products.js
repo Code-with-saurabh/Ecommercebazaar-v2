@@ -119,6 +119,24 @@ router.get(
 );
 
 // GET /api/products/:id - accepts the mongo id OR the shareable slug
+router.get('/facets', asyncHandler(async (_req, res) => {
+  const counts = field => [
+    { $group: { _id: `$${field}`, count: { $sum: 1 } } },
+    { $sort: { count: -1, _id: 1 } },
+  ];
+  const [row] = await Product.aggregate([
+    { $match: { isActive: true } },
+    { $facet: { brands: counts('brand'), categories: counts('category'), prices: [
+      { $group: { _id: null, min: { $min: '$price' }, max: { $max: '$price' } } },
+    ] } },
+  ]);
+  return ApiResponse.ok(res, 'OK', {
+    brands: row.brands.map(({ _id, count }) => [_id, count]),
+    categories: Object.fromEntries(row.categories.map(({ _id, count }) => [_id, count])),
+    minPrice: row.prices[0]?.min ?? 0, maxPrice: row.prices[0]?.max ?? 0,
+  });
+}));
+
 router.get(
   '/:id',
   asyncHandler(async (req, res) => {

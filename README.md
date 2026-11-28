@@ -9,6 +9,8 @@ Full-stack e-commerce app (**Bazaar**) — recovered, reorganized and running.
 
 ## Docs
 
+**Continue the storefront review:** [completed work, verification and next tasks](docs/reviews/handoff.md) · [initial audit and roadmap](docs/roadmap/storefront-review.md) · [local photos and source manifest](photos/README.md).
+
 Detailed documentation lives in [`docs/`](docs/README.md): overview & architecture,
 setup/troubleshooting, feature guides, API reference, future roadmap and
 contributing/code-style rules.

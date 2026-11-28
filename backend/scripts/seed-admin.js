@@ -30,6 +30,10 @@ async function main() {
   const password = process.env.ADMIN_PASSWORD || DEV_DEFAULTS.password;
   const usingDevPassword = !process.env.ADMIN_PASSWORD;
 
+  if (process.env.NODE_ENV === 'production' && (usingDevPassword || password === DEV_DEFAULTS.password)) {
+    throw new Error('Set a unique ADMIN_PASSWORD before seeding a production admin');
+  }
+
   await connectDB();
 
   const existing = await User.findOne({ $or: [{ username }, { email }] });

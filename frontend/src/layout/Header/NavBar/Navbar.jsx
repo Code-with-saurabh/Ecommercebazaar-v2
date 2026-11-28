@@ -17,11 +17,7 @@ const Navbar = () => (
     <div className="bz-announce">
       <div className="bz-shell bz-announce__inner">
         <p className="bz-caps">
-          <strong>Complimentary</strong> Delivery Over $100
-          <span className="bz-announce__sep">|</span>
-          Cash on Delivery Available
-          <span className="bz-announce__sep">|</span>
-          Server-Verified Pricing
+           Apparel &amp; footwear from Surat <span className="bz-announce__sep">/</span> Cash on delivery
         </p>
       </div>
     </div>

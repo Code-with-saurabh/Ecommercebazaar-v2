@@ -10,16 +10,16 @@ import { post } from '../../api';
 import { useToast } from '../../components/Toast/Toast.jsx';
 
 /** One API-backed row; loading/error stay local so the other row is untouched. */
-function CardRow({ eyebrow, heading, params, align = 'left' }) {
+function NewArrivals() {
+  const params = { limit: 4, sort: 'newest' };
   const { items, loading, error, refetch } = useProducts(params);
 
   return (
-    <section className={`bz-section bz-section--${align}`}>
+    <section className="bz-section">
       <div className="bz-shell">
         <header className="bz-section__head">
           <div>
-            <p className="bz-caps bz-section__eyebrow">{eyebrow}</p>
-            <h2 className="bz-title bz-section__title">{heading}</h2>
+            <h2 className="bz-title bz-section__title">New arrivals</h2>
           </div>
           <Link to="/products" className="bz-link">
             View all
@@ -39,71 +39,16 @@ function CardRow({ eyebrow, heading, params, align = 'left' }) {
             </button>
           </div>
         ) : (
-          <div className="bz-grid">
+          items?.length ? <div className="bz-grid">
             {(items || []).map(product => (
               <Card key={product._id} product={product} />
             ))}
-          </div>
+          </div> : <p>No new arrivals are listed right now.</p>
         )}
       </div>
     </section>
   );
 }
-
-/** Representative image per category comes from a limit:1 rating query. */
-const CATEGORIES = [
-  { key: 'shoes', label: 'Footwear', to: '/products/shoes', className: 'bz-cat--tall' },
-  { key: 'tshirts', label: 'T-Shirts', to: '/products/tshirt', className: 'bz-cat--mid' },
-  { key: 'shirts', label: 'Shirts', to: '/products?category=shirts', className: '' },
-  { key: 'pants', label: 'Pants', to: '/products?category=pants', className: 'bz-cat--wide' },
-];
-
-function CategoryTile({ category }) {
-  const { items, loading } = useProducts({ category: category.key, limit: 1, sort: 'rating' });
-  const thumb = items && items[0] ? items[0].thumbnail : null;
-
-  return (
-    <Link to={category.to} className={`bz-cat ${category.className}`}>
-      {thumb && !loading && (
-        <img className="bz-cat__img" src={thumb} alt="" aria-hidden="true" loading="lazy" />
-      )}
-      <span className="bz-cat__scrim" aria-hidden="true" />
-      <span className="bz-cat__label">
-        <span className="bz-title">{category.label}</span>
-        <span className="bz-caps bz-cat__cta">
-          Shop
-          <span className="material-symbols-outlined" aria-hidden="true">
-            arrow_forward
-          </span>
-        </span>
-      </span>
-    </Link>
-  );
-}
-
-/** Teal promo band - the real coupon claim, with the discount as display type. */
-const PromoBand = () => (
-  <section className="bz-promo">
-    <div className="bz-shell bz-promo__inner">
-      <div className="bz-promo__copy">
-        <p className="bz-caps">Archive Sale</p>
-        <h2 className="bz-title">
-          Coupons worth up to <em>70% off</em>, checked before you pay.
-        </h2>
-        <p className="bz-promo__sub">
-          Every coupon code is validated server-side at checkout - the discount you see
-          is the discount you get.
-        </p>
-        <Link to="/products?sale=true" className="bz-btn bz-btn--ink">
-          Shop the Archive Sale
-        </Link>
-      </div>
-      <p className="bz-promo__numeral" aria-hidden="true">
-        70<span>%</span>
-      </p>
-    </div>
-  </section>
-);
 
 /** Newsletter - POST /api/newsletter, idempotent, calm success state. */
 function Newsletter() {
@@ -131,8 +76,7 @@ function Newsletter() {
     <section className="bz-news">
       <div className="bz-shell bz-news__inner">
         <div>
-          <p className="bz-caps bz-news__eyebrow">Stay in the loop</p>
-          <h2 className="bz-title bz-news__title">Notes from the archive</h2>
+          <h2 className="bz-title bz-news__title">Notes from Bazaar</h2>
           <p className="bz-news__sub">New arrivals and restocks, occasionally.</p>
         </div>
         {done ? (
@@ -140,7 +84,7 @@ function Newsletter() {
             <span className="material-symbols-outlined" aria-hidden="true">
               check_circle
             </span>
-            You&rsquo;re subscribed - watch your inbox.
+             You&rsquo;re subscribed.
           </p>
         ) : (
           <form className="bz-news__form" onSubmit={handleSubmit}>
@@ -166,34 +110,7 @@ function Home() {
   return (
     <>
       <Hero />
-      <section className="bz-section bz-section--cats">
-        <div className="bz-shell">
-          <header className="bz-section__head">
-            <div>
-              <p className="bz-caps bz-section__eyebrow">Browse the edit</p>
-              <h2 className="bz-title bz-section__title">Shop by category</h2>
-            </div>
-          </header>
-          <div className="bz-cats">
-            {CATEGORIES.map(category => (
-              <CategoryTile key={category.key} category={category} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <CardRow
-        eyebrow="Newest first"
-        heading="Recommended"
-        params={{ limit: 4, sort: 'newest' }}
-      />
-      <PromoBand />
-      <CardRow
-        eyebrow="Featured"
-        heading="Features"
-        params={{ featured: 'true', limit: 5 }}
-        align="right"
-      />
+      <NewArrivals />
       <Newsletter />
     </>
   );

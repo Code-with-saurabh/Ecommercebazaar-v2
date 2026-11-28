@@ -5,6 +5,7 @@ import { get, del } from '../../api';
 import { isLoggedIn } from '../../utils/session';
 import { additems } from '../../store/slices/ForShirt.jsx';
 import { formatMoney } from '../../utils/money';
+import { hasOptions } from '../../utils/catalog';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import { ProductGridSkeleton } from '../../components/Skeleton/Skeleton';
 import LazyImage from '../../components/LazyImage/LazyImage.jsx';
@@ -160,14 +161,14 @@ function Wishlist() {
                 </p>
               </div>
               <div className="wl-actions">
-                <button
+                {!oos && hasOptions(product) ? <Link className="bz-btn bz-btn--quiet" to={`/products/${product.slug || product._id}`}>Choose options</Link> : <button
                   type="button"
                   className="bz-btn bz-btn--quiet"
                   onClick={() => moveToCart(product)}
                   disabled={oos}
                 >
                   {oos ? 'Out of stock' : 'Add to bag'}
-                </button>
+                </button>}
                 <button
                   type="button"
                   className="wl-remove"

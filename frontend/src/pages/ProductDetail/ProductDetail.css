@@ -693,6 +693,9 @@
   .bz-pdp__rail {
     position: static;
   }
+  .bz-pdp__stage { display: contents; }
+  .bz-pdp__dossier { order: 2; }
+  .bz-pdp__figure { max-height: 55vh; }
 }
 
 @media (max-width: 640px) {

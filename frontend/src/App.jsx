@@ -1,5 +1,5 @@
 // src/App.jsx
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Header from './layout/Header/main';
@@ -13,7 +13,7 @@ import {
   PageSkeleton,
 } from './components/Skeleton/Skeleton';
 import { Seo } from './seo';
-import useCartSync from './hooks/useCartSync';
+import { startCartSync } from './store/cartSync';
 import './assets/styles/App.css';
 
 // Route-level code splitting: each page is its own chunk, so the initial
@@ -61,18 +61,19 @@ function LazyRoute({ component: Component, componentProps, fallback, ...routePro
 
 function App() {
   // local cart <-> server cart (guest cookie / account), see hooks/useCartSync
-  useCartSync();
+  useEffect(startCartSync, []);
 
   return (
     <>
       <Seo />
       <ScrollToTop />
+      <a className="skip-content" href="#store-content">Skip to content</a>
       {/* `sticky` (not `Header` alone) is what header/main.css styles -
           position:sticky + white bar so the nav survives long grids */}
       <div className="Header sticky">
         <Header />
       </div>
-      <div className="mainPage">
+      <main className="mainPage" id="store-content" tabIndex={-1}>
         <Switch>
           <LazyRoute exact path="/" component={Home} fallback={<HomeSkeleton />} />
           <LazyRoute path="/about" component={About} />
@@ -119,7 +120,7 @@ function App() {
           {/* Unknown URLs used to render a blank page - now an explicit 404 */}
           <LazyRoute component={ErrorPage} />
         </Switch>
-      </div>
+      </main>
       <div className="FDIV">
         <Footer />
       </div>

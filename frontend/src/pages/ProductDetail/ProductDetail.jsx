@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { additems } from '../../store/slices/ForShirt.jsx';
@@ -6,6 +6,8 @@ import { useProduct, useProducts } from '../../hooks/useProducts';
 import { post } from '../../api';
 import { isLoggedIn } from '../../utils/session';
 import { formatMoney } from '../../utils/money';
+import { shippingDescription, useShippingPolicy } from '../../hooks/useShippingPolicy';
+import { productJsonLd } from '../../seo/structuredData';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import LazyImage from '../../components/LazyImage/LazyImage.jsx';
 import Card from '../../components/ProductCard/ProductCard.jsx';
@@ -54,6 +56,7 @@ function Detail({ id }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const toast = useToast();
+  const policy = useShippingPolicy();
 
   const [size, setSize] = useState('');
   const [color, setColor] = useState('');
@@ -61,8 +64,12 @@ function Detail({ id }) {
   const [activeImage, setActiveImage] = useState(0);
   const [saved, setSaved] = useState(false);
   const [reviewRating, setReviewRating] = useState(null);
+  useEffect(() => {
+    if (product) document.title = `${product.name} | Bazaar`;
+  }, [product]);
 
-  const selectedSize = size || product?.sizes?.[0] || '';
+  const selectedSize = size || (product?.sizes?.length === 1 ? product.sizes[0] : '');
+  const needsSize = Boolean(product?.sizes?.length && !selectedSize);
   const selectedColor = color || product?.colors?.[0] || '';
   const alreadyInCart = useSelector(state => product && state.Shirt.products.some(item =>
     item.id === product._id && (item.size || '') === selectedSize && (item.color || '') === selectedColor
@@ -120,7 +127,7 @@ function Detail({ id }) {
         <p>
           {notFound
             ? 'It may have been removed or the link is wrong.'
-            : 'The API did not respond. Check that the backend is running.'}
+             : 'This piece could not be loaded. Please try again.'}
         </p>
         <div className="bz-pdp__missing-actions">
           <button type="button" className="bz-btn bz-btn--primary" onClick={refetch}>
@@ -143,7 +150,7 @@ function Detail({ id }) {
   const category = categoryLabel(product.category);
 
   const handleAdd = () => {
-    if (!product.inStock) return;
+    if (!product.inStock || needsSize) return;
     // slice bumps qty when the line already exists
     dispatch(
       additems({
@@ -182,6 +189,7 @@ function Detail({ id }) {
 
   return (
     <div className="bz-pdp">
+      <script type="application/ld+json">{JSON.stringify(productJsonLd(product)).replace(/</g, '\\u003c')}</script>
       <div className="bz-pdp__bar">
         <div className="bz-shell bz-pdp__bar-inner">
           <nav className="bz-pdp__crumbs" aria-label="Breadcrumb">
@@ -196,8 +204,6 @@ function Detail({ id }) {
             <span className="bz-pdp__current">{product.name}</span>
           </nav>
           <div className="bz-pdp__assurance">
-            <span>Free shipping over $100</span>
-            <span aria-hidden="true">·</span>
             <span>Cash on delivery</span>
           </div>
         </div>
@@ -207,9 +213,6 @@ function Detail({ id }) {
         <section className="bz-pdp__stage">
           <figure className="bz-pdp__frame">
             <div className="bz-pdp__badges">
-              {product.discountPercent > 0 && (
-                <span className="bz-badge bz-badge--sale">Save {product.discountPercent}%</span>
-              )}
               {!product.inStock && <span className="bz-pdp__badge-oos">Out of stock</span>}
             </div>
             <LazyImage
@@ -251,8 +254,7 @@ function Detail({ id }) {
           <div className="bz-pdp__dossier">
             <div className="bz-pdp__dossier-head">
               <div>
-                <p className="bz-caps bz-pdp__eyebrow">Atelier dossier</p>
-                <h2 className="bz-pdp__dossier-title">{product.name}</h2>
+                <h2 className="bz-pdp__dossier-title">Product details</h2>
               </div>
               <span className="bz-pdp__dossier-sku bz-caps">SKU {product.sku}</span>
             </div>
@@ -298,7 +300,7 @@ function Detail({ id }) {
               <span className="material-symbols-outlined" aria-hidden="true">
                 lock
               </span>
-              Totals are re-priced and verified server-side at checkout.
+              Shipping and tax are shown at checkout.
             </p>
           </div>
 
@@ -318,7 +320,7 @@ function Detail({ id }) {
             <div className="bz-pdp__option">
               <div className="bz-pdp__option-head">
                 <span className="bz-pdp__option-label">Size</span>
-                <span className="bz-pdp__option-value">{selectedSize}</span>
+                <span className="bz-pdp__option-value">{selectedSize || 'Select a size'}</span>
               </div>
               <div className="bz-pdp__sizes" role="group" aria-label="Choose a size">
                 {product.sizes.map(option => (
@@ -397,14 +399,14 @@ function Detail({ id }) {
                 type="button"
                 className="bz-pdp__add"
                 onClick={handleAdd}
-                disabled={!product.inStock}
+                disabled={!product.inStock || needsSize}
               >
                 <span className="material-symbols-outlined" aria-hidden="true">
                   shopping_bag
                 </span>
                 {!product.inStock
                   ? 'Out of stock'
-                  : `Add to Bag — ${formatMoney(product.price * qty)}`}
+                   : needsSize ? 'Choose a size to add' : `Add to bag · ${formatMoney(product.price * qty)}`}
               </button>
             </div>
           </div>
@@ -435,8 +437,8 @@ function Detail({ id }) {
                 local_shipping
               </span>
               <div>
-                <strong>Free shipping</strong>
-                <span>Over $100 · $10 flat below</span>
+                <strong>Delivery</strong>
+                <span>{shippingDescription(policy)}</span>
               </div>
             </div>
             <div className="bz-pdp__trust-item">
@@ -446,24 +448,6 @@ function Detail({ id }) {
               <div>
                 <strong>Cash on delivery</strong>
                 <span>Pay when it arrives</span>
-              </div>
-            </div>
-            <div className="bz-pdp__trust-item">
-              <span className="material-symbols-outlined" aria-hidden="true">
-                price_check
-              </span>
-              <div>
-                <strong>Server-priced</strong>
-                <span>Recomputed at checkout</span>
-              </div>
-            </div>
-            <div className="bz-pdp__trust-item">
-              <span className="material-symbols-outlined" aria-hidden="true">
-                verified
-              </span>
-              <div>
-                <strong>Coupons verified</strong>
-                <span>Validated server-side</span>
               </div>
             </div>
           </div>

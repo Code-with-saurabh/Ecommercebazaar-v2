@@ -8,7 +8,7 @@ export const PAGE_META = {
   '/': {
     title: 'Bazaar | Online Shopping for Shirts, T-Shirts, Pants & Shoes',
     description:
-      'Shop shirts, t-shirts, pants and shoes online at Bazaar. Premium quality, honest prices, fast checkout and free returns.',
+      'Explore the everyday wardrobe at Bazaar: shirts, tees, pants and footwear from an independent store in Surat.',
     keywords: 'online shopping, shirts, t-shirts, pants, shoes, bazaar, ecommerce',
     ogType: 'website',
   },
@@ -21,19 +21,19 @@ export const PAGE_META = {
   '/products/tshirt': {
     title: 'Buy T-Shirts Online | Premium Tees – Bazaar',
     description:
-      'Shop premium t-shirts at Bazaar. Fresh designs, comfortable fabrics and sizes that fit. Free returns on every order.',
+      'Explore T-shirts at Bazaar. Compare brands, prices and available sizes.',
     keywords: 'buy tshirts, t-shirt online, premium tees',
   },
   '/products/shoes': {
     title: 'Shoes & Sneakers Online | Everyday Comfort – Bazaar',
     description:
-      'Discover Bazaar shoes and sneakers: everyday comfort, modern styles for men and women. Order online with free returns.',
+      'Discover shoes and sneakers at Bazaar. Browse available sizes, colors and prices.',
     keywords: 'shoes online, sneakers, buy shoes',
   },
   '/about': {
     title: 'About Bazaar | Our Story & Quality Promise',
     description:
-      'Learn who we are, what we stand for and why thousands of shoppers trust Bazaar for shirts, pants and shoes.',
+      'Meet Bazaar, an independent apparel and footwear store based in Surat.',
     keywords: 'about bazaar, online store, quality clothing',
   },
   '/help': {
@@ -45,7 +45,7 @@ export const PAGE_META = {
   '/contact': {
     title: 'Contact Bazaar | Get in Touch',
     description:
-      'Questions about an order or product? Contact the Bazaar team — we reply within one business day.',
+      'Questions about an order or product? Contact Bazaar by email or phone.',
     keywords: 'contact, support, help',
   },
   '/search': {
@@ -89,6 +89,9 @@ const DEFAULT_META = {
 export function resolvePageMeta(pathname) {
   const path = pathname.replace(/\/+$/, '') || '/';
   const found = PAGE_META[path];
+  if (!found && /^\/products\/[^/]+$/.test(path)) return { path, title: 'Product details | Bazaar', description: 'View product details, options and availability.', robots: 'index, follow' };
+  const privatePage = ({ '/admin': 'Store administration', '/account': 'My account', '/wishlist': 'Wishlist', '/checkout': 'Checkout' })[path] || (/^\/order\/[^/]+\/confirmed$/.test(path) && 'Order receipt');
+  if (privatePage) return { path, title: `${privatePage} | Bazaar`, description: privatePage, robots: 'noindex, nofollow' };
   if (found) {
     return { ...DEFAULT_META, ...found, robots: found.robots || 'index, follow', path };
   }

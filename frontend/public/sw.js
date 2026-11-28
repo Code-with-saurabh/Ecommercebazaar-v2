@@ -9,7 +9,7 @@
  *
  * Bump VERSION to invalidate every cache at once.
  */
-const VERSION = 'bazaar-v1';
+const VERSION = 'bazaar-v2';
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const PRECACHE = ['/', '/index.html', '/favicon3.ico', '/manifest.json'];
@@ -27,7 +27,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches
       .keys()
-      .then(keys => Promise.all(keys.filter(key => !key.startsWith(VERSION)).map(key => caches.delete(key))))
+      .then(keys => Promise.all(keys.filter(key => key.startsWith('bazaar-') && ![STATIC_CACHE, RUNTIME_CACHE].includes(key)).map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
@@ -79,6 +79,9 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return; // API + third parties: network only
+  // Production serves the API on the same origin. Private JSON must never
+  // enter Cache Storage (cache.put does not honor Cache-Control: no-store).
+  if (url.pathname === '/api' || url.pathname.startsWith('/api/') || request.headers.has('Authorization')) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(networkFirst(request));

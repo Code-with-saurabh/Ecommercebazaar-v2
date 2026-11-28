@@ -10,16 +10,19 @@ const useQuery = () => new URLSearchParams(useLocation().search);
 const SearchPage = () => {
   const query = useQuery();
   const searchQuery = (query.get('query') || '').trim();
+  const page = Math.max(1, parseInt(query.get('page'), 10) || 1);
+  const pageUrl = number => `/search?query=${encodeURIComponent(searchQuery)}&page=${number}`;
 
   // Server-side search now: the API escapes the regex and ranks by the text
   // index / filters, so the client no longer reimplements matching rules.
-  const { items, loading, error, refetch } = useProducts(
-    { q: searchQuery, limit: 50 },
+  const { items, meta, loading, error, refetch } = useProducts(
+    { q: searchQuery, limit: 20, page },
     { enabled: searchQuery.length > 0 }
   );
 
   const results = items || [];
-  let summary = `${results.length} product${results.length === 1 ? '' : 's'} shown`;
+  const total = meta?.total ?? results.length;
+  let summary = `${total} product${total === 1 ? '' : 's'} found`;
   if (!searchQuery) summary = 'Type something to search products.';
   else if (loading) summary = 'Searching…';
   else if (error) summary = 'Could not load search results.';
@@ -56,6 +59,11 @@ const SearchPage = () => {
           }
         />
       )}
+      {!loading && !error && meta?.totalPages > 1 && <nav className="search-pages" aria-label="Search result pages">
+        {page > 1 && <Link className="bz-link" to={pageUrl(page - 1)}>Previous</Link>}
+        <span>Page {page} of {meta.totalPages}</span>
+        {page < meta.totalPages && <Link className="bz-link" to={pageUrl(page + 1)}>Next</Link>}
+      </nav>}
     </div>
   );
 };

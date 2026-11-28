@@ -4,11 +4,13 @@ import { useDispatch } from 'react-redux';
 import { get, post } from '../../api';
 import { isLoggedIn } from '../../utils/session';
 import { clearCart } from '../../store/slices/ForShirt.jsx';
+import { flushCart } from '../../store/cartSync';
 import { formatMoney } from '../../utils/money';
 import { useToast } from '../../components/Toast/Toast.jsx';
 import FormField from '../../components/FormField/FormField';
 import LazyImage from '../../components/LazyImage/LazyImage.jsx';
 import Spinner from '../../components/Spinner/Spinner';
+import { ADDRESS_FIELDS, validateAddress } from '../../utils/address';
 import './Checkout.css';
 
 /**
@@ -24,33 +26,14 @@ import './Checkout.css';
 
 const EMPTY_PRICING = { subtotal: 0, discount: 0, shipping: 0, tax: 0, total: 0, currency: 'USD' };
 
-const ADDRESS_FIELDS = {
-  fullName: '',
-  phone: '',
-  line1: '',
-  line2: '',
-  city: '',
-  state: '',
-  pincode: '',
-};
-
-function validateAddress(values) {
-  const errors = {};
-  if (values.fullName.trim().length < 2) errors.fullName = 'Full name must be at least 2 characters';
-  if (!/^\+?\d{7,15}$/.test(values.phone.trim())) errors.phone = 'Enter 7–15 digits, optionally starting with +';
-  if (!values.line1.trim()) errors.line1 = 'Address line 1 is required';
-  if (!values.city.trim()) errors.city = 'City is required';
-  if (!values.state.trim()) errors.state = 'State is required';
-  if (!/^\d{4,10}$/.test(values.pincode.trim())) errors.pincode = 'Pincode must be 4-10 digits';
-  return errors;
-}
-
 function Checkout() {
   const history = useHistory();
   const toast = useToast();
   const dispatch = useDispatch();
 
   const [ready, setReady] = useState(false);
+  const [loadError, setLoadError] = useState('');
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [cartEmpty, setCartEmpty] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [addressId, setAddressId] = useState('');
@@ -89,6 +72,7 @@ function Checkout() {
     let cancelled = false;
     (async () => {
       try {
+        await flushCart();
         const cart = await get('/cart');
         const empty = !cart || !cart.items || cart.items.length === 0;
         if (cancelled) return;
@@ -101,7 +85,7 @@ function Checkout() {
         setReady(true);
       } catch {
         if (!cancelled) {
-          setPreviewError('Could not load your cart. Please try again.');
+          setLoadError('Your bag could not be synchronized. Try again before placing an order.');
           setReady(true);
         }
       }
@@ -109,7 +93,7 @@ function Checkout() {
     return () => {
       cancelled = true;
     };
-  }, [allowed, loadAddresses]);
+  }, [allowed, loadAddresses, loadAttempt]);
 
   const runPreview = useCallback(
     async ({ couponCode, targetAddressId } = {}) => {
@@ -144,9 +128,9 @@ function Checkout() {
   // re-price whenever the selected address changes (debounced by seq guard)
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- setState only after await; seq guard drops stale responses
-    if (ready && !cartEmpty) runPreview();
+    if (ready && !loadError && !cartEmpty) runPreview();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- seq guard replaces dep tracking
-  }, [ready, cartEmpty, addressId]);
+  }, [ready, loadError, cartEmpty, addressId]);
 
   const applyCoupon = async e => {
     e.preventDefault();
@@ -295,6 +279,10 @@ function Checkout() {
     );
   }
 
+  if (loadError) return <div className="bz-shell bz-page"><div className="bz-lead"><h1>Checkout</h1><p role="alert">{loadError}</p>
+    <button className="bz-btn bz-btn--outline" type="button" onClick={() => { setReady(false); setLoadError(''); setLoadAttempt(value => value + 1); }}>Try again</button>
+  </div></div>;
+
   if (cartEmpty) {
     return (
       <div className="checkout-page">
@@ -317,8 +305,7 @@ function Checkout() {
           <div>
             <h1>Checkout</h1>
             <p>
-              {preview.itemCount} item{preview.itemCount === 1 ? '' : 's'} · every total below is
-              priced by the server, live
+              Review your delivery address and the amount due on arrival.
             </p>
           </div>
           <span className="checkout-head__badge">
@@ -507,13 +494,6 @@ function Checkout() {
                 <span>Pay when your order arrives</span>
               </span>
             </label>
-            <label className="co-pay is-disabled" title="Online payments arrive in the next release">
-              <input type="radio" name="payment" disabled />
-              <span>
-                <strong>Card / UPI (Razorpay)</strong>
-                <span>Coming soon</span>
-              </span>
-            </label>
           </section>
 
           <section className="co-card" aria-labelledby="co-note">
@@ -591,7 +571,7 @@ function Checkout() {
             <span className="material-symbols-outlined" aria-hidden="true">
               lock
             </span>
-            Priced and verified by the server — coupons are re-checked before you pay.
+            Your total includes shipping, tax and any applied discount.
           </p>
 
           <button
@@ -609,8 +589,7 @@ function Checkout() {
           </button>
 
           <p className="co-fineprint">
-            By placing this order you agree to our terms. Items are reserved only when the order
-            is confirmed.
+            Items are reserved when your order is confirmed.
           </p>
           {selectedAddress && (
             <p className="co-ship-to">

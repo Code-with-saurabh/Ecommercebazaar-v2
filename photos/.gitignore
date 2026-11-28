@@ -1,0 +1,8 @@
+# The source manifest is versioned; the licensed image originals stay local.
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.avif
+*.tif
+*.tiff

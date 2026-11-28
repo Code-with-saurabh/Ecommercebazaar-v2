@@ -1,181 +1,34 @@
-/* Hero - editorial type block + full-bleed real-product filmstrip ---------- */
-
-.bz-hero {
-  padding-top: 4.5rem;
-  background: var(--bz-surface);
+.wardrobe {
+  display: grid; grid-template-columns: minmax(0, .83fr) minmax(0, 1fr);
+  align-items: center; gap: clamp(2rem, 6vw, 6rem);
+  padding-block: clamp(2rem, 4.5vw, 4.5rem);
 }
-
-.bz-hero__eyebrow {
-  color: var(--bz-ink-3);
-  letter-spacing: 0.2em;
-}
-
-.bz-hero__title {
-  font-family: var(--bz-serif);
-  font-weight: 400;
-  font-size: clamp(44px, 7vw, 84px);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  color: var(--bz-ink);
-  margin-top: 1.25rem;
-}
-
-.bz-hero__title em {
-  font-style: italic;
-  color: var(--bz-teal);
-}
-
-.bz-hero__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-top: 1.75rem;
-}
-
-.bz-hero__sub {
-  font-size: 17px;
-  line-height: 28px;
-  color: var(--bz-ink-2);
-  max-width: 34rem;
-}
-
-.bz-hero__ctas {
-  display: flex;
-  gap: 0.75rem;
-}
-
-/* full-bleed filmstrip: hairline-partitioned real catalog photography */
-.bz-film {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1px;
-  background: var(--bz-hairline);
-  border-top: 1px solid var(--bz-hairline);
-  border-bottom: 1px solid var(--bz-hairline);
-  margin-top: 3rem;
-}
-
-.bz-film__tile {
-  position: relative;
-  display: block;
-  background: var(--bz-surface-low);
-  overflow: hidden;
-}
-
-.bz-film__img {
-  transition: transform 0.5s ease;
-}
-
-.bz-film__tile:hover .bz-film__img {
-  transform: scale(1.05);
-}
-
-/* skeleton tiles while the six popular products load */
-.bz-film__tile--loading {
-  aspect-ratio: 3 / 4;
-  background: linear-gradient(90deg, #f1f0ed 25%, #f7f6f3 40%, #f1f0ed 60%);
-  background-size: 200% 100%;
-  animation: bz-film-shimmer 1.4s ease-in-out infinite;
-}
-
-@keyframes bz-film-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.bz-film__caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 2.25rem 12px 12px;
-  background: linear-gradient(to top, rgba(26, 28, 26, 0.72), transparent);
-  color: #fff;
-  transform: translateY(4px);
-  opacity: 0.92;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.bz-film__tile:hover .bz-film__caption {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.bz-film__caption .bz-caps {
-  color: rgba(250, 249, 246, 0.75);
-  font-size: 10px;
-}
-
-.bz-film__name {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* real claims, hairline-divided, no icons (design: no icon-text sections) */
-.bz-hero__claims {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 1.25rem 0;
-  color: var(--bz-ink-2);
-}
-
-.bz-hero__claims li {
-  padding: 4px 1.5rem;
-  border-left: 1px solid var(--bz-hairline);
-}
-
-.bz-hero__claims li:first-child {
-  padding-left: 0;
-  border-left: 0;
-}
-
-/* ---- responsive ---------------------------------------------------------- */
-@media (max-width: 1023px) {
-  .bz-film {
-    grid-template-columns: repeat(3, 1fr);
+.wardrobe__copy > .bz-caps, .wardrobe-plate__caption .bz-caps { color: var(--bz-teal-deep); }
+.wardrobe h1 { margin: 1.3rem 0; font: 400 clamp(3.5rem, 6.4vw, 6.5rem)/.99 var(--bz-serif); letter-spacing: -.065em; }
+.wardrobe h1 em { color: var(--bz-teal-deep); font-weight: 400; }
+.wardrobe__intro { max-width: 35ch; font-size: 1.05rem; line-height: 1.6; color: var(--bz-ink-2); }
+.wardrobe__index { display: flex; flex-wrap: wrap; column-gap: 1.3rem; margin: 1.8rem 0 1.35rem; border-bottom: 1px solid var(--bz-hairline); }
+.wardrobe__index button { padding: .85rem 0; border: 0; border-bottom: 2px solid transparent; color: var(--bz-ink-2); background: transparent; cursor: pointer; font-size: .95rem; }
+.wardrobe__index [aria-pressed=true] { border-color: var(--bz-teal); color: var(--bz-teal-deep); font-weight: 700; }
+.wardrobe__copy .bz-btn { gap: 1.4rem; }
+.wardrobe-plate { background: #eae8df; padding: clamp(.7rem, 1.8vw, 1.6rem); border: 1px solid var(--bz-hairline); }
+.wardrobe-plate__link { display: block; text-decoration: none; }
+.wardrobe-plate__photo, .wardrobe-plate__state { height: clamp(18rem, 30vw, 29rem); display: grid; place-items: center; background: var(--bz-surface); overflow: hidden; }
+.wardrobe-plate__photo img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.wardrobe-plate__state { align-content: center; gap: 1rem; }
+.wardrobe-plate__caption { display: flex; gap: 1.25rem; align-items: center; justify-content: space-between; padding: 1rem 0 .1rem; }
+.wardrobe-plate__caption strong { font-size: .95rem; white-space: nowrap; }
+.wardrobe-plate__caption p { font: 500 1.05rem/1.35 var(--bz-serif); }
+@supports (animation-timeline: view()) {
+  @media (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+    .wardrobe-plate__photo img { animation: plate-depth linear both; animation-timeline: view(); animation-range: exit 0% exit 75%; }
+    @keyframes plate-depth { from { transform: scale(1); } to { transform: translateY(1.5%) scale(1.04); } }
   }
 }
-
-@media (max-width: 640px) {
-  .bz-hero {
-    padding-top: 2.5rem;
-  }
-
-  .bz-hero__row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .bz-film {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .bz-film__tile {
-    flex: 0 0 62%;
-    scroll-snap-align: start;
-  }
-
-  .bz-hero__claims {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .bz-hero__claims li {
-    padding: 0;
-    border-left: 0;
-  }
+@media (max-width: 768px) {
+  .wardrobe { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+  .wardrobe h1 { margin-block: .8rem; font-size: clamp(3rem, 10vw, 4rem); }
+  .wardrobe h1 br { display: none; }
+  .wardrobe__index { margin: 1rem 0; }
+  .wardrobe-plate__photo, .wardrobe-plate__state { height: clamp(13rem, 60vw, 23rem); }
 }

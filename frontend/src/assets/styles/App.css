@@ -1,8 +1,10 @@
 /* src/assets/styles/App.css */
 
 .mainPage{
-	min-height:100vh;
+ min-height:60vh;
 }
+.skip-content { position: fixed; z-index: 100; top: .5rem; left: .5rem; transform: translateY(-160%); background: var(--bz-ink); color: white; padding: .6rem 1rem; }
+.skip-content:focus { transform: none; }
 
 /* Shared "nothing to show" block (used by pages/Products and pages/SearchPage;
    lived only in SearchPage.css, so the Products page rendered it unstyled). */
@@ -18,4 +20,3 @@
   color: #ff6347;
   text-transform: uppercase;
 }
-

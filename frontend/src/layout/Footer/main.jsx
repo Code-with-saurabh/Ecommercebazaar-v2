@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 const BRANDS = ['ASICS', 'Brooks', 'Hoka One One', 'Dr. Martens', 'Allbirds'];
 
 const CONCIERGE = [
-  { to: '/help', label: 'Help & FAQ Directory' },
+  { to: '/help', label: 'Delivery & payment' },
   { to: '/contact', label: 'Contact Support' },
-  { to: '/about', label: 'About the Atelier' },
+  { to: '/about', label: 'About Bazaar' },
   { to: '/products', label: 'Full Catalog' },
 ];
 
@@ -29,14 +29,13 @@ function Footer() {
         <div className="bz-footer__brand">
           <div>
             <span className="bz-wordmark bz-footer__word">Bazaar</span>
-            <span className="bz-caps bz-footer__tag">Haute Commerce Digital Flagship</span>
+            <span className="bz-caps bz-footer__tag">Surat, India</span>
             <p className="bz-footer__blurb">
-              Curated apparel and technical footwear, authenticated and dispatched
-              with server-verified pricing from our Surat studio.
+              Shirts, tees, pants and footwear for an everyday wardrobe.
             </p>
           </div>
           <div className="bz-footer__hq">
-            <p className="bz-caps">Atelier Headquarters</p>
+            <p className="bz-caps">Contact</p>
             <p>Gujarat, Surat — India</p>
             <a href="tel:9327115687">+91 93271 15687</a>
             <a href="mailto:saurabh12166@gmail.com">saurabh12166@gmail.com</a>
@@ -45,7 +44,7 @@ function Footer() {
 
         {/* real internal pages only */}
         <div>
-          <h4 className="bz-caps bz-footer__head">Client Concierge</h4>
+          <h4 className="bz-caps bz-footer__head">Customer service</h4>
           <ul className="bz-footer__list">
             {CONCIERGE.map(item => (
               <li key={item.label}>
@@ -57,8 +56,7 @@ function Footer() {
 
         {/* brand filters are live catalog query params */}
         <div>
-          <h4 className="bz-caps bz-footer__head">Curated Authenticity</h4>
-          <p className="bz-footer__note">Authorized distribution partners:</p>
+          <h4 className="bz-caps bz-footer__head">Browse by brand</h4>
           <div className="bz-footer__brands">
             {BRANDS.map(brand => (
               <Link key={brand} to={`/products?brand=${encodeURIComponent(brand)}`}>
@@ -66,16 +64,10 @@ function Footer() {
               </Link>
             ))}
           </div>
-          <p className="bz-caps bz-footer__verified">
-            <span className="material-symbols-outlined" aria-hidden="true">
-              verified
-            </span>
-            Server-Verified Pricing
-          </p>
         </div>
 
         <div>
-          <h4 className="bz-caps bz-footer__head">Editions &amp; Social</h4>
+          <h4 className="bz-caps bz-footer__head">Meet the founder</h4>
           <ul className="bz-footer__list bz-footer__social">
             {SOCIAL.map(item => (
               <li key={item.label}>
@@ -97,7 +89,7 @@ function Footer() {
             <span className="material-symbols-outlined" aria-hidden="true">
               lock
             </span>
-            Server-Verified Checkout
+            Account checkout
           </span>
           <span className="bz-footer__sep">·</span>
           <span>
@@ -107,7 +99,7 @@ function Footer() {
             Cash on Delivery
           </span>
         </div>
-        <p>&copy; 2024 Saurabh Sharma. All Rights Reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Bazaar</p>
       </div>
     </footer>
   );

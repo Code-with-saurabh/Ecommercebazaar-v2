@@ -1,7 +1,7 @@
 .bz-navlinks ul {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: clamp(.75rem, 1.35vw, 1.4rem);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -40,9 +40,10 @@
 }
 
 /* tablets/phones: one scrollable row, no hamburger JS */
-@media (max-width: 1023px) {
+@media (max-width: 1150px) {
   .bz-navlinks {
     order: 3;
+    min-width: 0;
     flex: 1 1 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;

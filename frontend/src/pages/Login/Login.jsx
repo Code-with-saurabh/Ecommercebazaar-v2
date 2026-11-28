@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import { post } from '../../api';
+import { flushCart } from '../../store/cartSync';
 import { setSession } from '../../utils/session';
 import { validateLogin, trimmedCredentials } from '../../utils/validation';
 import { useToast } from '../../components/Toast/Toast.jsx';
@@ -52,6 +53,7 @@ function Login() {
     setFieldErrors({});
     setSubmitting(true);
     try {
+      await flushCart(); // include the latest guest edit in the server's merge
       const session = await post('/users/login', values); // accessToken + profile
       setSession(session);
       toast.success(session && session.username ? `Welcome back, ${session.username}` : 'Welcome back');

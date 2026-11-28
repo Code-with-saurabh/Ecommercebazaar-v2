@@ -6,6 +6,7 @@ import { additems } from '../../store/slices/ForShirt.jsx';
 import { post } from '../../api';
 import { isLoggedIn } from '../../utils/session';
 import { formatMoney } from '../../utils/money';
+import { hasOptions } from '../../utils/catalog';
 import { useToast } from '../Toast/Toast.jsx';
 import LazyImage from '../LazyImage/LazyImage.jsx';
 
@@ -21,7 +22,7 @@ const Card = ({ product }) => {
   const {
     _id: id,
     slug,
-    name = 'No Data...',
+    name,
     brand = 'Bazaar',
     price = 0,
     mrp,
@@ -35,6 +36,7 @@ const Card = ({ product }) => {
   const toast = useToast();
   const history = useHistory();
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // Boolean selector: this card re-renders only when *its* membership flips.
   const alreadyInCart = useSelector(state =>
@@ -52,16 +54,18 @@ const Card = ({ product }) => {
   const handleSave = async () => {
     if (!isLoggedIn()) {
       toast.info('Sign in to save items');
-      history.push('/login');
+      history.push('/login', { from: `/products/${slug || id}` });
       return;
     }
+    if (saved || saving) return;
+    setSaving(true);
     try {
       await post('/wishlist', { productId: id });
       setSaved(true);
       toast.success('Saved to wishlist');
     } catch (err) {
       toast.error(err.message || 'Could not save to wishlist');
-    }
+    } finally { setSaving(false); }
   };
 
   const shortName = (str, max) => (str && str.length > max ? `${str.slice(0, max)}...` : str);
@@ -86,7 +90,8 @@ const Card = ({ product }) => {
           <button
             type="button"
             className={`bz-card__wish${saved ? ' is-saved' : ''}`}
-            onClick={handleSave}
+              onClick={handleSave}
+              disabled={saved || saving}
             aria-label={saved ? 'Saved to wishlist' : 'Save to Wishlist'}
             aria-pressed={saved}
           >
@@ -99,7 +104,7 @@ const Card = ({ product }) => {
         <div className="bz-card__body">
           <div className="bz-card__meta">
             <span className="bz-caps">{shortName(brand, 16)}</span>
-            <span
+            {ratingCount > 0 && <span
               className="bz-card__rating"
               title={ratingCount ? `${avgRating.toFixed(1)} / 5 from ${ratingCount} review(s)` : 'No reviews yet'}
             >
@@ -110,12 +115,12 @@ const Card = ({ product }) => {
               >
                 star
               </span>
-              {ratingCount ? `${avgRating.toFixed(1)} (${ratingCount})` : 'New'}
-            </span>
+              {avgRating.toFixed(1)} ({ratingCount})
+            </span>}
           </div>
 
           <h3 className="bz-card__title">
-            <Link to={`/products/${slug}`}>{shortName(name, 64)}</Link>
+            <Link to={`/products/${slug}`}>{name}</Link>
           </h3>
 
           <div className="bz-card__price">
@@ -123,14 +128,11 @@ const Card = ({ product }) => {
             {mrp && mrp > price && <s>{formatMoney(mrp)}</s>}
           </div>
 
-          <p className={`bz-card__stock bz-caps${inStock ? '' : ' is-out'}`}>
-            {inStock ? 'In stock' : 'Out of stock'}
-          </p>
         </div>
       </div>
 
       <div className="bz-card__actions">
-        <button
+        {inStock && hasOptions(product) ? <Link className="bz-card__add" to={`/products/${slug || id}`}>Choose options</Link> : <button
           type="button"
           className="bz-card__add"
           onClick={handleAddToCart}
@@ -139,8 +141,8 @@ const Card = ({ product }) => {
           <span className="material-symbols-outlined" aria-hidden="true">
             add
           </span>
-          {alreadyInCart ? 'In Cart — Add Another' : 'Quick Add'}
-        </button>
+          {!inStock ? 'Out of stock' : alreadyInCart ? 'Add another' : 'Add to bag'}
+        </button>}
       </div>
     </article>
   );

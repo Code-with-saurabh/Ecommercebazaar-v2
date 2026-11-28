@@ -1,4 +1,4 @@
-const rawUrl = import.meta.env.VITE_SITE_URL || 'https://your-domain.example';
+const rawUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
 
 export const SITE = {
   // ============================================================

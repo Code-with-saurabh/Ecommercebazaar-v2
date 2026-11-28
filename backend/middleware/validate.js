@@ -138,7 +138,7 @@ function headlineFor(errors) {
  * generic "Validation failed" and let the client render `details`.
  */
 function createValidator({ read, write, where }) {
-  return function validateWith(schema) {
+  return function validateWith(schema, { suppliedOnly = false } = {}) {
     return function zodValidate(req, _res, next) {
       const source = read(req) || {};
       const parsed = schema.safeParse(source);
@@ -149,7 +149,11 @@ function createValidator({ read, write, where }) {
         return next(ApiError.badRequest(headlineFor(errors), details));
       }
 
-      write(req, parsed.data);
+      // Zod 4 applies defaults inside partial() schemas. PATCH must keep
+      // omitted gallery/variant/discount fields exactly as stored.
+      write(req, suppliedOnly
+        ? Object.fromEntries(Object.entries(parsed.data).filter(([key]) => Object.hasOwn(source, key)))
+        : parsed.data);
       return next();
     };
   };
